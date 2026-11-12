@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-export const JS_ORDER = ['notes', 'pitch', 'tuner', 'check', 'wav', 'synth', 'audio', 'ui-tuner', 'ui-check', 'main'];
+export const JS_ORDER = ['notes', 'pitch', 'tuner', 'check', 'wav', 'synth', 'chroma', 'chords', 'score', 'tracker', 'judge', 'progress', 'lessons-data', 'diagram', 'audio', 'listen', 'ui-tuner', 'ui-check', 'ui-play', 'ui-chord', 'ui-lesson', 'ui-pages', 'main'];
 
 export function stripModuleSyntax(code, name) {
   const out = code

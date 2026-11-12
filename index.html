@@ -166,6 +166,125 @@ textarea { width: 100%; margin-top: 8px; font: 14px/1.5 ui-monospace, Consolas, 
   .path .tag { grid-column: 2; justify-self: start; }
 }
 @media (prefers-reduced-motion: reduce) { .needle, .level > div { transition: none; } }
+
+/* ---- 2~5단계 기능용 ---- */
+.back { display: inline-block; margin-bottom: 6px; color: var(--muted); text-decoration: none; font-weight: 600; }
+.back::before { content: "‹ "; }
+.stats { display: flex; gap: 22px; margin: 14px 0; flex-wrap: wrap; }
+.stat strong { font-size: 34px; font-weight: 800; margin-right: 4px; }
+.stat span { color: var(--muted); }
+.week { list-style: none; display: flex; gap: 8px; padding: 0; margin: 0; }
+.week li { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); color: var(--muted); font-size: 14px; font-weight: 700; }
+.week li.done { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+.week li.today { outline: 2px solid var(--accent); outline-offset: 2px; }
+.plan, .lesson-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.plan a, .lesson-list a { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; color: var(--ink); text-decoration: none; min-height: 56px; }
+.plan-kind { font-size: 13px; font-weight: 800; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.plan-text { display: grid; }
+.plan-text em, .l-goal { font-style: normal; color: var(--muted); font-size: 15px; }
+.plan-go { font-size: 24px; color: var(--muted); }
+.lesson-list a { grid-template-columns: 1fr auto; }
+.lesson-list .l-title { font-weight: 700; }
+.lesson-list .l-goal { grid-column: 1; }
+.lesson-list .stars, .lesson-list .tag { grid-row: 1 / span 2; grid-column: 2; align-self: center; }
+.lesson-list li { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+.lesson-list li.empty { color: var(--muted); padding: 8px 2px; }
+.stage { margin: 18px 0; }
+.stage > header { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; margin-bottom: 8px; }
+.stage > header h2 { font-size: 20px; }
+.stage > header p { color: var(--muted); font-size: 15px; }
+.stage .n { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--card); border: 1px solid var(--line); }
+.stage.complete .n { background: var(--good); border-color: var(--good); color: #fff; }
+.stars { display: inline-flex; gap: 2px; }
+.star { width: 20px; height: 20px; fill: var(--line); }
+.star.on { fill: var(--warn); }
+.result .stars .star, .lesson-done .stars .star { width: 40px; height: 40px; }
+.step-dots { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 10px 0 14px; }
+.step-dots li { font-size: 13px; font-weight: 700; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+.step-dots li.done { background: var(--good-bg); color: var(--good); border-color: var(--good); }
+.step-dots li.now { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.step-body h2 { font-size: 22px; margin-bottom: 8px; }
+.step-body p + p { margin-top: 8px; }
+.step-nav { justify-content: space-between; }
+.figure { margin-top: 14px; display: grid; justify-items: center; }
+.dg { width: 100%; height: auto; }
+.dg-chord { max-width: 230px; } .dg-board { max-width: 420px; } .dg-open-strings { max-width: 420px; }
+.dg-string, .dg-fret { stroke: var(--muted); }
+.dg-fret { stroke-width: 1.5; opacity: 0.6; }
+.dg-nut, .dg-barre { fill: var(--ink); }
+.dg-wood { fill: color-mix(in srgb, var(--accent) 12%, transparent); }
+.dg-dot { fill: var(--ink); }
+.dg-open { fill: none; stroke: var(--ink); stroke-width: 2; }
+.dg-finger { fill: var(--bg); font-size: 14px; font-weight: 800; }
+.dg-finger.is-plain, .dg-openlabel { fill: var(--ink); font-size: 14px; font-weight: 700; }
+.dg-mute, .dg-num, .dg-cap { fill: var(--muted); font-size: 13px; font-weight: 700; }
+.dg-mute { font-size: 18px; }
+.dg-string.is-active { stroke: var(--accent); stroke-width: 4; }
+.dg-string.is-clear { stroke: var(--good); stroke-width: 3; }
+.dg-string.is-muffled, .dg-string.is-other { stroke: var(--bad); stroke-width: 3; }
+.dg-num.is-active { fill: var(--accent); }
+.dg-dot.is-current, .dg-open.is-current { fill: var(--accent); stroke: var(--accent); }
+.dg-openlabel.is-current { fill: var(--accent-ink); }
+.player { display: grid; gap: 12px; --tab-line: var(--muted); --tab-note: var(--accent); --tab-note-ink: var(--accent-ink); --tab-hit: var(--good); }
+.player-bar, .player-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seg { display: inline-flex; gap: 6px; }
+.field { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-weight: 600; }
+.field.wide { display: grid; gap: 6px; width: 100%; }
+select, input[type="number"], input:not([type]), input[type="text"] { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; min-height: 44px; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--accent); }
+.tab-wrap { border: 1px solid var(--line); border-radius: 14px; background: var(--bg); overflow: hidden; }
+canvas.tab { display: block; width: 100%; height: 230px; }
+canvas.tab.lane { height: 170px; }
+.player-info { display: grid; gap: 2px; }
+.target { font-weight: 700; min-height: 1.6em; }
+.target[data-kind="warn"], .status[data-kind="warn"] { color: var(--warn); }
+.target[data-kind="bad"] { color: var(--bad); }
+.board { min-height: 60px; }
+.result { text-align: center; padding: 16px; border-radius: 14px; background: var(--good-bg); }
+.result-main { font-size: 22px; font-weight: 800; }
+.result-detail { color: var(--muted); }
+.lesson-done { text-align: center; display: grid; gap: 10px; justify-items: center; padding: 20px 0; }
+.row.center { justify-content: center; }
+.chordbox { display: grid; gap: 16px; }
+@media (min-width: 640px) { .chordbox { grid-template-columns: 240px 1fr; align-items: start; } }
+.chord-fig { display: grid; justify-items: center; }
+.chord-side { display: grid; gap: 10px; }
+.string-results { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.string-results li { display: flex; gap: 10px; align-items: center; min-height: 40px; padding: 2px 8px; border-radius: 10px; }
+.string-results li.now { background: color-mix(in srgb, var(--accent) 14%, transparent); font-weight: 700; }
+.string-results li[data-kind="clear"] { color: var(--good); }
+.string-results li[data-kind="muffled"], .string-results li[data-kind="other"] { color: var(--bad); }
+.dots { display: flex; gap: 8px; }
+.dots span { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line); }
+.dots span.on { background: var(--good); border-color: var(--good); }
+.change { display: grid; gap: 12px; }
+.change-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; align-items: center; text-align: center; }
+.change-fig { border: 2px solid transparent; border-radius: 16px; padding: 8px; display: grid; justify-items: center; }
+.change-fig.now { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.count-big { font-size: 72px; font-weight: 800; line-height: 1; }
+.timer { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; margin: 10px 0; }
+.timer > div { height: 100%; width: 100%; background: var(--accent); }
+.best { color: var(--muted); font-size: 15px; }
+.now-chord { display: flex; gap: 14px; align-items: center; }
+.now-fig { width: 130px; }
+.now-name { font-size: 34px; font-weight: 800; }
+.chord-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.chord-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 10px; text-align: center; color: var(--ink); text-decoration: none; display: grid; justify-items: center; }
+.panel + .panel { margin-top: 12px; }
+.custom { display: grid; gap: 10px; margin-top: 12px; padding: 14px; border: 1px dashed var(--line); border-radius: 14px; }
+.custom label { display: grid; gap: 4px; color: var(--muted); font-weight: 600; }
+.btn.small { min-height: 40px; padding: 4px 12px; font-size: 14px; }
+.metro, .calib { display: grid; gap: 14px; justify-items: center; text-align: center; }
+.pulse { width: 180px; height: 180px; border-radius: 50%; border: 6px solid var(--accent); display: grid; place-content: center; }
+.pulse.on { animation: pulse 0.18s ease-out; }
+@keyframes pulse { from { background: var(--accent); transform: scale(1.06); } to { background: transparent; transform: scale(1); } }
+.bpm-big { font-size: 48px; font-weight: 800; line-height: 1; }
+.beats { list-style: none; display: flex; gap: 10px; padding: 0; margin: 0; }
+.beats li { width: 16px; height: 16px; border-radius: 50%; background: var(--line); }
+.beats li.on { background: var(--accent); }
+.settings { display: grid; gap: 12px; }
+.settings h2 { font-size: 18px; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -173,50 +292,17 @@ textarea { width: 100%; margin-top: 8px; font: 14px/1.5 ui-monospace, Consolas, 
   <a class="brand" href="#home">여섯줄</a>
   <nav aria-label="주요 화면">
     <a href="#home" data-nav="home">홈</a>
-    <a href="#tuner" data-nav="tuner">튜너</a>
-    <a href="#check" data-nav="check">소리 점검</a>
+    <a href="#learn" data-nav="learn">배우기</a>
+    <a href="#songs" data-nav="songs">곡</a>
+    <a href="#tools" data-nav="tools">도구</a>
   </nav>
 </header>
 
 <main>
-  <section id="view-home" class="view">
-    <div class="hero">
-      <p class="eyebrow">클래식 기타 첫걸음</p>
-      <h1>치면, 듣고 알려 줍니다</h1>
-      <p class="lead">기타를 처음 잡는 사람을 위한 연습 앱입니다. 마이크로 소리를 듣고 맞았는지 바로 알려 줍니다. 오늘은 튜닝부터 시작하세요.</p>
-      <a class="btn primary big" href="#tuner">튜너 열기</a>
-    </div>
-
-    <h2>지금 쓸 수 있는 것</h2>
-    <div class="cards">
-      <a class="card" href="#tuner">
-        <h3>튜너</h3>
-        <p>여섯 줄을 차례로 맞춥니다. 줄을 치면 높은지 낮은지 알려 주고, 맞으면 표시합니다.</p>
-      </a>
-      <a class="card" href="#check">
-        <h3>소리 점검</h3>
-        <p>이 기기의 마이크가 기타 소리를 잘 듣는지 줄마다 확인합니다. 결과는 앱을 다듬는 데 씁니다.</p>
-      </a>
-    </div>
-
-    <h2>배우는 순서</h2>
-    <ol class="path">
-      <li class="now"><span class="n">0</span><div><strong>준비</strong><p>기타 각 부분, 앉는 자세, 오른손 손가락 이름, 튜닝</p></div><span class="tag on">튜닝 가능</span></li>
-      <li><span class="n">1</span><div><strong>줄과 프렛</strong><p>줄 번호와 개방현 음, TAB 악보 읽기</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">2</span><div><strong>단음 멜로디</strong><p>1~3번줄에서 검지와 중지를 번갈아 쳐서 쉬운 멜로디</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">3</span><div><strong>첫 코드</strong><p>Em, Am. 코드표 읽기와 한 줄씩 점검</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">4</span><div><strong>코드 넓히기 1</strong><p>C, G, D와 1분 코드 전환</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">5</span><div><strong>스트로크와 박자</strong><p>엄지와 검지로 쓸어 치기, 메트로놈</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">6</span><div><strong>첫 곡 반주</strong><p>코드 네 개로 한 곡을 끝까지</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">7</span><div><strong>아르페지오</strong><p>엄지 베이스와 검지·중지·약지 패턴</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">8</span><div><strong>코드 넓히기 2</strong><p>E, A, Dm, 세븐스 코드</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">9</span><div><strong>F 코드</strong><p>Fmaj7 → 작은 F → 바레 F로 천천히</p></div><span class="tag">준비 중</span></li>
-      <li><span class="n">10</span><div><strong>멜로디와 베이스 함께</strong><p>혼자서 반주와 멜로디를 같이 치는 독주 기초</p></div><span class="tag">준비 중</span></li>
-    </ol>
-    <p class="foot">v0.1 · 1단계(소리 엔진과 튜너)</p>
-  </section>
+  <section id="view-page" class="view"></section>
 
   <section id="view-tuner" class="view" hidden>
+    <a class="back" href="#tools">도구</a>
     <h1 class="title">튜너</h1>
     <div class="tuner">
       <div class="panel gauge-panel" data-state="idle">
@@ -263,6 +349,7 @@ textarea { width: 100%; margin-top: 8px; font: 14px/1.5 ui-monospace, Consolas, 
   </section>
 
   <section id="view-check" class="view" hidden>
+    <a class="back" href="#tools">도구</a>
     <h1 class="title">소리 점검</h1>
     <div class="panel">
       <p class="lead">이 기기의 마이크가 기타 소리를 얼마나 잘 듣는지 확인합니다.</p>
@@ -381,6 +468,46 @@ function rmsLevel(buf) {
   let sum = 0;
   for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
   return Math.sqrt(sum / (buf.length || 1));
+}
+
+// 날카로운(높은 주파수) 성분의 크기. 줄을 튕기는 순간에 크게 뛰고 금방 줄어들어 타격을 잡는 데 쓴다.
+function hfLevel(buf) {
+  let sum = 0;
+  for (let i = 1; i < buf.length; i++) { const d = buf[i] - buf[i - 1]; sum += d * d; }
+  return Math.sqrt(sum / (buf.length - 1 || 1));
+}
+
+function nsdfAtLag(buf, lag) {
+  let acf = 0, m = 0;
+  for (let i = 0, end = buf.length - lag; i < end; i++) { const a = buf[i], b = buf[i + lag]; acf += a * b; m += a * a + b * b; }
+  return m > 1e-12 ? (2 * acf) / m : 0;
+}
+
+// freq 근처(±2.5%, 약 ±43센트) 주기에서 소리가 얼마나 되풀이되는지(0~1).
+function salienceAt(buf, sampleRate, freq) {
+  const period = sampleRate / freq;
+  let best = -1;
+  for (let lag = Math.floor(period * 0.975); lag <= Math.ceil(period * 1.025); lag++) best = Math.max(best, nsdfAtLag(buf, lag));
+  return best;
+}
+
+// "이 음이 들리는가"를 확인한다. 다른 줄이 함께 울려도 통하도록, 무슨 음인지 맞히는 대신 기대한 음만 본다.
+// 들리면 또렷함(0~1), 아니면 0을 돌려준다. 인정 조건은 두 가지 중 하나다.
+//   (1) 또렷함이 min 이상이다.
+//   (2) baseline(줄을 튕기기 직전의 또렷함)이 주어졌고, 그보다 눈에 띄게 올랐다.
+//       크게 울리는 베이스 위에 한 옥타브 위 음을 살짝 친 경우처럼, 절대값은 낮아도 새로 생긴 음은 이것으로 잡는다.
+// 어느 경우든 옆 반음보다 또렷해야 하고, 한 옥타브·12도 위 음을 같은 음으로 착각하지 않게 그 주기들도 함께 본다.
+function soundsLike(buf, sampleRate, freq, options = {}) {
+  const min = options.min ?? 0.7, gap = options.gap ?? 0.2;
+  const s = options.salience ?? salienceAt(buf, sampleRate, freq);
+  const risen = options.baseline != null && s >= 0.35 && s - options.baseline >= 0.25;
+  if (s < min && !risen) return 0;
+  const semitone = 2 ** (1 / 12);
+  if (salienceAt(buf, sampleRate, freq * semitone) > s) return 0;
+  if (salienceAt(buf, sampleRate, freq / semitone) > s) return 0;
+  if (salienceAt(buf, sampleRate, freq * 2) > s - gap) return 0;
+  if (salienceAt(buf, sampleRate, freq * 3) > s - gap) return 0;
+  return s;
 }
 
 function detectPitch(buf, sampleRate, options = {}) {
@@ -653,6 +780,936 @@ function renderPluck(freq, sampleRate, seconds = 2, options = {}) {
   return out;
 }
 
+// ---- chroma.js ----
+// 크로마: 소리의 에너지를 12개 음이름(도, 도#, ... 시)별로 모은 벡터. 코드를 확인할 때 쓴다.
+
+function fftInPlace(re, im) {
+  const n = re.length;
+  for (let i = 1, j = 0; i < n; i++) {
+    let bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j) {
+      const tr = re[i]; re[i] = re[j]; re[j] = tr;
+      const ti = im[i]; im[i] = im[j]; im[j] = ti;
+    }
+  }
+  for (let len = 2; len <= n; len <<= 1) {
+    const ang = (-2 * Math.PI) / len;
+    const wr0 = Math.cos(ang), wi0 = Math.sin(ang);
+    for (let i = 0; i < n; i += len) {
+      let wr = 1, wi = 0;
+      for (let k = 0; k < len / 2; k++) {
+        const a = i + k, b = a + len / 2;
+        const xr = re[b] * wr - im[b] * wi, xi = re[b] * wi + im[b] * wr;
+        re[b] = re[a] - xr; im[b] = im[a] - xi;
+        re[a] += xr; im[a] += xi;
+        const nwr = wr * wr0 - wi * wi0;
+        wi = wr * wi0 + wi * wr0;
+        wr = nwr;
+      }
+    }
+  }
+}
+
+// buf 길이는 2의 거듭제곱이어야 한다. 75~2100Hz만 보고, 음과 음 사이에 걸친 에너지는 버린다.
+function chromaOf(buf, sampleRate) {
+  const n = buf.length;
+  const re = new Float64Array(n), im = new Float64Array(n);
+  for (let i = 0; i < n; i++) re[i] = buf[i] * (0.5 - 0.5 * Math.cos((2 * Math.PI * i) / (n - 1)));
+  fftInPlace(re, im);
+  const out = new Float64Array(12);
+  const kMin = Math.ceil((75 * n) / sampleRate), kMax = Math.min(n / 2 - 1, Math.floor((2100 * n) / sampleRate));
+  for (let k = kMin; k <= kMax; k++) {
+    const midi = 69 + 12 * Math.log2((k * sampleRate) / n / 440);
+    const near = Math.round(midi);
+    if (Math.abs(midi - near) > 0.35) continue;
+    out[((near % 12) + 12) % 12] += re[k] * re[k] + im[k] * im[k];
+  }
+  let norm = 0;
+  for (let i = 0; i < 12; i++) norm += out[i] * out[i];
+  norm = Math.sqrt(norm) || 1;
+  for (let i = 0; i < 12; i++) out[i] /= norm;
+  return out;
+}
+
+function cosine(a, b) {
+  let dot = 0, na = 0, nb = 0;
+  for (let i = 0; i < a.length; i++) { dot += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i]; }
+  return dot / (Math.sqrt(na * nb) || 1);
+}
+
+// ---- chords.js ----
+// 코드 자료와 코드 확인.
+// frets, fingers 는 6번줄 → 1번줄 순서. frets 의 -1은 치지 않는 줄, 0은 개방현. fingers 의 0은 누르지 않음(1 검지, 2 중지, 3 약지, 4 새끼).
+
+const CHORDS = {
+  Em: { name: 'Em', frets: [0, 2, 2, 0, 0, 0], fingers: [0, 2, 3, 0, 0, 0], rivals: ['E', 'G'], tip: '손가락 두 개만 씁니다. 여섯 줄을 모두 칩니다.' },
+  Am: { name: 'Am', frets: [-1, 0, 2, 2, 1, 0], fingers: [0, 0, 2, 3, 1, 0], rivals: ['A', 'C', 'Fmaj7'], tip: '5번줄부터 칩니다. 1번줄이 검지에 닿아 먹먹해지기 쉬우니 손가락을 세우세요.' },
+  C: { name: 'C', frets: [-1, 3, 2, 0, 1, 0], fingers: [0, 3, 2, 0, 1, 0], rivals: ['Am', 'Em'], tip: '5번줄부터 칩니다. 세 손가락이 계단처럼 비스듬히 놓입니다.' },
+  G: { name: 'G', frets: [3, 2, 0, 0, 0, 3], fingers: [2, 1, 0, 0, 0, 3], rivals: ['Em', 'G7'], tip: '손을 넓게 벌립니다. 여섯 줄을 모두 칩니다.' },
+  D: { name: 'D', frets: [-1, -1, 0, 2, 3, 2], fingers: [0, 0, 0, 1, 3, 2], rivals: ['Dm', 'D7'], tip: '4번줄부터 칩니다. 세 손가락이 작은 세모 모양이 됩니다.' },
+  E: { name: 'E', frets: [0, 2, 2, 1, 0, 0], fingers: [0, 2, 3, 1, 0, 0], rivals: ['Em', 'E7'], tip: 'Em에 검지 하나를 더한 모양입니다.' },
+  A: { name: 'A', frets: [-1, 0, 2, 2, 2, 0], fingers: [0, 0, 1, 2, 3, 0], rivals: ['Am', 'A7'], tip: '2프렛에 세 손가락이 나란히 섭니다. 5번줄부터 칩니다.' },
+  Dm: { name: 'Dm', frets: [-1, -1, 0, 2, 3, 1], fingers: [0, 0, 0, 2, 3, 1], rivals: ['D', 'F'], tip: 'D에서 1번줄을 한 프렛 낮춘 모양입니다. 4번줄부터 칩니다.' },
+  G7: { name: 'G7', frets: [3, 2, 0, 0, 0, 1], fingers: [3, 2, 0, 0, 0, 1], rivals: ['G'], tip: 'C 코드 모양을 위아래로 벌린 느낌입니다.' },
+  D7: { name: 'D7', frets: [-1, -1, 0, 2, 1, 2], fingers: [0, 0, 0, 2, 1, 3], rivals: ['D'], tip: 'D의 세모를 뒤집은 모양입니다.' },
+  A7: { name: 'A7', frets: [-1, 0, 2, 0, 2, 0], fingers: [0, 0, 2, 0, 3, 0], rivals: ['A'], tip: 'A에서 가운데 손가락을 뺀 모양입니다.' },
+  E7: { name: 'E7', frets: [0, 2, 0, 1, 0, 0], fingers: [0, 2, 0, 1, 0, 0], rivals: ['E'], tip: 'E에서 약지를 뗀 모양입니다.' },
+  Fmaj7: { name: 'Fmaj7', frets: [-1, -1, 3, 2, 1, 0], fingers: [0, 0, 3, 2, 1, 0], rivals: ['Am', 'F'], tip: 'C 코드를 한 줄씩 아래로 옮긴 모양입니다. F 대신 쓸 수 있습니다. 4번줄부터 칩니다.' },
+  Fs: { name: 'F(작은)', frets: [-1, -1, 3, 2, 1, 1], fingers: [0, 0, 3, 2, 1, 1], barre: { fret: 1, from: 2, to: 1 }, rivals: ['Fmaj7'], tip: '검지를 눕혀 1번줄과 2번줄을 함께 누릅니다. 4번줄부터 칩니다.' },
+  F: { name: 'F', frets: [1, 3, 3, 2, 1, 1], fingers: [1, 3, 4, 2, 1, 1], barre: { fret: 1, from: 6, to: 1 }, rivals: ['Fmaj7', 'Dm'], tip: '검지로 1프렛 여섯 줄을 모두 누릅니다. 검지의 옆면(엄지 쪽)을 쓰고 프렛에 바짝 붙이세요.' },
+};
+const CHORD_ORDER = ['Em', 'Am', 'C', 'G', 'D', 'E', 'A', 'Dm', 'G7', 'D7', 'A7', 'E7', 'Fmaj7', 'Fs', 'F'];
+
+// 치는 줄만 { num, midi } 로. 굵은 줄부터.
+function chordStrings(id) {
+  const chord = CHORDS[id];
+  const out = [];
+  chord.frets.forEach((fret, i) => { if (fret >= 0) out.push({ num: STRINGS[i].num, fret, midi: STRINGS[i].midi + fret }); });
+  return out;
+}
+
+// 코드를 한 번 쓸어 친 소리(합성). up 이면 가는 줄부터.
+function strumSamples(id, sampleRate, seconds = 1.6, options = {}) {
+  const gap = options.gap ?? 0.016;
+  const strings = chordStrings(id);
+  if (options.up) strings.reverse();
+  const n = Math.floor(sampleRate * seconds);
+  const out = new Float32Array(n);
+  strings.forEach((s, i) => {
+    const offset = Math.floor(i * gap * sampleRate);
+    const tone = renderPluck(midiToFreq(s.midi), sampleRate, seconds - i * gap, { brightness: options.brightness ?? 1.5 });
+    for (let k = 0; k < tone.length && offset + k < n; k++) out[offset + k] += tone[k] / Math.sqrt(strings.length);
+  });
+  return out;
+}
+
+const templateCache = new Map();
+function chordTemplate(id, sampleRate, size = 8192) {
+  const key = `${id}@${sampleRate}@${size}`;
+  if (!templateCache.has(key)) {
+    const start = Math.floor(0.12 * sampleRate);
+    const audio = strumSamples(id, sampleRate, 0.12 + size / sampleRate + 0.05);
+    templateCache.set(key, chromaOf(audio.subarray(start, start + size), sampleRate));
+  }
+  return templateCache.get(key);
+}
+
+function scoreChord(chroma, id, sampleRate, size) {
+  return cosine(chroma, chordTemplate(id, sampleRate, size));
+}
+
+// 지금 쳐야 하는 코드가 맞는지 확인한다. 헷갈리기 쉬운 코드(rivals) 쪽이 더 비슷하면 그 이름을 알려 준다.
+function verifyChord(chroma, expectedId, sampleRate, options = {}) {
+  const minScore = options.minScore ?? 0.78;
+  const margin = options.margin ?? 0.02;
+  const size = options.size;
+  const rivals = (options.rivals ?? CHORDS[expectedId].rivals).filter((id) => id !== expectedId && CHORDS[id]);
+  const score = scoreChord(chroma, expectedId, sampleRate, size);
+  let rival = null;
+  for (const id of rivals) {
+    const s = scoreChord(chroma, id, sampleRate, size);
+    if (!rival || s > rival.score) rival = { id, score: s };
+  }
+  if (rival && rival.score > score + margin) return { ok: false, score, reason: 'rival', rival };
+  if (score < minScore) return { ok: false, score, reason: 'unclear', rival };
+  return { ok: true, score, rival };
+}
+
+// 두 코드 가운데 어느 쪽에 가까운지(1분 전환용). 둘 다 아니면 null.
+function pickOfTwo(chroma, a, b, sampleRate, minScore = 0.7) {
+  const sa = scoreChord(chroma, a, sampleRate), sb = scoreChord(chroma, b, sampleRate);
+  if (Math.max(sa, sb) < minScore) return null;
+  return sa >= sb ? a : b;
+}
+
+// 한 줄씩 점검: 튕긴 뒤 windowMs 동안 들린 프레임을 모아 그 줄이 맑게 울렸는지 판단한다.
+// 앞서 친 줄들이 아직 울리고 있으므로, 무슨 음인지 맞히지 않고 "이 줄의 음이 들리는가"를 확인한다.
+function createStringCheck(id, options = {}) {
+  const windowMs = options.windowMs ?? 650;
+  const needFrames = options.needFrames ?? 3;
+  const a4 = options.a4 ?? 440;
+  const strings = chordStrings(id);
+  const results = strings.map(() => null);
+  let index = 0, openAt = null, clear = 0, others = new Map();
+
+  function settle(result) {
+    results[index] = result;
+    index++;
+    openAt = null;
+    clear = 0;
+    others = new Map();
+    return { type: 'string', index: index - 1, string: strings[index - 1], result, done: index >= strings.length };
+  }
+
+  return {
+    strings,
+    results,
+    get index() { return index; },
+    get done() { return index >= strings.length; },
+    // frame: { time, freq, clarity, rms, buf, sampleRate }, onset: 이 프레임에서 튕김이 감지됐는지
+    push(frame, onset) {
+      if (index >= strings.length) return null;
+      if (onset && openAt === null) { openAt = frame.time; clear = 0; others = new Map(); }
+      if (openAt === null) return null;
+      const target = strings[index].midi;
+      const seg = frame.buf.subarray(Math.max(0, frame.buf.length - 2048));
+      if (soundsLike(seg, frame.sampleRate, midiToFreq(target, a4)) > 0) clear++;
+      else if (frame.freq > 0 && frame.clarity >= 0.85) {
+        // 프렛을 잘못 누른 경우만 "다른 음"으로 본다: 목표에서 4반음 안쪽이고, 앞서 친 줄의 음이 아닌 것.
+        const midi = Math.round(freqToMidi(frame.freq, a4));
+        const ringing = strings.slice(0, index).some((x) => x.midi === midi);
+        if (midi !== target && Math.abs(midi - target) <= 4 && !ringing) others.set(midi, (others.get(midi) || 0) + 1);
+      }
+      if (clear >= needFrames) return settle({ kind: 'clear' });
+      if (frame.time - openAt >= windowMs) {
+        let top = null;
+        for (const [midi, count] of others) if (!top || count > top.count) top = { midi, count };
+        if (top && top.count >= needFrames) return settle({ kind: 'other', midi: top.midi });
+        return settle({ kind: 'muffled' });
+      }
+      return null;
+    },
+    retry(i) { if (i < index) { index = i; results.fill(null, i); openAt = null; } },
+  };
+}
+
+// ---- score.js ----
+// 악보 자료 도우미. 악보는 { title, bpm, beatsPerBar, notes: [{ t, string, fret, dur, midi }] } 꼴이고 t, dur 단위는 박이다.
+
+// seq([[줄, 프렛, 길이(박, 기본 1)], ...]) → 앞에서부터 차례로 놓인 음 배열
+function seq(items, start = 0) {
+  let t = start;
+  return items.map(([string, fret, dur = 1]) => {
+    const note = { t, string, fret, dur, midi: fretToMidi(string, fret) };
+    t += dur;
+    return note;
+  });
+}
+
+function scoreBeats(score) {
+  let end = 0;
+  for (const n of score.notes) end = Math.max(end, n.t + n.dur);
+  return end;
+}
+
+function barCount(score) {
+  return Math.ceil(scoreBeats(score) / score.beatsPerBar);
+}
+
+function beatMs(bpm, tempo = 1) {
+  return 60000 / (bpm * tempo);
+}
+
+// fromBar ~ toBar (1부터, 양 끝 포함) 구간만 잘라 t를 0부터 다시 매긴다.
+function sliceBars(score, fromBar, toBar) {
+  const a = (fromBar - 1) * score.beatsPerBar, b = toBar * score.beatsPerBar;
+  return { ...score, notes: score.notes.filter((n) => n.t >= a && n.t < b).map((n) => ({ ...n, t: n.t - a })) };
+}
+
+const FINGER_KO = ['', '검지', '중지', '약지', '새끼'];
+function describeNote(note) {
+  const where = note.fret === 0 ? `${note.string}번줄 개방현` : `${note.string}번줄 ${note.fret}프렛`;
+  const finger = note.fret >= 1 && note.fret <= 4 ? ` · 왼손 ${FINGER_KO[note.fret]}` : '';
+  return `${where} (${midiToKo(note.midi)})${finger}`;
+}
+
+function describeMidi(midi) {
+  return `${midiToKo(midi)}(${midiToName(midi)})`;
+}
+
+// 스트로크 패턴 글자열 → 박 위치 배열. 'D' 내려치기, 'U' 올려치기, '-' 쉼. 한 글자가 반 박.
+// 예: 'D-DU-UDU' (칼립소) → [{ t: 0, dir: 'D' }, { t: 1, dir: 'D' }, { t: 1.5, dir: 'U' }, ...]
+function patternHits(pattern) {
+  const hits = [];
+  [...pattern].forEach((ch, i) => { if (ch === 'D' || ch === 'U') hits.push({ t: i * 0.5, dir: ch }); });
+  return hits;
+}
+
+// ---- tracker.js ----
+// 음 추적기: 25ms마다 들어오는 소리 프레임을 "줄을 튕긴 순간(onset)"과 "어떤 음을 쳤는지(note)" 사건으로 바꾼다.
+// 원칙 1: 줄을 한 번 튕기면 음 사건은 한 번만 낸다. 울리던 소리가 사그라들며 다른 음처럼 들리는 것은 무시한다.
+// 원칙 2: 쳐야 할 음을 알고 있으면(setExpected) 그 음이 들리는지부터 확인한다. 앞서 친 줄이 아직 울려도 통한다.
+
+const TRACKER_DEFAULTS = {
+  a4: 440,
+  segment: 2048,      // 기대한 음을 확인할 때 쓰는 소리 길이(샘플)
+  minRms: 0.004,      // 이보다 작으면 조용한 것으로 본다
+  minClarity: 0.8,    // 이보다 흐리면 음을 판단하지 않는다
+  stableFrames: 2,    // 튕긴 직후 같은 음이 연속 몇 프레임 나와야 인정할지
+  slowFrames: 5,      // 튕긴 순간을 못 잡았을 때, 새 음이 연속 몇 프레임 나와야 인정할지(기대 음이 없을 때)
+  softFrames: 3,      // 기대 음이 있을 때: 살짝 쳐서 튕김을 못 잡았어도, 기대 음이 새로 들리고 음량이 늘면 인정
+  onsetRatio: 1.7,    // 음량이나 날카로운 성분이 직전 최소의 몇 배로 커지면 튕긴 것으로 볼지
+  overPeak: 1.1,      // 동시에 직전 최대보다도 이만큼 커야 한다(여러 줄이 울릴 때 생기는 음량 출렁임을 튕김으로 오해하지 않게)
+  lookback: 4,        // 직전 몇 프레임과 비교할지
+  refractoryMs: 110,  // 튕김을 연달아 두 번 세지 않는 시간
+  onsetValidMs: 600,  // 튕긴 뒤 이 시간 안에 음이 또렷해져야 그 튕김의 음으로 인정
+  releaseMs: 200,     // 이만큼 조용하면 "울리는 음 없음"으로 되돌린다
+};
+
+// 스트로크 연습용 설정. 코드가 울리는 중에 다시 치면 음량이 조금만 커지므로 더 예민하게 잡는다.
+// (박자 채점은 정해진 시각 근처의 타격만 세므로, 가끔 잘못 잡힌 타격이 있어도 큰 문제가 없다.)
+const STRUM_TRACKER = { onsetRatio: 1.35, overPeak: 1.02, refractoryMs: 180 };
+
+function createNoteTracker(options = {}) {
+  const o = { ...TRACKER_DEFAULTS, ...options };
+  let levels = [], sharps = [];
+  let cand = null, candCount = 0, candSince = 0, candCents = 0, candExpected = false;
+  let current = null;
+  let lastHeardAt = -Infinity, lastOnsetAt = -Infinity;
+  let onsetOpen = false;
+  let expected = null;
+  let salHistory = new Map();   // 기대 음별 최근 또렷함(튕기기 전 기준값을 구하는 데 쓴다)
+  let baseAtOnset = new Map();  // 마지막 튕김 직전의 또렷함
+
+  function reset() {
+    levels = [];
+    sharps = [];
+    cand = null;
+    candCount = 0;
+    current = null;
+    lastHeardAt = lastOnsetAt = -Infinity;
+    onsetOpen = false;
+    salHistory = new Map();
+    baseAtOnset = new Map();
+  }
+
+  function setExpected(midis) {
+    expected = midis && midis.length ? Array.from(new Set(midis)) : null;
+    for (const m of Array.from(salHistory.keys())) if (!expected || !expected.includes(m)) salHistory.delete(m);
+  }
+
+  // frame: { time(ms), freq, clarity, rms, hf, buf?, sampleRate? }
+  // → 사건 배열 [{ type: 'onset', time } | { type: 'note', midi, cents, time, clarity }]
+  function push(frame) {
+    const events = [];
+    const t = frame.time;
+    const sharp = frame.hf ?? 0;
+
+    // 음량이 확 커지거나(조용한 데서 친 경우), 날카로운 성분이 확 커지면(울리는 중에 다시 친 경우) 튕긴 것으로 본다.
+    const jumped = (value, past) => value >= Math.min(...past) * o.onsetRatio && value >= Math.max(...past) * o.overPeak;
+    const rose = levels.length >= 1 && (jumped(frame.rms, levels) || (sharp > 0 && jumped(sharp, sharps)));
+    if (rose && frame.rms >= o.minRms * 2 && t - lastOnsetAt >= o.refractoryMs) {
+      lastOnsetAt = t;
+      onsetOpen = true;
+      cand = null;
+      candCount = 0;
+      baseAtOnset = new Map();
+      for (const [m, values] of salHistory) baseAtOnset.set(m, Math.min(...values));
+      events.push({ type: 'onset', time: t, rms: frame.rms });
+    }
+    const levelBefore = levels.length ? levels[0] : 0;   // 약 100ms 전 음량
+    levels.push(frame.rms);
+    sharps.push(sharp);
+    if (levels.length > o.lookback) { levels.shift(); sharps.shift(); }
+    if (onsetOpen && t - lastOnsetAt > o.onsetValidMs) onsetOpen = false;
+
+    let midi = null, cents = 0, clarity = frame.clarity, matched = false;
+    if (frame.rms >= o.minRms) {
+      if (expected && frame.buf && frame.sampleRate) {
+        const seg = frame.buf.subarray(Math.max(0, frame.buf.length - o.segment));
+        let best = 0;
+        for (const m of expected) {
+          const f = midiToFreq(m, o.a4);
+          const raw = salienceAt(seg, frame.sampleRate, f);
+          const s = soundsLike(seg, frame.sampleRate, f, { salience: raw, baseline: onsetOpen ? baseAtOnset.get(m) : undefined });
+          if (s > best) { best = s; midi = m; }
+          const values = salHistory.get(m) || [];
+          values.push(raw);
+          if (values.length > o.lookback) values.shift();
+          salHistory.set(m, values);
+        }
+        if (midi !== null) { clarity = best; matched = true; }
+      }
+      if (midi === null && frame.clarity >= o.minClarity && frame.freq > 0) {
+        const exact = freqToMidi(frame.freq, o.a4);
+        midi = Math.round(exact);
+        cents = (exact - midi) * 100;
+      }
+    }
+    if (midi === null) {
+      if (t - lastHeardAt > o.releaseMs) { current = null; cand = null; candCount = 0; }
+      return events;
+    }
+    lastHeardAt = t;
+    if (midi === cand) candCount++;
+    else { cand = midi; candCount = 1; candSince = t; candExpected = matched; }
+    candCents = cents;
+
+    // 기대 음이 있는데 다른 음이 들린 경우에는 조금 더 지켜본다. 튕긴 직후에는 울리던 음이 먼저 잡힐 수 있기 때문이다.
+    const viaOnset = onsetOpen && candCount >= (expected && !candExpected ? o.stableFrames + 2 : o.stableFrames);
+    // 튕김을 못 잡은 경우. 기대 음이 있을 때는 그 음에 한해서만, 그리고 음량이 늘고 있을 때만 인정한다.
+    // (여러 줄이 울리며 생기는 엉뚱한 음이나, 울리던 줄이 남아 들리는 것을 새로 친 음으로 세지 않기 위해서다.)
+    const loud = frame.rms >= o.minRms * 2;
+    const viaChange = !onsetOpen && cand !== current && loud && (expected
+      ? candExpected && candCount >= o.softFrames && frame.rms >= levelBefore * 1.05
+      : candCount >= o.slowFrames);
+    if (viaOnset || viaChange) {
+      events.push({ type: 'note', midi: cand, cents: candCents, clarity, time: viaOnset ? lastOnsetAt : candSince });
+      current = cand;
+      onsetOpen = false;
+    }
+    return events;
+  }
+
+  return { push, reset, setExpected, options: o };
+}
+
+// ---- judge.js ----
+// 채점. 두 가지 방식이 있다.
+// 기다려 주기: 맞는 음을 칠 때까지 기다린다. 박자는 보지 않는다.
+// 박자 맞추기: 정해진 시각에 맞는 음(또는 스트로크)을 쳤는지 본다.
+
+function starsFor(accuracy) {
+  return accuracy >= 0.95 ? 3 : accuracy >= 0.8 ? 2 : accuracy >= 0.6 ? 1 : 0;
+}
+
+// notes: [{ midi }]
+function createWaitJudge(notes) {
+  let index = 0, wrong = 0;
+  return {
+    get index() { return index; },
+    get wrong() { return wrong; },
+    get done() { return index >= notes.length; },
+    onNote(ev) {
+      if (index >= notes.length) return { type: 'done' };
+      if (ev.midi === notes[index].midi) {
+        index++;
+        return { type: 'hit', index: index - 1, done: index >= notes.length };
+      }
+      // 방금 맞힌 음이 아직 울려서 다시 들린 것은 틀림으로 세지 않는다.
+      if (index > 0 && ev.midi === notes[index - 1].midi) return { type: 'echo' };
+      wrong++;
+      return { type: 'wrong', heard: ev.midi, expected: notes[index].midi, index };
+    },
+    result() {
+      const accuracy = notes.length ? index / (index + wrong) || 0 : 0;
+      return { mode: 'wait', total: notes.length, hit: index, wrong, accuracy, stars: index >= notes.length ? Math.max(1, starsFor(accuracy)) : 0 };
+    },
+  };
+}
+
+// notes: [{ midi | null, timeMs }]. midi가 null이면 어떤 소리든(스트로크) 시각만 본다.
+function createTimedJudge(notes, options = {}) {
+  const latencyMs = options.latencyMs ?? 0;
+  const perfectMs = options.perfectMs ?? 80;
+  const goodMs = options.goodMs ?? 160;
+  const grades = notes.map(() => null);
+  const offsets = [];
+  let extra = 0;
+
+  return {
+    grades,
+    get extra() { return extra; },
+    // ev: { time(ms, 연습 시작 기준), midi? }
+    onEvent(ev) {
+      const t = ev.time - latencyMs;
+      let best = -1, bestDist = Infinity;
+      for (let i = 0; i < notes.length; i++) {
+        if (grades[i] !== null) continue;
+        if (notes[i].midi != null && notes[i].midi !== ev.midi) continue;
+        const d = Math.abs(t - notes[i].timeMs);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      if (best >= 0 && bestDist <= goodMs) {
+        grades[best] = bestDist <= perfectMs ? 'perfect' : 'good';
+        offsets.push(t - notes[best].timeMs);
+        return { type: 'hit', index: best, grade: grades[best], offset: t - notes[best].timeMs };
+      }
+      extra++;
+      return { type: 'extra' };
+    },
+    // 지나가 버린 음을 놓침으로 처리하고, 새로 놓친 음 번호를 돌려준다.
+    advance(nowMs) {
+      const t = nowMs - latencyMs;
+      const missed = [];
+      for (let i = 0; i < notes.length; i++) {
+        if (grades[i] === null && notes[i].timeMs + goodMs < t) { grades[i] = 'miss'; missed.push(i); }
+      }
+      return missed;
+    },
+    get finished() { return grades.every((g) => g !== null); },
+    result() {
+      const count = (g) => grades.filter((x) => x === g).length;
+      const perfect = count('perfect'), good = count('good'), miss = notes.length - perfect - good;
+      const accuracy = notes.length ? (perfect + 0.75 * good) / notes.length : 0;
+      const sorted = offsets.slice().sort((a, b) => a - b);
+      const medianOffset = sorted.length ? sorted[sorted.length >> 1] : 0;
+      return { mode: 'timed', total: notes.length, perfect, good, miss, extra, accuracy, medianOffset, stars: starsFor(accuracy) };
+    },
+  };
+}
+
+// ---- progress.js ----
+// 연습 기록. 기기 안(localStorage)에만 저장한다. 저장소를 인자로 받아 node에서도 시험할 수 있게 했다.
+
+const PROGRESS_KEY = 'guitar-lesson.progress.v1';
+
+function emptyProgress() {
+  return { version: 1, lessons: {}, changes: {}, days: {}, custom: [], latencyMs: 80, settings: { sensitivity: 'normal', click: true } };
+}
+
+function loadProgress(storage) {
+  try {
+    const raw = storage.getItem(PROGRESS_KEY);
+    if (!raw) return emptyProgress();
+    const data = JSON.parse(raw);
+    if (!data || data.version !== 1) return emptyProgress();
+    const base = emptyProgress();
+    return { ...base, ...data, settings: { ...base.settings, ...(data.settings || {}) } };
+  } catch (e) {
+    return emptyProgress();
+  }
+}
+
+function saveProgress(storage, progress) {
+  try { storage.setItem(PROGRESS_KEY, JSON.stringify(progress)); return true; } catch (e) { return false; }
+}
+
+function dayKey(date = new Date()) {
+  const p = (n) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${p(date.getMonth() + 1)}-${p(date.getDate())}`;
+}
+
+function addDays(key, delta) {
+  const [y, m, d] = key.split('-').map(Number);
+  return dayKey(new Date(y, m - 1, d + delta));
+}
+
+function recordLesson(progress, id, stars, accuracy, today) {
+  const prev = progress.lessons[id] || { stars: 0, best: 0, count: 0 };
+  progress.lessons[id] = { stars: Math.max(prev.stars, stars), best: Math.max(prev.best, accuracy), count: prev.count + 1, last: today };
+  touchDay(progress, today, 0);
+  return progress.lessons[id];
+}
+
+function touchDay(progress, today, seconds) {
+  progress.days[today] = (progress.days[today] || 0) + Math.max(0, Math.round(seconds));
+  return progress.days[today];
+}
+
+function recordChange(progress, a, b, count, today) {
+  const key = [a, b].sort().join('-');
+  const list = progress.changes[key] || (progress.changes[key] = []);
+  list.push({ date: today, count });
+  if (list.length > 60) list.splice(0, list.length - 60);
+  touchDay(progress, today, 0);
+  return Math.max(...list.map((x) => x.count));
+}
+
+function bestChange(progress, a, b) {
+  const list = progress.changes[[a, b].sort().join('-')] || [];
+  return list.length ? Math.max(...list.map((x) => x.count)) : 0;
+}
+
+// 연속 연습일. 오늘 아직 안 했어도 어제까지 이어졌으면 끊기지 않은 것으로 센다.
+function streakOf(progress, today) {
+  const has = (key) => key in progress.days;
+  let current = 0;
+  let key = has(today) ? today : addDays(today, -1);
+  while (has(key)) { current++; key = addDays(key, -1); }
+  let best = 0, run = 0, prev = null;
+  for (const k of Object.keys(progress.days).sort()) {
+    run = prev && addDays(prev, 1) === k ? run + 1 : 1;
+    best = Math.max(best, run);
+    prev = k;
+  }
+  return { current, best, doneToday: has(today) };
+}
+
+function weekDays(progress, today) {
+  const out = [];
+  for (let i = 6; i >= 0; i--) { const key = addDays(today, -i); out.push({ key, done: key in progress.days, seconds: progress.days[key] || 0 }); }
+  return out;
+}
+
+function lessonStars(progress, id) {
+  return progress.lessons[id] ? progress.lessons[id].stars : 0;
+}
+
+// lessons: [{ id, stage }] 순서대로. 아직 별이 없는 첫 레슨.
+function nextLesson(progress, lessons) {
+  return lessons.find((l) => lessonStars(progress, l.id) === 0) || null;
+}
+
+// 오늘의 연습: 튜닝 → 복습(별이 가장 적은, 가장 오래된 것) → 새 레슨.
+function todayPlan(progress, lessons) {
+  const plan = [{ kind: 'tuner' }];
+  const done = lessons.filter((l) => lessonStars(progress, l.id) > 0 && l.practice);
+  if (done.length) {
+    const review = done.slice().sort((a, b) => (lessonStars(progress, a.id) - lessonStars(progress, b.id)) || String(progress.lessons[a.id].last).localeCompare(String(progress.lessons[b.id].last)))[0];
+    plan.push({ kind: 'review', lesson: review });
+  }
+  const next = nextLesson(progress, lessons);
+  if (next) plan.push({ kind: 'new', lesson: next });
+  return plan;
+}
+
+function stageSummary(progress, lessons, stage) {
+  const list = lessons.filter((l) => l.stage === stage);
+  const done = list.filter((l) => lessonStars(progress, l.id) > 0).length;
+  const stars = list.reduce((sum, l) => sum + lessonStars(progress, l.id), 0);
+  return { total: list.length, done, stars, maxStars: list.length * 3 };
+}
+
+// ---- lessons-data.js ----
+// 레슨과 곡 자료. 화면 코드와 분리해 두어 내용만 따로 고치거나 늘릴 수 있다.
+// 단계(step) 종류: card(설명), tuner(튜너로 이동), notes(단음 연습), strings(한 줄씩 점검),
+//                  strum(코드 확인), change(코드 전환), rhythm(스트로크·반주)
+
+const STAGES = [
+  { n: 0, title: '준비', desc: '기타 각 부분, 앉는 자세, 두 손, 튜닝' },
+  { n: 1, title: '줄과 프렛', desc: '줄 번호와 개방현 음, TAB 악보 읽기' },
+  { n: 2, title: '단음 멜로디', desc: '1~3번줄에서 검지와 중지를 번갈아 쳐서 쉬운 멜로디' },
+  { n: 3, title: '첫 코드', desc: 'Em, Am. 코드표 읽기와 한 줄씩 점검' },
+  { n: 4, title: '코드 넓히기 1', desc: 'C, G, D와 1분 코드 전환' },
+  { n: 5, title: '스트로크와 박자', desc: '엄지와 검지로 쓸어 치기, 박자 맞추기' },
+  { n: 6, title: '첫 곡 반주', desc: '코드 네 개로 한 곡을 끝까지' },
+  { n: 7, title: '아르페지오', desc: '엄지 베이스와 검지·중지·약지 패턴' },
+  { n: 8, title: '코드 넓히기 2', desc: 'E, A, Dm, 세븐스 코드' },
+  { n: 9, title: 'F 코드', desc: 'Fmaj7 → 작은 F → 바레 F로 천천히' },
+  { n: 10, title: '멜로디와 베이스 함께', desc: '혼자서 베이스와 멜로디를 주고받는 독주 기초' },
+];
+
+const score = (title, bpm, items, beatsPerBar = 4) => ({ title, bpm, beatsPerBar, notes: seq(items) });
+const card = (title, body, figure) => ({ type: 'card', title, body, figure });
+const notes = (title, bpm, items, modes = ['wait', 'timed'], beatsPerBar = 4) => ({ type: 'notes', title, score: score(title, bpm, items, beatsPerBar), modes });
+const rep = (items, times) => Array.from({ length: times }, () => items).flat();
+
+// 음 위치 줄임말: [줄, 프렛]
+const G3 = [3, 0], A3 = [3, 2], B3 = [2, 0], C4 = [2, 1], D4 = [2, 3], E4 = [1, 0], F4 = [1, 1], G4 = [1, 3];
+const L = (p, dur) => [p[0], p[1], dur];
+
+const TWINKLE = [G3, G3, D4, D4, E4, E4, L(D4, 2), C4, C4, B3, B3, A3, A3, L(G3, 2),
+  D4, D4, C4, C4, B3, B3, L(A3, 2), D4, D4, C4, C4, B3, B3, L(A3, 2),
+  G3, G3, D4, D4, E4, E4, L(D4, 2), C4, C4, B3, B3, A3, A3, L(G3, 2)];
+const MARY = [E4, D4, C4, D4, E4, E4, L(E4, 2), D4, D4, L(D4, 2), E4, G4, L(G4, 2),
+  E4, D4, C4, D4, E4, E4, E4, E4, D4, D4, E4, D4, L(C4, 4)];
+const ODE = [E4, E4, F4, G4, G4, F4, E4, D4, C4, C4, D4, E4, L(E4, 1.5), L(D4, 0.5), L(D4, 2),
+  E4, E4, F4, G4, G4, F4, E4, D4, C4, C4, D4, E4, L(D4, 1.5), L(C4, 0.5), L(C4, 2)];
+
+// 작은 별: 베이스(엄지)와 멜로디를 반 박씩 주고받는 독주 편곡. 베이스는 솔(6번줄 3프렛), 도(5번줄 3프렛), 레(4번줄 개방).
+const bG = [6, 3], bC = [5, 3], bD = [4, 0];
+const duo = (bass, a, b) => [L(bass, 0.5), L(a, 0.5), L(bass, 0.5), L(b, 0.5)];
+const TWINKLE_SOLO = [...duo(bG, G3, G3), ...duo(bG, D4, D4), ...duo(bC, E4, E4), L(bG, 0.5), L(D4, 1.5),
+  ...duo(bC, C4, C4), ...duo(bG, B3, B3), ...duo(bD, A3, A3), L(bG, 0.5), L(G3, 1.5)];
+
+const SONGS = [
+  { id: 'twinkle', kind: 'melody', title: '작은 별', source: '프랑스 전래 선율', stage: 2, score: score('작은 별', 80, TWINKLE) },
+  { id: 'mary', kind: 'melody', title: '메리의 어린 양', source: '미국 동요(로웰 메이슨 선율)', stage: 2, score: score('메리의 어린 양', 88, MARY) },
+  { id: 'ode', kind: 'melody', title: '환희의 송가', source: '베토벤', stage: 2, score: score('환희의 송가', 88, ODE) },
+  { id: 'round-g', kind: 'chords', title: '연습곡 1 · 네 코드 돌리기', source: '이 앱의 연습곡', stage: 6, bars: rep(['G', 'Em', 'C', 'D'], 4), pattern: 'D-D-D-D-', bpm: 66 },
+  { id: 'round-c', kind: 'chords', title: '연습곡 2 · 도 라 파 솔', source: '이 앱의 연습곡', stage: 6, bars: rep(['C', 'Am', 'Fmaj7', 'G'], 4), pattern: 'D-DUD-DU', bpm: 66 },
+  { id: 'twinkle-acc', kind: 'chords', title: '작은 별 반주', source: '프랑스 전래 선율', stage: 6, bars: ['G', 'G', 'C', 'G', 'C', 'G', 'D', 'G', 'G', 'C', 'G', 'D', 'G', 'C', 'G', 'D', 'G', 'G', 'C', 'G', 'C', 'G', 'D', 'G'], pattern: 'D-D-', bpm: 72 },
+  { id: 'twinkle-solo', kind: 'melody', title: '작은 별 독주(베이스와 주고받기)', source: '프랑스 전래 선율', stage: 10, score: score('작은 별 독주', 60, TWINKLE_SOLO) },
+];
+const song = (id) => SONGS.find((s) => s.id === id);
+
+const LESSONS = [
+  // ---------- 0 준비 ----------
+  { id: '0-1', stage: 0, title: '기타와 친해지기', goal: '기타 각 부분의 이름과 줄 번호를 안다', steps: [
+    card('기타의 각 부분', ['위쪽부터 헤드(줄감개가 달린 곳), 넥(왼손으로 잡는 긴 부분), 몸통 순서입니다.', '넥 앞면을 지판이라 하고, 지판에 가로로 박힌 쇠막대를 프렛이라고 합니다. 몸통 가운데 둥근 구멍은 울림구멍, 줄이 묶인 아래쪽 나무는 브리지입니다.', '클래식 기타는 나일론 줄을 써서 소리가 부드럽고 손끝이 덜 아픕니다. 넥이 넓어 손가락 사이가 넉넉합니다.']),
+    card('줄 번호', ['기타를 안았을 때 바닥 쪽에 있는 가장 가는 줄이 1번줄, 얼굴 쪽에 있는 가장 굵은 줄이 6번줄입니다.', '누르지 않고 치는 줄을 개방현이라고 합니다. 6번줄부터 미, 라, 레, 솔, 시, 미입니다.'], { kind: 'open' }),
+  ] },
+  { id: '0-2', stage: 0, title: '앉는 자세와 두 손', goal: '편하게 앉아 두 손의 기본 모양을 잡는다', steps: [
+    card('앉는 자세', ['의자 앞쪽에 허리를 펴고 앉습니다. 기타 옆구리의 오목한 곳을 왼쪽 허벅지에 올리고, 왼발을 발받침이나 두꺼운 책 위에 올려 넥이 비스듬히 위를 향하게 합니다.', '발받침이 없으면 오른쪽 허벅지에 올려도 됩니다. 어깨에 힘이 들어가지 않는 자세가 좋은 자세입니다.']),
+    card('왼손', ['엄지는 넥 뒤 가운데쯤에 가볍게 댑니다. 손가락은 둥글게 세워서 손끝으로, 프렛 바로 뒤(몸통 쪽 쇠막대에 가깝게)를 누릅니다.', '손가락 번호는 검지 1, 중지 2, 약지 3, 새끼 4입니다. 손톱은 짧게 깎아 주세요.']),
+    card('오른손', ['손가락 이름은 엄지 p, 검지 i, 중지 m, 약지 a입니다. 클래식 기타는 피크 없이 손가락으로 칩니다.', '기본 자리는 엄지가 4~6번줄, 검지가 3번줄, 중지가 2번줄, 약지가 1번줄입니다. 손목은 줄에서 살짝 띄우고 힘을 뺍니다.']),
+  ] },
+  { id: '0-3', stage: 0, title: '튜닝하기', goal: '여섯 줄을 튜너로 맞춘다', steps: [
+    card('연습 전에는 항상 튜닝', ['줄이 조금만 풀려도 맞게 눌렀는데 틀린 음이 납니다. 이 앱도 튜닝이 틀어지면 잘못 알아듣습니다.', '새 나일론 줄은 며칠 동안 계속 풀립니다. 연습을 시작할 때마다 튜너를 한 번 열어 주세요.']),
+    { type: 'tuner' },
+  ] },
+
+  // ---------- 1 줄과 프렛 ----------
+  { id: '1-1', stage: 1, title: '여섯 줄의 이름', goal: '부르는 개방현을 바로 찾아 친다', steps: [
+    card('굵은 줄부터 차례로', ['6번줄부터 1번줄까지 엄지로 하나씩 쳐 봅니다. 화면이 가리키는 줄을 치면 다음으로 넘어갑니다.', '맞는 줄을 칠 때까지 기다려 주니 천천히 하세요.'], { kind: 'open' }),
+    notes('6번줄에서 1번줄로, 다시 6번줄로', 60, [[6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0]], ['wait']),
+  ] },
+  { id: '1-2', stage: 1, title: 'TAB 악보 읽기', goal: 'TAB을 보고 어느 줄인지 안다', steps: [
+    card('TAB 악보', ['가로줄 여섯 개가 기타 줄입니다. 맨 윗줄이 1번줄(가장 가는 줄), 맨 아랫줄이 6번줄입니다. 기타를 눕혀 놓고 위에서 내려다본 모양입니다.', '줄 위의 숫자는 누를 프렛입니다. 0은 누르지 않고 치는 개방현입니다.']),
+    notes('줄 건너뛰기', 60, [[3, 0], [2, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [4, 0], [2, 0], [5, 0], [3, 0], [6, 0], [1, 0]], ['wait']),
+  ] },
+  { id: '1-3', stage: 1, title: '프렛 누르기', goal: '1번줄과 2번줄에서 프렛을 눌러 맑은 소리를 낸다', steps: [
+    card('한 프렛에 한 손가락', ['1프렛은 검지, 2프렛은 중지, 3프렛은 약지로 누릅니다. 손끝을 세워 프렛 바로 뒤를 누르면 적은 힘으로도 맑은 소리가 납니다.', '소리가 지지직거리면 프렛에서 너무 멀거나 덜 눌린 것입니다.'], { kind: 'fretboard', marks: [{ string: 1, fret: 1, finger: 1 }, { string: 1, fret: 3, finger: 3 }] }),
+    notes('1번줄: 미 파 솔', 60, [E4, F4, G4, F4, E4, F4, G4, G4, F4, E4], ['wait']),
+    notes('2번줄: 시 도 레', 60, [B3, C4, D4, C4, B3, C4, D4, D4, C4, B3], ['wait']),
+  ] },
+
+  // ---------- 2 단음 멜로디 ----------
+  { id: '2-1', stage: 2, title: '검지와 중지 번갈아 치기', goal: '오른손 검지와 중지를 걷듯이 번갈아 쓴다', steps: [
+    card('i, m 번갈아 치기', ['멜로디는 오른손 검지(i)와 중지(m)를 걷는 것처럼 번갈아 칩니다. 같은 손가락을 연달아 쓰지 않는 것이 요령입니다.', '줄을 친 손가락이 바로 옆(굵은 쪽) 줄에 기대어 멈추게 치면 소리가 또렷합니다. 이것을 아포얀도라고 합니다.']),
+    notes('1번줄 개방현을 i m i m', 70, rep([E4], 8), ['wait', 'timed']),
+    notes('2번줄에서 1번줄로', 70, [B3, B3, C4, C4, D4, D4, E4, E4, F4, F4, G4, G4], ['wait', 'timed']),
+  ] },
+  { id: '2-2', stage: 2, title: '도레미파솔', goal: '도에서 솔까지 오르내린다', steps: [
+    card('다섯 음의 자리', ['도와 레는 2번줄 1프렛과 3프렛, 미 파 솔은 1번줄 개방현, 1프렛, 3프렛입니다.'], { kind: 'fretboard', marks: [{ string: 2, fret: 1, finger: 1, label: '도' }, { string: 2, fret: 3, finger: 3, label: '레' }, { string: 1, fret: 0, label: '미' }, { string: 1, fret: 1, finger: 1, label: '파' }, { string: 1, fret: 3, finger: 3, label: '솔' }] }),
+    notes('올라갔다 내려오기', 70, [C4, D4, E4, F4, G4, F4, E4, D4, L(C4, 2)], ['wait', 'timed']),
+  ] },
+  { id: '2-3', stage: 2, title: '3번줄 솔과 라', goal: '낮은 솔부터 높은 솔까지 잇는다', steps: [
+    card('3번줄', ['3번줄 개방현은 솔, 2프렛(중지)은 라입니다. 여기에 2번줄 시 도 레를 이으면 낮은 솔에서 레까지 올라갑니다.'], { kind: 'fretboard', marks: [{ string: 3, fret: 0, label: '솔' }, { string: 3, fret: 2, finger: 2, label: '라' }, { string: 2, fret: 0, label: '시' }, { string: 2, fret: 1, finger: 1, label: '도' }, { string: 2, fret: 3, finger: 3, label: '레' }] }),
+    notes('솔 라 시 도 레', 70, [G3, A3, B3, C4, D4, C4, B3, A3, L(G3, 2)], ['wait', 'timed']),
+  ] },
+  { id: '2-4', stage: 2, title: '작은 별', goal: '작은 별을 끝까지 친다', steps: [
+    card('첫 곡', ['지금까지 배운 여섯 음으로 칩니다. 먼저 기다려 주기로 음을 익히고, 익숙해지면 박자 맞추기로 바꿔 보세요. 빠르기는 70%부터 시작하면 편합니다.']),
+    { type: 'notes', title: '작은 별', score: song('twinkle').score, modes: ['wait', 'timed'] },
+  ] },
+  { id: '2-5', stage: 2, title: '메리의 어린 양', goal: '도 레 미 솔 네 음으로 한 곡을 친다', steps: [
+    { type: 'notes', title: '메리의 어린 양', score: song('mary').score, modes: ['wait', 'timed'] },
+  ] },
+  { id: '2-6', stage: 2, title: '환희의 송가', goal: '점음표가 있는 곡을 박자에 맞춰 친다', steps: [
+    card('길게 끄는 음', ['넷째 마디에 한 박 반짜리 음과 반 박짜리 음이 나옵니다. 화면에서 음표의 간격을 보고 길게, 짧게를 구분하세요.']),
+    { type: 'notes', title: '환희의 송가', score: song('ode').score, modes: ['wait', 'timed'] },
+  ] },
+
+  // ---------- 3 첫 코드 ----------
+  { id: '3-1', stage: 3, title: '코드표 읽기와 Em', goal: 'Em을 잡고 여섯 줄을 맑게 울린다', steps: [
+    card('코드표 읽는 법', ['코드표는 기타를 세워 놓고 정면에서 본 그림입니다. 세로줄 여섯 개가 줄이고 맨 왼쪽이 6번줄입니다. 가로줄은 프렛입니다.', '점 안의 숫자는 왼손 손가락 번호입니다. 줄 위의 ○는 누르지 않고 치는 줄, ×는 치지 않는 줄입니다.'], { kind: 'chord', id: 'Em' }),
+    card('Em 잡기', ['중지를 5번줄 2프렛에, 약지를 4번줄 2프렛에 놓습니다. 엄지로 6번줄부터 1번줄까지 천천히 쓸어내립니다.', '한 줄씩 쳐 보면 어느 줄이 덜 울리는지 알 수 있습니다. 아래에서 확인해 보세요.'], { kind: 'chord', id: 'Em' }),
+    { type: 'strings', chord: 'Em' },
+    { type: 'strum', chord: 'Em', times: 4 },
+  ] },
+  { id: '3-2', stage: 3, title: 'Am', goal: 'Am을 잡고 5번줄부터 울린다', steps: [
+    card('Am 잡기', ['검지를 2번줄 1프렛, 중지를 4번줄 2프렛, 약지를 3번줄 2프렛에 놓습니다. 6번줄은 치지 않고 5번줄부터 칩니다.', '1번줄이 검지 살에 닿아 먹먹해지기 쉽습니다. 손가락을 세우고 손바닥을 넥에서 조금 떼어 보세요.'], { kind: 'chord', id: 'Am' }),
+    { type: 'strings', chord: 'Am' },
+    { type: 'strum', chord: 'Am', times: 4 },
+  ] },
+  { id: '3-3', stage: 3, title: 'Em과 Am 바꾸기', goal: '두 코드를 1분에 10번 넘게 바꾼다', steps: [
+    card('바꾸는 요령', ['Em에서 중지와 약지를 모양 그대로 한 줄씩 아래(가는 줄 쪽)로 옮기고 검지를 더하면 Am입니다.', '손가락을 하나씩 옮기지 말고 한꺼번에 움직이는 연습을 합니다. 한 번 치고 바꾸고, 한 번 치고 바꿉니다. 횟수가 기록되니 어제보다 한 번만 더 해 보세요.']),
+    { type: 'change', a: 'Em', b: 'Am', seconds: 60, goal: 10 },
+  ] },
+
+  // ---------- 4 코드 넓히기 1 ----------
+  { id: '4-1', stage: 4, title: 'C', goal: 'C를 잡고 5번줄부터 맑게 울린다', steps: [
+    card('C 잡기', ['검지를 2번줄 1프렛, 중지를 4번줄 2프렛, 약지를 5번줄 3프렛에 놓습니다. Am에서 약지만 5번줄 3프렛으로 옮긴 모양입니다.', '약지가 4번줄에 닿지 않게, 검지가 1번줄에 닿지 않게 손가락을 세웁니다.'], { kind: 'chord', id: 'C' }),
+    { type: 'strings', chord: 'C' },
+    { type: 'strum', chord: 'C', times: 4 },
+    { type: 'change', a: 'C', b: 'Am', seconds: 60, goal: 10 },
+  ] },
+  { id: '4-2', stage: 4, title: 'G', goal: 'G를 잡고 여섯 줄을 울린다', steps: [
+    card('G 잡기', ['검지를 5번줄 2프렛, 중지를 6번줄 3프렛, 약지를 1번줄 3프렛에 놓습니다. 손을 넓게 벌려야 해서 처음에는 어색합니다.', '약지 대신 새끼손가락으로 1번줄을 눌러도 됩니다. 편한 쪽으로 하세요.'], { kind: 'chord', id: 'G' }),
+    { type: 'strings', chord: 'G' },
+    { type: 'strum', chord: 'G', times: 4 },
+    { type: 'change', a: 'G', b: 'Em', seconds: 60, goal: 10 },
+  ] },
+  { id: '4-3', stage: 4, title: 'D', goal: 'D를 잡고 4번줄부터 울린다', steps: [
+    card('D 잡기', ['검지를 3번줄 2프렛, 중지를 1번줄 2프렛, 약지를 2번줄 3프렛에 놓습니다. 5번줄과 6번줄은 치지 않습니다.', '세 손가락이 작은 세모를 이룹니다. 엄지로 4번줄부터 쓸어내립니다.'], { kind: 'chord', id: 'D' }),
+    { type: 'strings', chord: 'D' },
+    { type: 'strum', chord: 'D', times: 4 },
+    { type: 'change', a: 'G', b: 'D', seconds: 60, goal: 10 },
+  ] },
+  { id: '4-4', stage: 4, title: 'C와 G 바꾸기', goal: '가장 자주 나오는 전환을 익힌다', steps: [
+    card('멀리 움직이는 전환', ['C와 G는 손가락이 모두 자리를 옮깁니다. 바꾸기 직전에 다음 모양을 머릿속에 그리고, 손가락을 줄에서 조금만 띄워 움직입니다.', '소리가 완벽하지 않아도 박자에 맞춰 바꾸는 것이 먼저입니다.']),
+    { type: 'change', a: 'C', b: 'G', seconds: 60, goal: 10 },
+  ] },
+
+  // ---------- 5 스트로크와 박자 ----------
+  { id: '5-1', stage: 5, title: '엄지로 네 박', goal: '박자에 맞춰 한 마디에 네 번 쓸어내린다', steps: [
+    card('내려치기', ['엄지 옆면으로 굵은 줄에서 가는 줄 쪽으로 쓸어내립니다. 화면의 화살표가 판정선에 닿을 때 칩니다.', '세게 치기보다 고르게 치는 데 집중하세요. 발로 박자를 같이 세면 쉽습니다.']),
+    { type: 'rhythm', title: 'Em 네 박', bars: ['Em', 'Em', 'Em', 'Em'], pattern: 'D-D-D-D-', bpm: 60 },
+  ] },
+  { id: '5-2', stage: 5, title: '내리고 올리기', goal: '검지로 내리고 올리는 8비트를 친다', steps: [
+    card('올려치기', ['검지 손톱 쪽으로 쓸어내리고(↓), 검지 살 쪽으로 가는 줄 서너 개만 가볍게 쓸어올립니다(↑).', '손은 시계추처럼 계속 아래위로 움직입니다. 올려치기는 내려치기보다 작게 칩니다.']),
+    { type: 'rhythm', title: 'Em 8비트', bars: ['Em', 'Em', 'Am', 'Am'], pattern: 'DUDUDUDU', bpm: 60 },
+  ] },
+  { id: '5-3', stage: 5, title: '칼립소 리듬', goal: '가장 널리 쓰는 반주 리듬을 익힌다', steps: [
+    card('↓ ↓↑ ↑↓↑', ['손은 계속 아래위로 움직이되, 줄을 치지 않고 지나가는 곳이 두 군데 있습니다. 입으로 "쿵 쿵짝 짝쿵짝" 하고 따라 하면 쉽습니다.', '처음에는 느리게, 왼손은 Em 하나만 잡고 오른손에 집중합니다.']),
+    { type: 'rhythm', title: 'Em 칼립소', bars: ['Em', 'Em', 'Em', 'Em'], pattern: 'D-DU-UDU', bpm: 60 },
+  ] },
+  { id: '5-4', stage: 5, title: '코드를 바꾸며 치기', goal: '리듬을 멈추지 않고 코드를 바꾼다', steps: [
+    card('멈추지 않기', ['코드를 바꾸느라 오른손이 멈추면 노래가 끊깁니다. 왼손이 조금 늦어도 오른손은 계속 움직이세요.', '마디의 마지막 박에서 미리 손을 떼고 옮기기 시작하면 다음 마디 첫 박에 맞출 수 있습니다.']),
+    { type: 'rhythm', title: 'Em과 Am', bars: ['Em', 'Em', 'Am', 'Am', 'Em', 'Em', 'Am', 'Am'], pattern: 'D-D-D-D-', bpm: 60 },
+    { type: 'rhythm', title: 'C와 G', bars: ['C', 'C', 'G', 'G', 'C', 'C', 'G', 'G'], pattern: 'D-D-D-D-', bpm: 60 },
+  ] },
+
+  // ---------- 6 첫 곡 반주 ----------
+  { id: '6-1', stage: 6, title: '네 코드 돌리기', goal: 'G, Em, C, D를 한 마디씩 이어 친다', steps: [
+    card('가장 흔한 진행', ['G, Em, C, D 네 코드를 차례로 도는 진행은 수많은 노래에 쓰입니다. 한 마디에 네 번 내려치면서 마디마다 코드를 바꿉니다.']),
+    { type: 'rhythm', title: song('round-g').title, bars: song('round-g').bars, pattern: song('round-g').pattern, bpm: song('round-g').bpm },
+  ] },
+  { id: '6-2', stage: 6, title: 'Fmaj7과 도 라 파 솔', goal: 'F 대신 Fmaj7을 써서 C, Am, F, G 진행을 친다', steps: [
+    card('Fmaj7', ['F 코드는 초보자에게 가장 어려운 코드입니다. 당분간은 모양이 쉬운 Fmaj7으로 대신합니다. C 코드에서 중지와 약지를 한 줄씩 아래로 옮긴 모양이고, 4번줄부터 칩니다.'], { kind: 'chord', id: 'Fmaj7' }),
+    { type: 'strings', chord: 'Fmaj7' },
+    { type: 'rhythm', title: song('round-c').title, bars: song('round-c').bars, pattern: song('round-c').pattern, bpm: song('round-c').bpm },
+  ] },
+  { id: '6-3', stage: 6, title: '작은 별 반주', goal: '노래를 부르며 G, C, D로 반주한다', steps: [
+    card('노래 반주', ['두 박마다 코드가 바뀝니다. 한 코드에 두 번씩 내려칩니다. 익숙해지면 작은 별을 흥얼거리며 쳐 보세요.']),
+    { type: 'rhythm', title: song('twinkle-acc').title, bars: song('twinkle-acc').bars, pattern: song('twinkle-acc').pattern, bpm: song('twinkle-acc').bpm },
+  ] },
+
+  // ---------- 7 아르페지오 ----------
+  { id: '7-1', stage: 7, title: 'p i m a 개방현', goal: '엄지, 검지, 중지, 약지를 차례로 쓴다', steps: [
+    card('아르페지오', ['코드를 한꺼번에 치지 않고 한 줄씩 차례로 뜯는 것을 아르페지오라고 합니다. 엄지(p)가 굵은 줄을, 검지(i) 중지(m) 약지(a)가 3번, 2번, 1번줄을 맡습니다.', '손가락을 미리 줄 위에 올려놓고, 손등은 움직이지 않은 채 손가락만 움직입니다.']),
+    notes('6번 3번 2번 1번', 60, rep([[6, 0], [3, 0], [2, 0], [1, 0]], 4), ['wait', 'timed']),
+  ] },
+  { id: '7-2', stage: 7, title: 'Am 아르페지오', goal: '코드를 잡은 채로 한 줄씩 뜯는다', steps: [
+    card('코드를 잡고 뜯기', ['왼손은 Am을 잡고 있습니다. 오른손 엄지가 5번줄, 검지 중지 약지가 3번, 2번, 1번줄을 칩니다.', '앞에 친 줄이 계속 울리기 때문에 앱이 가끔 헷갈릴 수 있습니다. 한 음씩 또렷하게 치면 잘 알아듣습니다.'], { kind: 'chord', id: 'Am' }),
+    notes('Am: 5 3 2 1', 60, rep([[5, 0], [3, 2], [2, 1], [1, 0]], 4), ['wait', 'timed']),
+    notes('Em: 6 3 2 1', 60, rep([[6, 0], [3, 0], [2, 0], [1, 0]], 4), ['wait', 'timed']),
+  ] },
+  { id: '7-3', stage: 7, title: 'C와 G 아르페지오', goal: '코드를 바꾸며 아르페지오를 잇는다', steps: [
+    notes('C 두 마디, G 두 마디', 60, [...rep([[5, 3], [3, 0], [2, 1], [1, 0]], 2), ...rep([[6, 3], [3, 0], [2, 0], [1, 3]], 2)], ['wait', 'timed']),
+  ] },
+  { id: '7-4', stage: 7, title: '올라갔다 내려오기', goal: 'p i m a m i 여섯 음 패턴을 친다', steps: [
+    card('여섯 음 패턴', ['엄지, 검지, 중지, 약지로 올라갔다가 중지, 검지로 내려옵니다. 발라드 반주에 많이 쓰는 패턴입니다.']),
+    notes('Am과 Em', 66, [...rep([[5, 0], [3, 2], [2, 1], [1, 0], [2, 1], [3, 2]], 2), ...rep([[6, 0], [3, 0], [2, 0], [1, 0], [2, 0], [3, 0]], 2)], ['wait', 'timed'], 3),
+  ] },
+
+  // ---------- 8 코드 넓히기 2 ----------
+  { id: '8-1', stage: 8, title: 'E와 A', goal: 'E와 A를 잡는다', steps: [
+    card('E', ['Em에 검지(3번줄 1프렛)를 더하면 E입니다. 음 하나 차이로 밝은 느낌이 됩니다.'], { kind: 'chord', id: 'E' }),
+    { type: 'strings', chord: 'E' },
+    card('A', ['2프렛에 검지, 중지, 약지를 4번, 3번, 2번줄 순서로 나란히 세웁니다. 자리가 좁으니 손가락을 비스듬히 놓으세요. 5번줄부터 칩니다.'], { kind: 'chord', id: 'A' }),
+    { type: 'strings', chord: 'A' },
+    { type: 'change', a: 'A', b: 'E', seconds: 60, goal: 10 },
+  ] },
+  { id: '8-2', stage: 8, title: 'Dm', goal: 'Dm을 잡고 D와 구분한다', steps: [
+    card('Dm', ['검지를 1번줄 1프렛, 중지를 3번줄 2프렛, 약지를 2번줄 3프렛에 놓습니다. D에서 1번줄만 한 프렛 낮춘 모양이고 4번줄부터 칩니다.'], { kind: 'chord', id: 'Dm' }),
+    { type: 'strings', chord: 'Dm' },
+    { type: 'strum', chord: 'Dm', times: 4 },
+    { type: 'change', a: 'Dm', b: 'Am', seconds: 60, goal: 10 },
+  ] },
+  { id: '8-3', stage: 8, title: '세븐스 코드', goal: 'G7, D7, A7, E7을 잡는다', steps: [
+    card('세븐스', ['코드 이름에 7이 붙으면 음 하나가 더해져 다음 코드로 넘어가고 싶은 느낌이 납니다. 모양은 기본 코드에서 손가락 하나를 옮기거나 떼면 됩니다.']),
+    card('G7', ['중지를 5번줄 2프렛, 약지를 6번줄 3프렛, 검지를 1번줄 1프렛에 놓습니다.'], { kind: 'chord', id: 'G7' }),
+    { type: 'strum', chord: 'G7', times: 3 },
+    card('D7', ['검지를 2번줄 1프렛, 중지를 3번줄 2프렛, 약지를 1번줄 2프렛에 놓습니다. 4번줄부터 칩니다.'], { kind: 'chord', id: 'D7' }),
+    { type: 'strum', chord: 'D7', times: 3 },
+    card('A7과 E7', ['A7은 중지를 4번줄 2프렛, 약지를 2번줄 2프렛에 놓고 3번줄은 비웁니다. E7은 중지를 5번줄 2프렛, 검지를 3번줄 1프렛에 놓습니다.'], { kind: 'chord', id: 'A7' }),
+    { type: 'strum', chord: 'A7', times: 3 },
+    { type: 'strum', chord: 'E7', times: 3 },
+  ] },
+  { id: '8-4', stage: 8, title: '카포', goal: '카포가 무엇이고 언제 쓰는지 안다', steps: [
+    card('카포', ['카포는 프렛에 끼워 모든 줄을 한꺼번에 눌러 주는 집게입니다. 같은 코드 모양으로 치면서 전체 음을 높일 수 있습니다.', '노래가 내 목소리에 낮으면 카포를 2프렛이나 3프렛에 끼워 보세요. 클래식 기타는 넥이 평평하고 넓으니 클래식 기타용 카포를 써야 합니다.', '카포를 끼운 상태에서는 이 앱의 판정이 맞지 않습니다. 앱으로 연습할 때는 빼 주세요.']),
+  ] },
+
+  // ---------- 9 F 코드 ----------
+  { id: '9-1', stage: 9, title: '작은 F', goal: '검지로 두 줄을 함께 누른다', steps: [
+    card('검지를 눕히기', ['Fmaj7에서 검지를 눕혀 1번줄과 2번줄 1프렛을 함께 누르면 작은 F입니다. 검지 끝마디의 넓은 면을 씁니다.', '처음에는 1번줄이 잘 안 울립니다. 며칠에 걸쳐 조금씩 됩니다. 하루에 몇 분씩만 하세요.'], { kind: 'chord', id: 'Fs' }),
+    { type: 'strings', chord: 'Fs' },
+    { type: 'change', a: 'C', b: 'Fs', seconds: 60, goal: 8 },
+  ] },
+  { id: '9-2', stage: 9, title: '바레 F', goal: '검지로 여섯 줄을 모두 누른다', steps: [
+    card('바레 코드', ['검지를 곧게 펴서 1프렛의 여섯 줄을 모두 누르고, 나머지 손가락으로 E 코드 모양을 한 프렛 위에 잡습니다.', '요령은 세 가지입니다. 검지를 프렛에 바짝 붙이고, 검지의 엄지 쪽 옆면으로 누르고, 넥 뒤의 엄지를 검지 맞은편에 둡니다. 팔꿈치를 몸에 붙이면 힘이 덜 듭니다.', '여섯 줄이 모두 울리기까지 몇 주가 걸리는 것이 보통입니다. 안 울리는 줄이 어디인지 한 줄씩 확인하며 조금씩 고쳐 가세요.'], { kind: 'chord', id: 'F' }),
+    { type: 'strings', chord: 'F' },
+  ] },
+  { id: '9-3', stage: 9, title: 'F 넣어 치기', goal: '진행 안에서 F로 바꾼다', steps: [
+    card('진행 속의 F', ['F를 잡는 데 시간이 걸려도 괜찮습니다. 작은 F로 쳐도 좋으니 박자를 지키며 바꾸는 연습을 합니다.']),
+    { type: 'change', a: 'Am', b: 'Fs', seconds: 60, goal: 8 },
+    { type: 'rhythm', title: 'C Am F G', bars: rep(['C', 'Am', 'Fs', 'G'], 2), pattern: 'D-D-D-D-', bpm: 60 },
+  ] },
+
+  // ---------- 10 멜로디와 베이스 함께 ----------
+  { id: '10-1', stage: 10, title: '베이스와 멜로디 주고받기', goal: '엄지와 다른 손가락이 번갈아 나온다', steps: [
+    card('독주의 첫걸음', ['혼자서 반주와 멜로디를 함께 치는 것이 독주입니다. 엄지가 굵은 줄에서 베이스를, 검지와 중지가 가는 줄에서 멜로디를 맡습니다.', '여기서는 베이스와 멜로디를 반 박씩 번갈아 칩니다. 두 음을 동시에 치는 독주는 다음 버전에서 다룹니다.']),
+    notes('베이스 솔과 멜로디', 60, [...duo(bG, G3, B3), ...duo(bG, D4, B3), ...duo(bC, C4, E4), ...duo(bC, G4, E4)], ['wait', 'timed']),
+  ] },
+  { id: '10-2', stage: 10, title: '작은 별 독주', goal: '베이스를 넣어 작은 별 앞부분을 혼자 친다', steps: [
+    card('베이스 자리', ['베이스는 세 음만 씁니다. 솔은 6번줄 3프렛, 도는 5번줄 3프렛, 레는 4번줄 개방현입니다. 모두 엄지로 칩니다.'], { kind: 'fretboard', marks: [{ string: 6, fret: 3, finger: 3, label: '솔' }, { string: 5, fret: 3, finger: 3, label: '도' }, { string: 4, fret: 0, label: '레' }] }),
+    { type: 'notes', title: '작은 별 독주', score: song('twinkle-solo').score, modes: ['wait', 'timed'] },
+  ] },
+];
+
+function lessonById(id) {
+  return LESSONS.find((l) => l.id === id) || null;
+}
+
+function isPractice(step) {
+  return step.type !== 'card';
+}
+
+// 기록·오늘의 연습용 요약 목록
+const LESSON_INDEX = LESSONS.map((l) => ({ id: l.id, stage: l.stage, title: l.title, practice: l.steps.some(isPractice) }));
+
+// ---- diagram.js ----
+// 그림: 코드표(세로), 지판(가로), 개방현 안내. SVG 글자열을 돌려준다. 색은 CSS(dg-* 클래스)에서 정한다.
+
+// 코드표: 기타를 세워 정면에서 본 모양. 왼쪽이 6번줄.
+function chordSvg(id, options = {}) {
+  const chord = CHORDS[id];
+  const active = options.active ?? null;   // 강조할 줄 번호
+  const marks = options.marks ?? {};       // { 줄번호: 'clear' | 'muffled' | 'other' }
+  const x0 = 34, y0 = 44, dx = 30, dy = 38, rows = 4;
+  const x = (i) => x0 + i * dx, w = dx * 5;
+  let s = `<svg class="dg dg-chord" viewBox="0 0 ${x0 * 2 + w} ${y0 + dy * rows + 44}" role="img" aria-label="${chord.name} 코드표">`;
+  s += `<rect class="dg-nut" x="${x0 - 2}" y="${y0 - 6}" width="${w + 4}" height="6" rx="2"/>`;
+  for (let r = 0; r <= rows; r++) s += `<line class="dg-fret" x1="${x0}" y1="${y0 + r * dy}" x2="${x0 + w}" y2="${y0 + r * dy}"/>`;
+  for (let i = 0; i < 6; i++) {
+    const num = 6 - i, cls = ['dg-string', num === active ? 'is-active' : '', marks[num] ? `is-${marks[num]}` : ''].join(' ').trim();
+    s += `<line class="${cls}" x1="${x(i)}" y1="${y0}" x2="${x(i)}" y2="${y0 + rows * dy}" stroke-width="${(1.2 + (5 - i) * 0.35).toFixed(2)}"/>`;
+  }
+  if (chord.barre) {
+    const a = 6 - chord.barre.from, b = 6 - chord.barre.to, y = y0 + (chord.barre.fret - 0.5) * dy;
+    s += `<rect class="dg-barre" x="${x(a) - 11}" y="${y - 11}" width="${x(b) - x(a) + 22}" height="22" rx="11"/>`;
+  }
+  chord.frets.forEach((fret, i) => {
+    const num = 6 - i;
+    if (fret < 0) s += `<text class="dg-mute" x="${x(i)}" y="${y0 - 16}" text-anchor="middle">×</text>`;
+    else if (fret === 0) s += `<circle class="dg-open" cx="${x(i)}" cy="${y0 - 20}" r="6.5"/>`;
+    else {
+      const y = y0 + (fret - 0.5) * dy;
+      const inBarre = chord.barre && chord.barre.fret === fret && num <= chord.barre.from && num >= chord.barre.to;
+      if (!inBarre) s += `<circle class="dg-dot" cx="${x(i)}" cy="${y}" r="12"/>`;
+      s += `<text class="dg-finger" x="${x(i)}" y="${y + 5}" text-anchor="middle">${chord.fingers[i]}</text>`;
+    }
+    s += `<text class="dg-num${num === active ? ' is-active' : ''}" x="${x(i)}" y="${y0 + rows * dy + 22}" text-anchor="middle">${num}</text>`;
+  });
+  s += `<text class="dg-cap" x="${x0 + w / 2}" y="${y0 + rows * dy + 40}" text-anchor="middle">줄 번호</text>`;
+  return s + '</svg>';
+}
+
+// 지판: TAB과 같은 방향(위가 1번줄). marks: [{ string, fret, finger?, label? }], current: 강조할 한 곳
+function fretboardSvg(marks = [], options = {}) {
+  const frets = options.frets ?? 4;
+  const current = options.current ?? null;
+  const x0 = 58, y0 = 18, fw = 74, sh = 26;
+  const w = fw * frets, h = sh * 5;
+  let s = `<svg class="dg dg-board" viewBox="0 0 ${x0 + w + 16} ${y0 + h + 34}" role="img" aria-label="지판 그림">`;
+  s += `<rect class="dg-wood" x="${x0}" y="${y0 - 8}" width="${w}" height="${h + 16}" rx="4"/>`;
+  s += `<rect class="dg-nut" x="${x0 - 5}" y="${y0 - 8}" width="6" height="${h + 16}" rx="2"/>`;
+  for (let f = 1; f <= frets; f++) {
+    s += `<line class="dg-fret" x1="${x0 + f * fw}" y1="${y0 - 8}" x2="${x0 + f * fw}" y2="${y0 + h + 8}"/>`;
+    s += `<text class="dg-num" x="${x0 + (f - 0.5) * fw}" y="${y0 + h + 28}" text-anchor="middle">${f}프렛</text>`;
+  }
+  for (let n = 1; n <= 6; n++) {
+    const y = y0 + (n - 1) * sh;
+    s += `<line class="dg-string" x1="${x0}" y1="${y}" x2="${x0 + w}" y2="${y}" stroke-width="${(1.1 + (n - 1) * 0.4).toFixed(2)}"/>`;
+    s += `<text class="dg-num" x="14" y="${y + 5}" text-anchor="middle">${n}</text>`;
+  }
+  const draw = (m, cls) => {
+    const y = y0 + (m.string - 1) * sh;
+    const cx = m.fret === 0 ? x0 - 22 : x0 + (m.fret - 0.5) * fw;
+    const text = m.label ?? (m.fret === 0 ? '' : m.finger ?? '');
+    s += `<circle class="${m.fret === 0 ? 'dg-open' : 'dg-dot'} ${cls}" cx="${cx}" cy="${y}" r="11.5"/>`;
+    if (text !== '') s += `<text class="${m.fret === 0 ? 'dg-openlabel' : 'dg-finger'} ${cls}" x="${cx}" y="${y + 4.5}" text-anchor="middle">${text}</text>`;
+  };
+  marks.forEach((m) => draw(m, ''));
+  if (current) draw(current, 'is-current');
+  return s + '</svg>';
+}
+
+// 개방현 여섯 줄의 이름
+function openStringsSvg() {
+  const x0 = 96, y0 = 20, sh = 30, w = 300;
+  let s = `<svg class="dg dg-open-strings" viewBox="0 0 ${x0 + w + 20} ${y0 + sh * 5 + 26}" role="img" aria-label="개방현 여섯 줄의 음 이름">`;
+  STRINGS.slice().reverse().forEach((st, i) => {
+    const y = y0 + i * sh;
+    s += `<text class="dg-finger is-plain" x="12" y="${y + 6}">${st.num}번줄</text>`;
+    s += `<line class="dg-string" x1="${x0}" y1="${y}" x2="${x0 + w - 70}" y2="${y}" stroke-width="${(1.1 + i * 0.45).toFixed(2)}"/>`;
+    s += `<text class="dg-finger is-plain" x="${x0 + w - 56}" y="${y + 6}">${NOTE_NAMES[pitchClass(st.midi)]} ${midiToKo(st.midi)}</text>`;
+  });
+  return s + '</svg>';
+}
+
+function figureSvg(figure) {
+  if (!figure) return '';
+  if (figure.kind === 'chord') return chordSvg(figure.id);
+  if (figure.kind === 'fretboard') return fretboardSvg(figure.marks, { frets: figure.frets });
+  if (figure.kind === 'open') return openStringsSvg();
+  return '';
+}
+
 // ---- audio.js ----
 // 브라우저 소리 입출력.
 // 마이크 → input → 고역통과(50Hz, 웅웅거리는 잡음 제거) → analyser. 녹음할 때만 tap을 붙인다.
@@ -670,7 +1727,8 @@ function micErrorMessage(err) {
 function createAudio() {
   let ctx = null, input = null, filter = null, analyser = null, tap = null, sink = null;
   let micStream = null, micNode = null, micSettings = null, onChunk = null;
-  const frame = new Float32Array(4096);
+  const frame = new Float32Array(8192);
+  const live = new Set();
 
   function micSupported() {
     return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
@@ -720,21 +1778,30 @@ function createAudio() {
     micNode = null;
   }
 
-  function readFrame() {
+  // 가장 최근 n샘플. 튜너는 4096, 코드 확인은 8192를 쓴다.
+  function readFrame(n = 4096) {
     if (!analyser) return null;
     analyser.getFloatTimeDomainData(frame);
-    return frame;
+    return n >= frame.length ? frame : frame.subarray(frame.length - n);
   }
 
   // target: 'speakers'면 스피커로, 'input'이면 분석 경로로만 넣는다(개발용 시험 신호).
-  function play(samples, target = 'speakers') {
+  // delaySec 뒤에 재생한다. 예약한 소리는 stopAll() 로 한꺼번에 끌 수 있다.
+  function play(samples, target = 'speakers', delaySec = 0) {
     const buffer = ctx.createBuffer(1, samples.length, ctx.sampleRate);
     buffer.getChannelData(0).set(samples);
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.connect(target === 'input' ? input : ctx.destination);
-    source.start();
+    source.onended = () => live.delete(source);
+    live.add(source);
+    source.start(ctx.currentTime + Math.max(0, delaySec));
     return source;
+  }
+
+  function stopAll() {
+    for (const source of live) { try { source.stop(); } catch (e) { /* 이미 끝남 */ } }
+    live.clear();
   }
 
   function record(seconds) {
@@ -765,12 +1832,66 @@ function createAudio() {
   }
 
   return {
-    micSupported, ensureContext, openMic, closeMic, readFrame, play, record,
+    micSupported, ensureContext, openMic, closeMic, readFrame, play, stopAll, record,
     get sampleRate() { return ctx ? ctx.sampleRate : 0; },
     get micOpen() { return !!micStream; },
     get micSettings() { return micSettings; },
     get ready() { return !!ctx; },
   };
+}
+
+// ---- listen.js ----
+// 듣기 루프와 화면 공용 도우미.
+// 25ms마다 최근 소리로 음량, 날카로운 성분, 음 높이를 구해 구독자에게 넘긴다. 구독자가 없으면 멈춘다.
+
+function createListener(audio) {
+  const subs = new Set();
+  let timer = null;
+
+  function tick() {
+    const buf = audio.readFrame(8192);
+    if (!buf) return;
+    // 음량은 최근 2048샘플(약 43ms)로 잰다. 더 짧으면 굵은 줄 여러 개가 함께 울릴 때 값이 출렁인다.
+    const n = buf.length, tail = buf.subarray(n - 2048);
+    const p = detectPitch(tail, audio.sampleRate, { minFreq: 70 });
+    const frame = { time: performance.now(), freq: p.freq, clarity: p.clarity, rms: rmsLevel(tail), hf: hfLevel(tail), buf, sampleRate: audio.sampleRate };
+    for (const fn of Array.from(subs)) fn(frame);
+  }
+
+  return {
+    subscribe(fn) {
+      subs.add(fn);
+      if (!timer) timer = setInterval(tick, 25);
+      return () => {
+        subs.delete(fn);
+        if (!subs.size && timer) { clearInterval(timer); timer = null; }
+      };
+    },
+  };
+}
+
+function esc(text) {
+  return String(text).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+const STAR_PATH = 'M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z';
+function starsHtml(count, max = 3) {
+  let out = `<span class="stars" role="img" aria-label="별 ${count}개 (${max}개 중)">`;
+  for (let i = 0; i < max; i++) out += `<svg viewBox="0 0 24 24" class="star${i < count ? ' on' : ''}" aria-hidden="true"><path d="${STAR_PATH}"/></svg>`;
+  return out + '</span>';
+}
+
+// 짧은 박자 소리(메트로놈). accent 이면 조금 높은 음.
+function clickSamples(sampleRate, accent = false) {
+  const n = Math.floor(sampleRate * 0.03), out = new Float32Array(n), f = accent ? 1760 : 1175;
+  for (let i = 0; i < n; i++) out[i] = 0.35 * Math.sin((2 * Math.PI * f * i) / sampleRate) * Math.exp(-i / (sampleRate * 0.008));
+  return out;
+}
+
+// 마이크 민감도 설정 → 추적기 옵션
+function trackerOptions(settings, extra = {}) {
+  const minRms = { low: 0.008, normal: 0.004, high: 0.002 }[settings.sensitivity] ?? 0.004;
+  return { minRms, ...extra };
 }
 
 // ---- ui-tuner.js ----
@@ -1120,35 +2241,1277 @@ function initCheckView(root, audio, env) {
   return { buildReport, takes };
 }
 
+// ---- ui-play.js ----
+// 단음 연습 화면: 흘러가는 TAB 악보. 기다려 주기 / 박자 맞추기 / 시범 듣기.
+
+const TEMPOS = [50, 60, 70, 80, 90, 100];
+const pluckCache = new Map();
+function pluckOf(midi, sampleRate) {
+  const key = `${midi}@${sampleRate}`;
+  if (!pluckCache.has(key)) pluckCache.set(key, renderPluck(midiToFreq(midi), sampleRate, 1.3));
+  return pluckCache.get(key);
+}
+
+// spec: { score, modes: ['wait', 'timed'], onResult(result) }
+function mountNotePlayer(host, app, spec) {
+  const full = spec.score;
+  const bars = barCount(full);
+  const barOptions = (sel) => Array.from({ length: bars }, (_, i) => `<option value="${i + 1}"${i + 1 === sel ? ' selected' : ''}>${i + 1}</option>`).join('');
+  host.innerHTML = `
+    <div class="player">
+      <div class="player-bar">
+        <div class="seg" role="group" aria-label="연습 방식">${spec.modes.map((m) => `<button type="button" class="btn chip" data-mode="${m}">${m === 'wait' ? '기다려 주기' : '박자 맞추기'}</button>`).join('')}</div>
+        <label class="field">빠르기 <select data-role="tempo">${TEMPOS.map((t) => `<option value="${t}"${t === 100 ? ' selected' : ''}>${t}%</option>`).join('')}</select></label>
+        ${bars > 4 ? `<label class="field">마디 <select data-role="from">${barOptions(1)}</select> ~ <select data-role="to">${barOptions(bars)}</select></label>` : ''}
+        <label class="field check"><input type="checkbox" data-role="click"${app.progress.settings.click ? ' checked' : ''}> 박자 소리</label>
+      </div>
+      <div class="tab-wrap"><canvas class="tab" aria-label="TAB 악보"></canvas></div>
+      <div class="player-info">
+        <p class="target" role="status" aria-live="polite"></p>
+        <p class="heard"></p>
+      </div>
+      <div class="board"></div>
+      <div class="player-actions">
+        <button type="button" class="btn primary big" data-act="start">시작</button>
+        <button type="button" class="btn" data-act="demo">시범 듣기</button>
+        <button type="button" class="btn ghost" data-act="stop" hidden>멈춤</button>
+        ${app.env.dev ? '<button type="button" class="btn ghost" data-act="auto">자동 연주(시험)</button>' : ''}
+      </div>
+      <div class="result" hidden></div>
+    </div>`;
+  const q = (sel) => host.querySelector(sel);
+  const canvas = q('canvas'), g = canvas.getContext('2d');
+  const el = { target: q('.target'), heard: q('.heard'), board: q('.board'), result: q('.result'), start: q('[data-act="start"]'), demo: q('[data-act="demo"]'), stop: q('[data-act="stop"]'), tempo: q('[data-role="tempo"]'), from: q('[data-role="from"]'), to: q('[data-role="to"]'), click: q('[data-role="click"]') };
+  let mode = spec.modes[0];
+  let run = null;       // 진행 중인 연습
+  let view = null;      // 화면에 그릴 악보 상태 { notes, states, pos, beatsPerBar, current }
+  let raf = 0, destroyed = false;
+
+  function currentScore() {
+    if (!el.from) return full;
+    const a = Math.min(Number(el.from.value), Number(el.to.value)), b = Math.max(Number(el.from.value), Number(el.to.value));
+    return sliceBars(full, a, b);
+  }
+
+  function paintModes() {
+    for (const b of host.querySelectorAll('[data-mode]')) b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
+    el.tempo.closest('.field').hidden = mode === 'wait';
+  }
+
+  function setInfo(text, kind = '') {
+    el.target.textContent = text;
+    el.target.dataset.kind = kind;
+  }
+
+  function showTarget(note) {
+    if (!note) { el.board.innerHTML = ''; return; }
+    setInfo(`칠 음: ${describeNote(note)}`);
+    el.board.innerHTML = fretboardSvg([], { current: { string: note.string, fret: note.fret, finger: note.fret || '' }, frets: Math.max(4, note.fret) });
+  }
+
+  // ---------- 그리기 ----------
+  function colors() {
+    const cs = getComputedStyle(host);
+    const v = (name, fallback) => cs.getPropertyValue(name).trim() || fallback;
+    return { line: v('--tab-line', '#b8ad9c'), ink: v('--ink', '#222'), muted: v('--muted', '#777'), note: v('--tab-note', '#a84f1c'), noteInk: v('--tab-note-ink', '#fff'), good: v('--good', '#1d8348'), warn: v('--warn', '#b9720b'), bad: v('--bad', '#b3261e'), hit: v('--tab-hit', '#1d8348') };
+  }
+
+  function draw() {
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.clientWidth, H = canvas.clientHeight;
+    if (!W || !H) return;
+    if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) { canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); }
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, W, H);
+    const c = colors();
+    const top = 30, gap = (H - top - 26) / 5, hitX = Math.max(84, W * 0.2), ppb = Math.max(64, Math.min(120, W / 8));
+    const yOf = (string) => top + (string - 1) * gap;
+    const v = view;
+    const pos = v ? v.pos : 0;
+    const xOf = (t) => hitX + (t - pos) * ppb;
+
+    g.lineWidth = 1;
+    g.font = '600 13px system-ui, sans-serif';
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    for (let s = 1; s <= 6; s++) {
+      g.strokeStyle = c.line;
+      g.lineWidth = 1 + (s - 1) * 0.35;
+      g.beginPath(); g.moveTo(34, yOf(s)); g.lineTo(W - 8, yOf(s)); g.stroke();
+      g.fillStyle = c.muted;
+      g.fillText(String(s), 16, yOf(s));
+    }
+    if (v) {
+      // 마디선
+      g.strokeStyle = c.line; g.lineWidth = 1; g.fillStyle = c.muted; g.font = '600 12px system-ui, sans-serif';
+      const total = Math.ceil(v.beats / v.beatsPerBar);
+      for (let b = 0; b <= total; b++) {
+        const x = xOf(b * v.beatsPerBar) - ppb * 0.45;
+        if (x < 34 || x > W) continue;
+        g.globalAlpha = 0.55;
+        g.beginPath(); g.moveTo(x, top - 8); g.lineTo(x, top + gap * 5 + 8); g.stroke();
+        g.globalAlpha = 1;
+        if (b < total) g.fillText(String(b + (v.barOffset || 0) + 1), x + 12, 12);
+      }
+    }
+    // 판정선
+    g.strokeStyle = c.hit; g.lineWidth = 3; g.globalAlpha = 0.85;
+    g.beginPath(); g.moveTo(hitX, top - 12); g.lineTo(hitX, top + gap * 5 + 12); g.stroke();
+    g.globalAlpha = 1;
+    if (v) {
+      v.notes.forEach((n, i) => {
+        const x = xOf(n.t), y = yOf(n.string);
+        if (x < 20 || x > W + 30) return;
+        const st = v.states[i];
+        const tail = Math.max(0, n.dur * ppb - 34);
+        const fill = st === 'hit' || st === 'perfect' ? c.good : st === 'good' ? c.warn : st === 'miss' ? c.bad : c.note;
+        g.globalAlpha = st ? 0.45 : 1;
+        if (tail > 6) { g.strokeStyle = fill; g.lineWidth = 6; g.lineCap = 'round'; g.beginPath(); g.moveTo(x + 14, y); g.lineTo(x + 14 + tail, y); g.stroke(); }
+        g.fillStyle = fill;
+        g.beginPath(); g.arc(x, y, 15, 0, Math.PI * 2); g.fill();
+        if (i === v.current && !st) { g.strokeStyle = c.ink; g.lineWidth = 2.5; g.beginPath(); g.arc(x, y, 19, 0, Math.PI * 2); g.stroke(); }
+        g.fillStyle = c.noteInk; g.font = '800 15px system-ui, sans-serif';
+        g.fillText(String(n.fret), x, y + 1);
+        g.globalAlpha = 1;
+      });
+      if (v.count) { g.fillStyle = c.ink; g.font = '800 64px system-ui, sans-serif'; g.globalAlpha = 0.85; g.fillText(v.count, W / 2, H / 2); g.globalAlpha = 1; }
+    }
+  }
+
+  function idleView() {
+    const sc = currentScore();
+    view = { notes: sc.notes, states: sc.notes.map(() => null), pos: -1, beats: scoreBeats(sc), beatsPerBar: sc.beatsPerBar, current: 0, barOffset: el.from ? Math.min(Number(el.from.value), Number(el.to.value)) - 1 : 0 };
+    showTarget(sc.notes[0]);
+    setInfo(mode === 'wait' ? '시작을 누르고 첫 음을 치세요. 맞는 음을 칠 때까지 기다립니다.' : '시작을 누르면 한 마디를 세고 시작합니다. 음표가 초록 선에 닿을 때 치세요.');
+    el.heard.textContent = '';
+    draw();
+  }
+
+  // ---------- 진행 ----------
+  function stop(silent) {
+    if (run) {
+      if (run.unsub) run.unsub();
+      cancelAnimationFrame(raf);
+      app.audio.stopAll();
+      if (run.kind !== 'demo') app.addPracticeTime((performance.now() - run.startedAt) / 1000);
+      run = null;
+    }
+    el.start.hidden = false; el.demo.hidden = false; el.stop.hidden = true;
+    if (!silent) idleView();
+  }
+
+  function finish() {
+    const r = run;
+    const result = r.judge.result();
+    stop(true);
+    draw();
+    let detail;
+    if (result.mode === 'wait') detail = result.wrong ? `틀린 음 ${result.wrong}번` : '틀린 음 없이 끝까지 쳤어요';
+    else {
+      detail = `정확 ${result.perfect} · 괜찮음 ${result.good} · 놓침 ${result.miss}`;
+      if (Math.abs(result.medianOffset) > 90 && result.perfect + result.good >= 4) detail += `. 전체적으로 ${result.medianOffset > 0 ? '늦게' : '빠르게'} 잡혔어요. 도구의 박자 보정을 해 보면 좋아요`;
+    }
+    el.result.hidden = false;
+    el.result.innerHTML = `${starsHtml(result.stars)}<p class="result-main">${result.stars >= 3 ? '아주 좋아요' : result.stars === 2 ? '잘했어요' : result.stars === 1 ? '끝까지 해냈어요' : '조금만 더 해 봐요'}</p><p class="result-detail">${detail}</p>`;
+    setInfo('다시 하려면 시작을 누르세요.');
+    if (spec.onResult) spec.onResult(result);
+  }
+
+  function schedule(notes, beat, leadSec, target) {
+    notes.forEach((n) => app.audio.play(pluckOf(n.midi, app.audio.sampleRate), target, leadSec + (n.t * beat) / 1000));
+  }
+
+  async function start(kind, auto = false) {
+    stop(true);
+    el.result.hidden = true;
+    try {
+      if (kind === 'demo') await app.audio.ensureContext();
+      else await app.ensureInput();
+    } catch (err) {
+      idleView();
+      setInfo(micErrorMessage(err), 'bad');
+      return;
+    }
+    const sc = currentScore();
+    const tempo = kind === 'wait' ? 1 : Number(el.tempo.value) / 100;
+    const beat = beatMs(sc.bpm, tempo);
+    const notes = sc.notes;
+    view = { notes, states: notes.map(() => null), pos: kind === 'wait' ? notes[0].t - 0.6 : -sc.beatsPerBar, beats: scoreBeats(sc), beatsPerBar: sc.beatsPerBar, current: 0, barOffset: view ? view.barOffset : 0 };
+    run = { kind, notes, beat, startedAt: performance.now(), t0: performance.now() + (kind === 'wait' ? 0 : sc.beatsPerBar * beat) };
+    el.start.hidden = true; el.demo.hidden = true; el.stop.hidden = false;
+
+    if (kind !== 'wait') {
+      const lead = (sc.beatsPerBar * beat) / 1000;
+      const clickOn = el.click.checked;
+      const sr = app.audio.sampleRate;
+      for (let b = 0; b < sc.beatsPerBar; b++) app.audio.play(clickSamples(sr, b === 0), 'speakers', (b * beat) / 1000);
+      if (clickOn && kind !== 'demo') for (let b = 0; b < view.beats; b++) app.audio.play(clickSamples(sr, b % sc.beatsPerBar === 0), 'speakers', lead + (b * beat) / 1000);
+      if (kind === 'demo') schedule(notes, beat, lead, 'speakers');
+      else if (auto) schedule(notes, beat, lead, 'input');
+    } else if (auto) {
+      notes.forEach((n, i) => app.audio.play(pluckOf(n.midi, app.audio.sampleRate), 'input', 0.4 + i * 0.45));
+    }
+
+    if (kind === 'demo') {
+      setInfo('시범을 듣는 중입니다.');
+    } else {
+      const tracker = createNoteTracker(trackerOptions(app.progress.settings));
+      if (kind === 'wait') {
+        run.judge = createWaitJudge(notes);
+        tracker.setExpected([notes[0].midi]);
+        showTarget(notes[0]);
+      } else {
+        run.judge = createTimedJudge(notes.map((n) => ({ midi: n.midi, timeMs: n.t * beat })), { latencyMs: app.progress.latencyMs });
+        showTarget(notes[0]);
+      }
+      run.unsub = app.listener.subscribe((frame) => {
+        if (!run) return;
+        if (kind === 'timed') {
+          // 판정 범위 안에 든 음들만 기대 음으로 알려 준다.
+          const now = frame.time - run.t0 - app.progress.latencyMs;
+          tracker.setExpected(notes.filter((n, i) => run.judge.grades[i] === null && Math.abs(n.t * beat - now) <= 260).map((n) => n.midi));
+        }
+        for (const ev of tracker.push(frame)) {
+          if (ev.type !== 'note') continue;
+          el.heard.textContent = `들린 음: ${describeMidi(ev.midi)}`;
+          if (kind === 'wait') {
+            const out = run.judge.onNote(ev);
+            if (out.type === 'hit') {
+              view.states[out.index] = 'hit';
+              view.current = out.index + 1;
+              if (out.done) { finish(); return; }
+              tracker.setExpected([notes[view.current].midi]);
+              showTarget(notes[view.current]);
+            } else if (out.type === 'wrong') {
+              setInfo(`다른 음이 들렸어요(${describeMidi(out.heard)}). 칠 음: ${describeNote(notes[view.current])}`, 'warn');
+            }
+          } else {
+            const out = run.judge.onEvent({ time: ev.time - run.t0, midi: ev.midi });
+            if (out.type === 'hit') view.states[out.index] = out.grade;
+          }
+        }
+      });
+    }
+
+    const loop = () => {
+      if (!run || destroyed) return;
+      const now = performance.now();
+      if (run.kind === 'wait') {
+        const target = notes[Math.min(view.current, notes.length - 1)].t;
+        view.pos += (target - view.pos) * 0.18;
+      } else {
+        const t = now - run.t0;
+        view.pos = t / run.beat;
+        view.count = t < 0 ? String(Math.ceil(-t / run.beat)) : '';
+        if (run.kind === 'timed') {
+          for (const i of run.judge.advance(t)) view.states[i] = 'miss';
+          const next = notes.findIndex((n, i) => view.states[i] === null);
+          if (next >= 0 && next !== view.current) { view.current = next; showTarget(notes[next]); }
+          if (t > view.beats * run.beat + 500) { run.judge.advance(Infinity); finish(); return; }
+        } else if (t > view.beats * run.beat + 600) { stop(); return; }
+      }
+      draw();
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+  }
+
+  host.addEventListener('click', (e) => {
+    const m = e.target.closest('[data-mode]');
+    if (m) { mode = m.dataset.mode; paintModes(); stop(); return; }
+    const a = e.target.closest('[data-act]');
+    if (!a) return;
+    if (a.dataset.act === 'start') start(mode);
+    else if (a.dataset.act === 'demo') start('demo');
+    else if (a.dataset.act === 'auto') start(mode, true);
+    else if (a.dataset.act === 'stop') stop();
+  });
+  host.addEventListener('change', (e) => {
+    if (e.target === el.click) { app.progress.settings.click = el.click.checked; app.save(); }
+    else if (e.target === el.from || e.target === el.to || e.target === el.tempo) stop();
+  });
+  const onResize = () => { if (!run) draw(); };
+  window.addEventListener('resize', onResize);
+
+  paintModes();
+  idleView();
+
+  return {
+    destroy() {
+      destroyed = true;
+      stop(true);
+      window.removeEventListener('resize', onResize);
+    },
+  };
+}
+
+// ---- ui-chord.js ----
+// 코드 연습 화면 조각들: 한 줄씩 점검, 코드 확인, 1분 전환, 스트로크·반주.
+
+const CHROMA_DELAY_MS = 180;   // 쓸어 친 뒤 여섯 줄이 다 울릴 때까지 기다렸다가 코드를 확인한다
+const strumCache = new Map();
+function strumOf(id, sampleRate, up = false) {
+  const key = `${id}@${sampleRate}@${up}`;
+  if (!strumCache.has(key)) strumCache.set(key, strumSamples(id, sampleRate, 1.1, { up }));
+  return strumCache.get(key);
+}
+
+function resultHtml(stars, main, detail) {
+  return `${starsHtml(stars)}<p class="result-main">${esc(main)}</p><p class="result-detail">${esc(detail)}</p>`;
+}
+const praise = (stars) => (stars >= 3 ? '아주 좋아요' : stars === 2 ? '잘했어요' : stars === 1 ? '끝까지 해냈어요' : '조금만 더 해 봐요');
+
+// 공통: 시작/멈춤과 듣기 구독을 관리한다.
+function session(app, el) {
+  let unsub = null, startedAt = 0;
+  return {
+    get active() { return !!unsub; },
+    async open(onFrame) {
+      try { await app.ensureInput(); } catch (err) { el.status.textContent = micErrorMessage(err); el.status.dataset.kind = 'bad'; return false; }
+      startedAt = performance.now();
+      unsub = app.listener.subscribe(onFrame);
+      return true;
+    },
+    close() {
+      if (!unsub) return;
+      unsub();
+      unsub = null;
+      app.audio.stopAll();
+      app.addPracticeTime((performance.now() - startedAt) / 1000);
+    },
+  };
+}
+
+// ---------- 한 줄씩 점검 ----------
+function mountStringCheck(host, app, spec) {
+  const chord = CHORDS[spec.chord];
+  host.innerHTML = `
+    <div class="chordbox">
+      <div class="chord-fig"></div>
+      <div class="chord-side">
+        <h3>${esc(chord.name)} 한 줄씩 점검</h3>
+        <p class="status" role="status" aria-live="polite"></p>
+        <ol class="string-results"></ol>
+        <div class="player-actions">
+          <button type="button" class="btn primary" data-act="start">점검 시작</button>
+          <button type="button" class="btn" data-act="sound">소리 듣기</button>
+          ${app.env.dev ? '<button type="button" class="btn ghost" data-act="auto">자동 연주(시험)</button>' : ''}
+        </div>
+        <div class="result" hidden></div>
+      </div>
+    </div>`;
+  const q = (sel) => host.querySelector(sel);
+  const el = { fig: q('.chord-fig'), status: q('.status'), list: q('.string-results'), result: q('.result'), start: q('[data-act="start"]') };
+  const sess = session(app, el);
+  let check = createStringCheck(spec.chord);
+  const LABEL = { clear: '맑아요', muffled: '먹먹해요', other: '다른 음' };
+
+  function paint() {
+    const marks = {};
+    check.strings.forEach((s, i) => { if (check.results[i]) marks[s.num] = check.results[i].kind; });
+    const active = sess.active && !check.done ? check.strings[check.index].num : null;
+    el.fig.innerHTML = chordSvg(spec.chord, { active, marks });
+    el.list.innerHTML = check.strings.map((s, i) => {
+      const r = check.results[i];
+      const text = !r ? (i === check.index && sess.active ? '지금 치세요' : '') : r.kind === 'other' ? `다른 음(${describeMidi(r.midi)})이 나요` : LABEL[r.kind];
+      return `<li data-kind="${r ? r.kind : ''}"${i === check.index && sess.active ? ' class="now"' : ''}><span class="s-num">${s.num}</span><span>${text}</span></li>`;
+    }).join('');
+  }
+
+  function finish() {
+    sess.close();
+    const total = check.strings.length, clear = check.results.filter((r) => r && r.kind === 'clear').length;
+    const accuracy = clear / total;
+    const stars = clear === total ? 3 : accuracy >= 0.75 ? 2 : accuracy >= 0.5 ? 1 : 0;
+    const bad = check.strings.filter((s, i) => check.results[i].kind !== 'clear');
+    const detail = bad.length ? `${bad.map((s) => s.num + '번줄').join(', ')}을 다시 보세요. 손가락을 세우고 프렛 가까이를 눌러 옆줄에 닿지 않게 합니다.` : '모든 줄이 맑게 울렸어요.';
+    el.result.hidden = false;
+    el.result.innerHTML = resultHtml(stars, clear === total ? '깨끗해요' : `${total}줄 중 ${clear}줄이 맑아요`, detail);
+    el.status.textContent = '';
+    el.start.textContent = '다시 점검';
+    paint();
+    if (spec.onResult) spec.onResult({ stars, accuracy });
+  }
+
+  async function start(auto) {
+    sess.close();
+    check = createStringCheck(spec.chord);
+    el.result.hidden = true;
+    const tracker = createNoteTracker(trackerOptions(app.progress.settings));
+    const ok = await sess.open((frame) => {
+      const onset = tracker.push(frame).some((e) => e.type === 'onset');
+      const out = check.push(frame, onset);
+      if (!out) return;
+      if (out.done) finish();
+      else { el.status.textContent = `${check.strings[check.index].num}번줄을 한 번 쳐 보세요`; paint(); }
+    });
+    if (!ok) return;
+    el.status.dataset.kind = '';
+    el.status.textContent = `코드를 잡은 채로 ${check.strings[0].num}번줄부터 한 줄씩 칩니다`;
+    paint();
+    if (auto) check.strings.forEach((s, i) => app.audio.play(renderPluck(midiToFreq(s.midi), app.audio.sampleRate, 1.2), 'input', 0.4 + i * 0.9));
+  }
+
+  host.addEventListener('click', async (e) => {
+    const a = e.target.closest('[data-act]');
+    if (!a) return;
+    if (a.dataset.act === 'start') start(false);
+    else if (a.dataset.act === 'auto') start(true);
+    else if (a.dataset.act === 'sound') { await app.audio.ensureContext(); app.audio.play(strumSamples(spec.chord, app.audio.sampleRate, 2), 'speakers'); }
+  });
+  paint();
+  return { destroy() { sess.close(); } };
+}
+
+// ---------- 코드 확인(쓸어 쳐서) ----------
+function mountStrumCheck(host, app, spec) {
+  const chord = CHORDS[spec.chord];
+  const times = spec.times ?? 4;
+  host.innerHTML = `
+    <div class="chordbox">
+      <div class="chord-fig">${chordSvg(spec.chord)}</div>
+      <div class="chord-side">
+        <h3>${esc(chord.name)} 쳐서 확인</h3>
+        <p class="lead">${esc(chord.tip)}</p>
+        <div class="dots" aria-hidden="true">${Array.from({ length: times }, () => '<span></span>').join('')}</div>
+        <p class="status" role="status" aria-live="polite"></p>
+        <div class="player-actions">
+          <button type="button" class="btn primary" data-act="start">확인 시작</button>
+          <button type="button" class="btn" data-act="sound">소리 듣기</button>
+          ${app.env.dev ? '<button type="button" class="btn ghost" data-act="auto">자동 연주(시험)</button>' : ''}
+        </div>
+        <div class="result" hidden></div>
+      </div>
+    </div>`;
+  const q = (sel) => host.querySelector(sel);
+  const el = { status: q('.status'), dots: q('.dots'), result: q('.result'), start: q('[data-act="start"]') };
+  const sess = session(app, el);
+
+  async function start(auto) {
+    sess.close();
+    el.result.hidden = true;
+    let ok = 0, attempts = 0, pendingAt = null;
+    const paint = () => [...el.dots.children].forEach((d, i) => d.classList.toggle('on', i < ok));
+    paint();
+    const tracker = createNoteTracker(trackerOptions(app.progress.settings, STRUM_TRACKER));
+    const opened = await sess.open((frame) => {
+      if (tracker.push(frame).some((e) => e.type === 'onset') && pendingAt === null) pendingAt = frame.time + CHROMA_DELAY_MS;
+      if (pendingAt === null || frame.time < pendingAt) return;
+      pendingAt = null;
+      attempts++;
+      const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), spec.chord, frame.sampleRate);
+      if (v.ok) {
+        ok++;
+        el.status.dataset.kind = 'good';
+        el.status.textContent = ok < times ? `좋아요. ${times - ok}번 더 쳐 보세요` : '좋아요';
+      } else {
+        el.status.dataset.kind = 'warn';
+        el.status.textContent = v.reason === 'rival' ? `${CHORDS[v.rival.id].name} 코드처럼 들려요. 코드표와 손가락 자리를 비교해 보세요` : '소리가 또렷하지 않아요. 여섯 줄을 고르게 쓸어 치거나, 한 줄씩 점검으로 안 울리는 줄을 찾아보세요';
+      }
+      paint();
+      if (ok >= times) {
+        sess.close();
+        const accuracy = ok / attempts, stars = Math.max(1, starsFor(accuracy));
+        el.result.hidden = false;
+        el.result.innerHTML = resultHtml(stars, praise(stars), `${attempts}번 쳐서 ${ok}번 맞았어요`);
+        el.start.textContent = '다시 확인';
+        if (spec.onResult) spec.onResult({ stars, accuracy });
+      }
+    });
+    if (!opened) return;
+    el.status.dataset.kind = '';
+    el.status.textContent = `${chord.name}을 잡고 천천히 ${times}번 쓸어 치세요`;
+    if (auto) for (let i = 0; i < times; i++) app.audio.play(strumOf(spec.chord, app.audio.sampleRate), 'input', 0.4 + i * 1.0);
+  }
+
+  host.addEventListener('click', async (e) => {
+    const a = e.target.closest('[data-act]');
+    if (!a) return;
+    if (a.dataset.act === 'start') start(false);
+    else if (a.dataset.act === 'auto') start(true);
+    else if (a.dataset.act === 'sound') { await app.audio.ensureContext(); app.audio.play(strumSamples(spec.chord, app.audio.sampleRate, 2), 'speakers'); }
+  });
+  return { destroy() { sess.close(); } };
+}
+
+// ---------- 코드 전환(1분) ----------
+function mountChange(host, app, spec) {
+  const A = CHORDS[spec.a], B = CHORDS[spec.b];
+  const seconds = spec.seconds ?? 60, goal = spec.goal ?? 10;
+  host.innerHTML = `
+    <div class="change">
+      <h3>${esc(A.name)} ↔ ${esc(B.name)} ${seconds}초 전환</h3>
+      <p class="lead">한 번 치고 바꾸고, 한 번 치고 바꿉니다. 맞게 바꿀 때마다 한 번으로 셉니다. 목표 ${goal}번.</p>
+      <div class="change-row">
+        <div class="change-fig" data-id="${spec.a}">${chordSvg(spec.a)}<strong>${esc(A.name)}</strong></div>
+        <div class="change-mid"><div class="count-big">0</div><div class="timer"><div></div></div><p class="best"></p></div>
+        <div class="change-fig" data-id="${spec.b}">${chordSvg(spec.b)}<strong>${esc(B.name)}</strong></div>
+      </div>
+      <p class="status" role="status" aria-live="polite"></p>
+      <div class="player-actions">
+        <button type="button" class="btn primary" data-act="start">시작</button>
+        <button type="button" class="btn ghost" data-act="end" hidden>그만하기</button>
+        ${app.env.dev ? '<button type="button" class="btn ghost" data-act="auto">자동 연주(시험)</button>' : ''}
+      </div>
+      <div class="result" hidden></div>
+    </div>`;
+  const q = (sel) => host.querySelector(sel);
+  const el = { status: q('.status'), count: q('.count-big'), bar: q('.timer > div'), best: q('.best'), result: q('.result'), start: q('[data-act="start"]'), end: q('[data-act="end"]') };
+  const sess = session(app, el);
+  let state = null;
+  const paintBest = () => { const b = bestChange(app.progress, spec.a, spec.b); el.best.textContent = b ? `최고 기록 ${b}번` : '첫 기록에 도전하세요'; };
+  const paintNext = (id) => { for (const f of host.querySelectorAll('.change-fig')) f.classList.toggle('now', f.dataset.id === id); };
+
+  function finish() {
+    if (!state) return;
+    const count = state.count;
+    state = null;
+    sess.close();
+    const best = recordChange(app.progress, spec.a, spec.b, count, app.today());
+    app.save();
+    const stars = count >= goal ? 3 : count >= goal * 0.6 ? 2 : count >= 1 ? 1 : 0;
+    el.result.hidden = false;
+    el.result.innerHTML = resultHtml(stars, `${count}번 바꿨어요`, count >= best ? '새 최고 기록이에요. 내일은 한 번만 더 해 보세요.' : `최고 기록은 ${best}번이에요.`);
+    el.start.hidden = false; el.start.textContent = '다시 도전'; el.end.hidden = true;
+    el.status.textContent = '';
+    paintNext(null);
+    paintBest();
+    if (spec.onResult) spec.onResult({ stars, accuracy: Math.min(1, count / goal), count });
+  }
+
+  async function start(auto) {
+    sess.close();
+    el.result.hidden = true;
+    state = { count: 0, expected: spec.a, pendingAt: null, startAt: null };
+    el.count.textContent = '0';
+    const tracker = createNoteTracker(trackerOptions(app.progress.settings, STRUM_TRACKER));
+    const opened = await sess.open((frame) => {
+      if (!state) return;
+      if (state.startAt === null) state.startAt = frame.time;
+      const left = seconds * 1000 - (frame.time - state.startAt);
+      el.bar.style.width = Math.max(0, (left / (seconds * 1000)) * 100).toFixed(1) + '%';
+      if (left <= 0) { finish(); return; }
+      if (tracker.push(frame).some((e) => e.type === 'onset') && state.pendingAt === null) state.pendingAt = frame.time + CHROMA_DELAY_MS;
+      if (state.pendingAt === null || frame.time < state.pendingAt) return;
+      state.pendingAt = null;
+      const pick = pickOfTwo(chromaOf(frame.buf, frame.sampleRate), spec.a, spec.b, frame.sampleRate);
+      if (pick === state.expected) {
+        state.count++;
+        state.expected = state.expected === spec.a ? spec.b : spec.a;
+        el.count.textContent = String(state.count);
+        paintNext(state.expected);
+        el.status.textContent = `다음은 ${CHORDS[state.expected].name}`;
+      }
+    });
+    if (!opened) { state = null; return; }
+    el.start.hidden = true; el.end.hidden = false;
+    el.status.dataset.kind = '';
+    el.status.textContent = `${A.name}부터 치세요`;
+    paintNext(spec.a);
+    if (auto) for (let i = 0; i < 8; i++) app.audio.play(strumOf(i % 2 ? spec.b : spec.a, app.audio.sampleRate), 'input', 0.4 + i * 0.8);
+  }
+
+  host.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-act]');
+    if (!a) return;
+    if (a.dataset.act === 'start') start(false);
+    else if (a.dataset.act === 'auto') start(true);
+    else if (a.dataset.act === 'end') finish();
+  });
+  paintBest();
+  return { destroy() { state = null; sess.close(); } };
+}
+
+// ---------- 스트로크·반주 ----------
+// spec: { title, bars: ['G', 'Em', ...], pattern: 'D-DU-UDU', bpm, onResult }
+function mountRhythm(host, app, spec) {
+  const beatsPerBar = spec.pattern.length / 2;
+  const base = patternHits(spec.pattern);
+  const hits = [];
+  spec.bars.forEach((id, b) => base.forEach((h) => hits.push({ t: b * beatsPerBar + h.t, dir: h.dir, chord: id, bar: b })));
+  const totalBeats = spec.bars.length * beatsPerBar;
+  const pieceChords = Array.from(new Set(spec.bars));
+  host.innerHTML = `
+    <div class="player rhythm">
+      <div class="player-bar">
+        <strong>${esc(spec.title || '스트로크')}</strong>
+        <label class="field">빠르기 <select data-role="tempo">${[50, 60, 70, 80, 90, 100].map((t) => `<option value="${t}"${t === 100 ? ' selected' : ''}>${t}%</option>`).join('')}</select></label>
+        <label class="field check"><input type="checkbox" data-role="click"${app.progress.settings.click ? ' checked' : ''}> 박자 소리</label>
+      </div>
+      <div class="tab-wrap"><canvas class="tab lane" aria-label="스트로크 악보"></canvas></div>
+      <div class="player-info"><p class="status target" role="status" aria-live="polite"></p><p class="heard"></p></div>
+      <div class="now-chord"></div>
+      <div class="player-actions">
+        <button type="button" class="btn primary big" data-act="start">시작</button>
+        <button type="button" class="btn" data-act="demo">시범 듣기</button>
+        <button type="button" class="btn ghost" data-act="stop" hidden>멈춤</button>
+        ${app.env.dev ? '<button type="button" class="btn ghost" data-act="auto">자동 연주(시험)</button>' : ''}
+      </div>
+      <div class="result" hidden></div>
+    </div>`;
+  const q = (sel) => host.querySelector(sel);
+  const canvas = q('canvas'), g = canvas.getContext('2d');
+  const el = { status: q('.status'), heard: q('.heard'), now: q('.now-chord'), result: q('.result'), start: q('[data-act="start"]'), demo: q('[data-act="demo"]'), stop: q('[data-act="stop"]'), tempo: q('[data-role="tempo"]'), click: q('[data-role="click"]') };
+  const sess = session(app, el);
+  let run = null, raf = 0, destroyed = false, shownBar = -1;
+  let view = { pos: -1, states: hits.map(() => null), count: '' };
+
+  function showBar(b) {
+    if (b === shownBar) return;
+    shownBar = b;
+    const id = spec.bars[Math.max(0, Math.min(b, spec.bars.length - 1))];
+    const next = spec.bars[b + 1];
+    el.now.innerHTML = `<div class="now-fig">${chordSvg(id)}</div><div><p class="now-name">${esc(CHORDS[id].name)}</p><p class="lead">${next ? `다음 마디: ${esc(CHORDS[next].name)}` : '마지막 마디'}</p></div>`;
+  }
+
+  function draw() {
+    const dpr = window.devicePixelRatio || 1, W = canvas.clientWidth, H = canvas.clientHeight;
+    if (!W || !H) return;
+    if (canvas.width !== Math.round(W * dpr) || canvas.height !== Math.round(H * dpr)) { canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); }
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, W, H);
+    const cs = getComputedStyle(host), v = (name, fb) => cs.getPropertyValue(name).trim() || fb;
+    const c = { line: v('--tab-line', '#b8ad9c'), ink: v('--ink', '#222'), muted: v('--muted', '#777'), note: v('--tab-note', '#a84f1c'), good: v('--good', '#1d8348'), warn: v('--warn', '#b9720b'), bad: v('--bad', '#b3261e'), hit: v('--tab-hit', '#1d8348') };
+    const hitX = Math.max(84, W * 0.2), ppb = Math.max(70, Math.min(130, W / 7)), y = H * 0.6;
+    const xOf = (t) => hitX + (t - view.pos) * ppb;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.strokeStyle = c.line; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(8, y + 34); g.lineTo(W - 8, y + 34); g.stroke();
+    for (let b = 0; b <= spec.bars.length; b++) {
+      const x = xOf(b * beatsPerBar) - ppb * 0.25;
+      if (x < 0 || x > W) continue;
+      g.globalAlpha = 0.5; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(x, 10); g.lineTo(x, y + 34); g.stroke();
+      g.globalAlpha = 1;
+      if (b < spec.bars.length) { g.fillStyle = c.ink; g.font = '800 20px system-ui, sans-serif'; g.textAlign = 'left'; g.fillText(CHORDS[spec.bars[b]].name, x + 8, 24); g.textAlign = 'center'; }
+    }
+    g.strokeStyle = c.hit; g.lineWidth = 3; g.globalAlpha = 0.85;
+    g.beginPath(); g.moveTo(hitX, 40); g.lineTo(hitX, y + 40); g.stroke();
+    g.globalAlpha = 1;
+    hits.forEach((h, i) => {
+      const x = xOf(h.t);
+      if (x < -20 || x > W + 20) return;
+      const st = view.states[i];
+      g.fillStyle = st === 'perfect' ? c.good : st === 'good' ? c.warn : st === 'miss' ? c.bad : c.note;
+      g.globalAlpha = st ? 0.5 : 1;
+      const up = h.dir === 'U', size = up ? 13 : 17, top = y - 26, bottom = y + 22;
+      g.fillRect(x - 3, up ? top + size : top, 6, bottom - top - size);
+      g.beginPath();
+      if (up) { g.moveTo(x, top); g.lineTo(x - size, top + size + 2); g.lineTo(x + size, top + size + 2); }
+      else { g.moveTo(x, bottom); g.lineTo(x - size, bottom - size - 2); g.lineTo(x + size, bottom - size - 2); }
+      g.closePath(); g.fill();
+      g.globalAlpha = 1;
+    });
+    if (view.count) { g.fillStyle = c.ink; g.font = '800 64px system-ui, sans-serif'; g.globalAlpha = 0.85; g.fillText(view.count, W / 2, H / 2); g.globalAlpha = 1; }
+  }
+
+  function stop(silent) {
+    cancelAnimationFrame(raf);
+    sess.close();
+    app.audio.stopAll();
+    run = null;
+    el.start.hidden = false; el.demo.hidden = false; el.stop.hidden = true;
+    if (!silent) { view = { pos: -1, states: hits.map(() => null), count: '' }; showBar(0); el.status.textContent = '시작을 누르면 한 마디를 세고 시작합니다. 화살표가 초록 선에 닿을 때 치세요.'; draw(); }
+  }
+
+  function finish() {
+    const r = run;
+    const result = r.judge.result();
+    const voted = r.votes.filter((v) => v.total > 0);
+    const chordOk = voted.filter((v) => v.ok * 2 >= v.total).length;
+    const chordRatio = voted.length ? chordOk / voted.length : 1;
+    let stars = result.stars;
+    if (chordRatio < 0.5) stars = Math.min(stars, 1);
+    stop(true);
+    draw();
+    el.result.hidden = false;
+    el.result.innerHTML = resultHtml(stars, praise(stars), `박자 정확 ${result.perfect} · 괜찮음 ${result.good} · 놓침 ${result.miss} · 코드가 맞은 마디 ${chordOk}/${voted.length}`);
+    el.status.textContent = '다시 하려면 시작을 누르세요.';
+    if (spec.onResult) spec.onResult({ stars, accuracy: result.accuracy * (0.5 + 0.5 * chordRatio) });
+  }
+
+  async function start(kind, auto = false) {
+    stop(true);
+    el.result.hidden = true;
+    const beat = beatMs(spec.bpm, Number(el.tempo.value) / 100);
+    const lead = (beatsPerBar * beat) / 1000;
+    if (kind === 'demo') { try { await app.audio.ensureContext(); } catch (err) { return; } }
+    const sr = () => app.audio.sampleRate;
+    view = { pos: -beatsPerBar, states: hits.map(() => null), count: '' };
+    run = { kind, beat, t0: 0, judge: createTimedJudge(hits.map((h) => ({ midi: null, timeMs: h.t * beat })), { latencyMs: app.progress.latencyMs, perfectMs: 90, goodMs: 180 }), votes: spec.bars.map(() => ({ ok: 0, total: 0 })), pending: [] };
+    if (kind !== 'demo') {
+      const tracker = createNoteTracker(trackerOptions(app.progress.settings, STRUM_TRACKER));
+      const opened = await sess.open((frame) => {
+        if (!run) return;
+        for (const ev of tracker.push(frame)) {
+          if (ev.type !== 'onset') continue;
+          const out = run.judge.onEvent({ time: ev.time - run.t0 });
+          if (out.type === 'hit') { view.states[out.index] = out.grade; run.pending.push({ at: frame.time + CHROMA_DELAY_MS, bar: hits[out.index].bar }); }
+        }
+        while (run.pending.length && frame.time >= run.pending[0].at) {
+          const p = run.pending.shift();
+          const id = spec.bars[p.bar];
+          const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), id, frame.sampleRate, { rivals: pieceChords.filter((x) => x !== id) });
+          run.votes[p.bar].total++;
+          if (v.ok) run.votes[p.bar].ok++;
+          el.heard.textContent = v.ok ? `${CHORDS[id].name} 좋아요` : v.reason === 'rival' ? `${CHORDS[v.rival.id].name}처럼 들려요` : '코드 소리가 또렷하지 않아요';
+        }
+      });
+      if (!opened) { run = null; return; }
+    }
+    run.t0 = performance.now() + beatsPerBar * beat;
+    el.start.hidden = true; el.demo.hidden = true; el.stop.hidden = false;
+    el.status.dataset.kind = '';
+    el.status.textContent = kind === 'demo' ? '시범을 듣는 중입니다.' : '화살표가 초록 선에 닿을 때 치세요.';
+    for (let b = 0; b < beatsPerBar; b++) app.audio.play(clickSamples(sr(), b === 0), 'speakers', (b * beat) / 1000);
+    if (el.click.checked && kind !== 'demo') for (let b = 0; b < totalBeats; b++) app.audio.play(clickSamples(sr(), b % beatsPerBar === 0), 'speakers', lead + (b * beat) / 1000);
+    if (kind === 'demo' || auto) hits.forEach((h) => app.audio.play(strumOf(h.chord, sr(), h.dir === 'U'), kind === 'demo' ? 'speakers' : 'input', lead + (h.t * beat) / 1000));
+
+    const loop = () => {
+      if (!run || destroyed) return;
+      const t = performance.now() - run.t0;
+      view.pos = t / run.beat;
+      view.count = t < 0 ? String(Math.ceil(-t / run.beat)) : '';
+      showBar(Math.max(0, Math.floor(view.pos / beatsPerBar)));
+      if (run.kind !== 'demo') for (const i of run.judge.advance(t)) view.states[i] = 'miss';
+      if (t > totalBeats * run.beat + 500) {
+        if (run.kind === 'demo') stop(); else { run.judge.advance(Infinity); finish(); }
+        return;
+      }
+      draw();
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+  }
+
+  host.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-act]');
+    if (!a) return;
+    if (a.dataset.act === 'start') start('play');
+    else if (a.dataset.act === 'demo') start('demo');
+    else if (a.dataset.act === 'auto') start('play', true);
+    else if (a.dataset.act === 'stop') stop();
+  });
+  host.addEventListener('change', (e) => {
+    if (e.target === el.click) { app.progress.settings.click = el.click.checked; app.save(); }
+    else if (e.target === el.tempo) stop();
+  });
+  const onResize = () => { if (!run) draw(); };
+  window.addEventListener('resize', onResize);
+  stop();
+  return { destroy() { destroyed = true; stop(true); window.removeEventListener('resize', onResize); } };
+}
+
+// ---- ui-lesson.js ----
+// 레슨 화면: 설명 카드와 연습을 한 단계씩 넘기고, 끝나면 별을 기록한다.
+
+const STEP_LABEL = { card: '설명', tuner: '튜닝', notes: '연습', strings: '한 줄 점검', strum: '코드 확인', change: '코드 전환', rhythm: '리듬' };
+
+function renderLesson(host, app, arg) {
+  const [id, stepArg] = arg.split('/');
+  const lesson = lessonById(id);
+  if (!lesson) {
+    host.innerHTML = '<div class="panel"><p>없는 레슨입니다.</p><p><a class="btn" href="#learn">배우는 순서로</a></p></div>';
+    return null;
+  }
+  const stage = STAGES[lesson.stage];
+  const results = new Map();
+  let index = Math.max(0, Math.min(Number(stepArg) || 0, lesson.steps.length));
+  let widget = null;
+
+  function mountStep(body, step, i) {
+    const onResult = (r) => { results.set(i, r); paintNav(); };
+    if (step.type === 'card') {
+      body.innerHTML = `<h2>${esc(step.title)}</h2>${step.body.map((p) => `<p>${esc(p)}</p>`).join('')}${step.figure ? `<div class="figure">${figureSvg(step.figure)}</div>` : ''}`;
+    } else if (step.type === 'tuner') {
+      body.innerHTML = '<h2>튜너로 여섯 줄 맞추기</h2><p>튜너를 열어 6번줄부터 1번줄까지 맞춘 뒤 이 화면으로 돌아와 다음을 누르세요. 브라우저의 뒤로 가기를 누르면 돌아옵니다.</p><p><a class="btn primary big" href="#tuner">튜너 열기</a></p>';
+      results.set(i, { stars: 3, accuracy: 1 });
+    } else if (step.type === 'notes') {
+      body.innerHTML = `<h2>${esc(step.title)}</h2><div class="widget"></div>`;
+      widget = mountNotePlayer(body.querySelector('.widget'), app, { score: step.score, modes: step.modes, onResult });
+    } else {
+      body.innerHTML = '<div class="widget"></div>';
+      const mount = { strings: mountStringCheck, strum: mountStrumCheck, change: mountChange, rhythm: mountRhythm }[step.type];
+      widget = mount(body.querySelector('.widget'), app, { ...step, onResult });
+    }
+  }
+
+  function summary(body) {
+    const practice = lesson.steps.map((s, i) => [s, i]).filter(([s]) => isPractice(s));
+    const done = practice.filter(([, i]) => results.has(i));
+    let stars = 3;
+    if (practice.length) stars = done.length ? Math.max(done.length === practice.length ? 1 : 0, Math.round(practice.reduce((sum, [, i]) => sum + (results.get(i)?.stars ?? 0), 0) / practice.length)) : 0;
+    const accuracy = practice.length ? practice.reduce((sum, [, i]) => sum + (results.get(i)?.accuracy ?? 0), 0) / practice.length : 1;
+    if (stars > 0) { recordLesson(app.progress, lesson.id, stars, accuracy, app.today()); app.save(); }
+    const pos = LESSONS.indexOf(lesson), next = LESSONS[pos + 1];
+    body.innerHTML = `
+      <div class="lesson-done">
+        ${starsHtml(stars)}
+        <h2>${stars > 0 ? '레슨을 마쳤어요' : '연습을 건너뛰었어요'}</h2>
+        <p class="lead">${stars > 0 ? esc(lesson.goal) : '연습을 한 번이라도 끝내면 별이 기록됩니다.'}</p>
+        <div class="row center">
+          ${next ? `<a class="btn primary big" href="#lesson/${next.id}">다음: ${esc(next.title)}</a>` : '<a class="btn primary big" href="#songs">곡 연습하러 가기</a>'}
+          <button type="button" class="btn" data-go="0">한 번 더</button>
+          <a class="btn ghost" href="#learn">배우는 순서</a>
+        </div>
+      </div>`;
+  }
+
+  function paintNav() {
+    const nextBtn = host.querySelector('[data-go="next"]');
+    if (!nextBtn) return;
+    const step = lesson.steps[index];
+    const last = index === lesson.steps.length - 1;
+    const waiting = step && isPractice(step) && !results.has(index);
+    nextBtn.textContent = waiting ? '건너뛰기' : last ? '마치기' : '다음';
+    nextBtn.classList.toggle('primary', !waiting);
+  }
+
+  function show() {
+    if (widget) { widget.destroy(); widget = null; }
+    const atEnd = index >= lesson.steps.length;
+    history.replaceState(null, '', `#lesson/${lesson.id}/${index}`);
+    host.innerHTML = `
+      <div class="lesson">
+        <a class="back" href="#learn">배우는 순서</a>
+        <p class="eyebrow">${stage.n}단계 · ${esc(stage.title)}</p>
+        <h1 class="title">${esc(lesson.title)}</h1>
+        <ol class="step-dots" aria-label="레슨 진행">${lesson.steps.map((s, i) => `<li class="${i < index ? 'done' : i === index ? 'now' : ''}"><span>${STEP_LABEL[s.type]}</span></li>`).join('')}</ol>
+        <div class="panel step-body"></div>
+        ${atEnd ? '' : `<div class="row step-nav"><button type="button" class="btn" data-go="prev"${index === 0 ? ' disabled' : ''}>이전</button><button type="button" class="btn primary" data-go="next">다음</button></div>`}
+      </div>`;
+    const body = host.querySelector('.step-body');
+    if (atEnd) summary(body);
+    else { mountStep(body, lesson.steps[index], index); paintNav(); }
+    window.scrollTo(0, 0);
+  }
+
+  const onClick = (e) => {
+    const b = e.target.closest('[data-go]');
+    if (!b) return;
+    if (b.dataset.go === 'next') index++;
+    else if (b.dataset.go === 'prev') index = Math.max(0, index - 1);
+    else index = Number(b.dataset.go);
+    show();
+  };
+  host.addEventListener('click', onClick);
+  show();
+  return () => {
+    host.removeEventListener('click', onClick);
+    if (widget) widget.destroy();
+  };
+}
+
+// ---- ui-pages.js ----
+// 홈, 배우는 순서, 곡, 도구(코드표, 메트로놈, 박자 보정, 설정) 화면.
+
+const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+const PATTERNS = [['D-D-D-D-', '네 번 내려치기'], ['DUDUDUDU', '8비트(내리고 올리기)'], ['D-DU-UDU', '칼립소']];
+const patternArrows = (p) => [...p].map((ch) => (ch === 'D' ? '↓' : ch === 'U' ? '↑' : '·')).join(' ');
+
+// ---------- 홈 ----------
+function renderHome(host, app) {
+  const today = app.today();
+  const streak = streakOf(app.progress, today);
+  const week = weekDays(app.progress, today);
+  const plan = todayPlan(app.progress, LESSON_INDEX);
+  const minutes = Math.round((app.progress.days[today] || 0) / 60);
+  const doneCount = LESSON_INDEX.filter((l) => lessonStars(app.progress, l.id) > 0).length;
+  const item = (href, kind, title, sub) => `<li><a href="${href}"><span class="plan-kind">${kind}</span><span class="plan-text"><strong>${esc(title)}</strong><em>${esc(sub)}</em></span><span class="plan-go" aria-hidden="true">›</span></a></li>`;
+  host.innerHTML = `
+    <div class="hero">
+      <p class="eyebrow">클래식 기타 첫걸음</p>
+      <h1>${streak.doneToday ? '오늘도 기타를 잡았네요' : '오늘의 연습을 시작해요'}</h1>
+      <p class="lead">하루 15분이면 충분합니다. 치면 듣고 맞았는지 알려 줍니다.</p>
+      <div class="stats">
+        <div class="stat"><strong>${streak.current}</strong><span>일 연속</span></div>
+        <div class="stat"><strong>${minutes}</strong><span>분 · 오늘</span></div>
+        <div class="stat"><strong>${doneCount}</strong><span>/ ${LESSON_INDEX.length} 레슨</span></div>
+      </div>
+      <ol class="week" aria-label="이번 주 연습">${week.map((d) => `<li class="${d.done ? 'done' : ''}${d.key === today ? ' today' : ''}"><span>${WEEKDAY[new Date(d.key + 'T00:00:00').getDay()]}</span></li>`).join('')}</ol>
+    </div>
+    <h2>오늘 할 것</h2>
+    <ol class="plan">
+      ${plan.map((p) => p.kind === 'tuner' ? item('#tuner', '1분', '튜닝 확인', '여섯 줄이 맞는지 먼저 봅니다')
+        : p.kind === 'review' ? item(`#lesson/${p.lesson.id}`, '복습', p.lesson.title, `${STAGES[p.lesson.stage].n}단계 · ${STAGES[p.lesson.stage].title}`)
+        : item(`#lesson/${p.lesson.id}`, '새 레슨', p.lesson.title, `${STAGES[p.lesson.stage].n}단계 · ${STAGES[p.lesson.stage].title}`)).join('')}
+      ${plan.some((p) => p.kind === 'new') ? '' : item('#songs', '곡', '곡 연습', '모든 레슨을 마쳤어요. 곡으로 다져 보세요')}
+    </ol>
+    <h2>바로 가기</h2>
+    <div class="cards">
+      <a class="card" href="#learn"><h3>배우는 순서</h3><p>준비부터 독주 기초까지 11단계</p></a>
+      <a class="card" href="#songs"><h3>곡</h3><p>멜로디와 반주 연습곡, 내 곡 만들기</p></a>
+      <a class="card" href="#chords"><h3>코드표</h3><p>코드 15개의 운지와 한 줄씩 점검</p></a>
+      <a class="card" href="#tuner"><h3>튜너</h3><p>여섯 줄을 차례로 맞춥니다</p></a>
+    </div>`;
+  return null;
+}
+
+// ---------- 배우는 순서 ----------
+function renderLearn(host, app) {
+  host.innerHTML = `<h1 class="title">배우는 순서</h1><p class="lead">순서대로 하면 좋지만 잠겨 있지 않습니다. 원하는 곳부터 해도 됩니다.</p>` + STAGES.map((st) => {
+    const sum = stageSummary(app.progress, LESSON_INDEX, st.n);
+    return `
+      <section class="stage${sum.done === sum.total ? ' complete' : ''}">
+        <header><span class="n">${st.n}</span><div><h2>${esc(st.title)}</h2><p>${esc(st.desc)}</p></div><span class="tag${sum.done ? ' on' : ''}">${sum.done}/${sum.total}</span></header>
+        <ul class="lesson-list">${LESSONS.filter((l) => l.stage === st.n).map((l) => `<li><a href="#lesson/${l.id}"><span class="l-title">${esc(l.title)}</span><span class="l-goal">${esc(l.goal)}</span>${starsHtml(lessonStars(app.progress, l.id))}</a></li>`).join('')}</ul>
+      </section>`;
+  }).join('');
+  return null;
+}
+
+// ---------- 곡 ----------
+function customSongs(app) {
+  return app.progress.custom || (app.progress.custom = []);
+}
+const CHORD_BY_NAME = Object.fromEntries(CHORD_ORDER.map((id) => [id === 'Fs' ? '작은F' : CHORDS[id].name, id]));
+
+function renderSongs(host, app) {
+  function paint(message = '') {
+    const row = (s, href, extra = '') => `<li><a href="${href}"><span class="l-title">${esc(s.title)}</span><span class="l-goal">${esc(s.kind === 'melody' ? '멜로디' : '반주')} · ${esc(s.source || '')}</span><span class="tag">${s.kind === 'melody' ? 'TAB' : esc(Array.from(new Set(s.bars)).map((id) => CHORDS[id].name).join(' '))}</span></a>${extra}</li>`;
+    host.innerHTML = `
+      <h1 class="title">곡</h1>
+      <p class="lead">저작권 보호 기간이 끝난 선율과 이 앱의 연습곡입니다. 가사는 싣지 않습니다.</p>
+      <section class="stage"><header><div><h2>멜로디</h2><p>한 음씩 치는 TAB 악보</p></div></header><ul class="lesson-list">${SONGS.filter((s) => s.kind === 'melody').map((s) => row(s, `#song/${s.id}`)).join('')}</ul></section>
+      <section class="stage"><header><div><h2>반주</h2><p>코드를 바꾸며 스트로크</p></div></header><ul class="lesson-list">${SONGS.filter((s) => s.kind === 'chords').map((s) => row(s, `#song/${s.id}`)).join('')}</ul></section>
+      <section class="stage"><header><div><h2>내 곡</h2><p>좋아하는 노래의 코드 진행을 적어 나만의 반주 연습을 만듭니다</p></div></header>
+        <ul class="lesson-list">${customSongs(app).map((s) => row({ ...s, kind: 'chords', source: `${s.bpm}BPM` }, `#song/${s.id}`, `<button type="button" class="btn ghost small" data-del="${s.id}" aria-label="${esc(s.title)} 지우기">지우기</button>`)).join('') || '<li class="empty">아직 만든 곡이 없어요.</li>'}</ul>
+        <form class="custom">
+          <label>제목 <input name="title" maxlength="30" placeholder="내 연습곡" required></label>
+          <label>코드(한 마디에 하나씩, 띄어쓰기로 구분) <input name="chords" placeholder="G Em C D G Em C D" required></label>
+          <label>리듬 <select name="pattern">${PATTERNS.map(([p, label]) => `<option value="${p}">${label} (${patternArrows(p)})</option>`).join('')}</select></label>
+          <label>빠르기(BPM) <input name="bpm" type="number" min="40" max="140" value="66" required></label>
+          <button type="submit" class="btn primary">곡 만들기</button>
+          <p class="status" role="status">${esc(message)}</p>
+          <p class="hint">쓸 수 있는 코드: ${Object.keys(CHORD_BY_NAME).join(', ')}</p>
+        </form>
+      </section>`;
+  }
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const names = String(f.get('chords')).trim().split(/[\s,|]+/).filter(Boolean);
+    const unknown = names.filter((n) => !CHORD_BY_NAME[n]);
+    if (!names.length || unknown.length) { paint(unknown.length ? `모르는 코드가 있어요: ${unknown.join(', ')}` : '코드를 하나 이상 적어 주세요'); return; }
+    customSongs(app).push({ id: 'my-' + Date.now().toString(36), title: String(f.get('title')).trim() || '내 연습곡', bars: names.map((n) => CHORD_BY_NAME[n]), pattern: String(f.get('pattern')), bpm: Math.max(40, Math.min(140, Number(f.get('bpm')) || 66)) });
+    app.save();
+    paint('곡을 만들었어요. 위 목록에서 눌러 연습하세요.');
+  };
+  const onClick = (e) => {
+    const del = e.target.closest('[data-del]');
+    if (!del) return;
+    app.progress.custom = customSongs(app).filter((s) => s.id !== del.dataset.del);
+    app.save();
+    paint();
+  };
+  host.addEventListener('submit', onSubmit);
+  host.addEventListener('click', onClick);
+  paint();
+  return () => { host.removeEventListener('submit', onSubmit); host.removeEventListener('click', onClick); };
+}
+
+function renderSong(host, app, id) {
+  const song = SONGS.find((s) => s.id === id) || customSongs(app).find((s) => s.id === id);
+  if (!song) { host.innerHTML = '<div class="panel"><p>없는 곡입니다.</p><p><a class="btn" href="#songs">곡 목록으로</a></p></div>'; return null; }
+  host.innerHTML = `<a class="back" href="#songs">곡</a><h1 class="title">${esc(song.title)}</h1><p class="lead">${esc(song.source || '내 곡')}</p><div class="panel"><div class="widget"></div></div>`;
+  const slot = host.querySelector('.widget');
+  const widget = song.score ? mountNotePlayer(slot, app, { score: song.score, modes: ['wait', 'timed'] }) : mountRhythm(slot, app, { title: song.title, bars: song.bars, pattern: song.pattern, bpm: song.bpm });
+  return () => widget.destroy();
+}
+
+// ---------- 도구 ----------
+function renderTools(host) {
+  host.innerHTML = `
+    <h1 class="title">도구</h1>
+    <div class="cards">
+      <a class="card" href="#tuner"><h3>튜너</h3><p>여섯 줄을 차례로 맞춥니다</p></a>
+      <a class="card" href="#chords"><h3>코드표</h3><p>운지 그림, 소리 듣기, 한 줄씩 점검</p></a>
+      <a class="card" href="#metro"><h3>메트로놈</h3><p>일정한 박자를 들려줍니다</p></a>
+      <a class="card" href="#calib"><h3>박자 보정</h3><p>이 기기의 소리 지연을 재서 박자 판정을 맞춥니다</p></a>
+      <a class="card" href="#check"><h3>소리 점검</h3><p>마이크가 기타 소리를 잘 듣는지 확인합니다</p></a>
+      <a class="card" href="#settings"><h3>설정</h3><p>마이크 민감도, 기록 내보내기와 가져오기</p></a>
+    </div>`;
+  return null;
+}
+
+function renderChords(host) {
+  host.innerHTML = `<a class="back" href="#tools">도구</a><h1 class="title">코드표</h1><p class="lead">코드를 누르면 소리를 듣고 한 줄씩 점검할 수 있습니다.</p>
+    <div class="chord-grid">${CHORD_ORDER.map((id) => `<a class="chord-card" href="#chord/${id}">${chordSvg(id)}<strong>${esc(CHORDS[id].name)}</strong></a>`).join('')}</div>`;
+  return null;
+}
+
+function renderChord(host, app, id) {
+  const chord = CHORDS[id];
+  if (!chord) { host.innerHTML = '<div class="panel"><p>없는 코드입니다.</p><p><a class="btn" href="#chords">코드표로</a></p></div>'; return null; }
+  host.innerHTML = `<a class="back" href="#chords">코드표</a><h1 class="title">${esc(chord.name)}</h1><p class="lead">${esc(chord.tip)}</p>
+    <div class="panel"><div class="widget" data-w="strings"></div></div>
+    <div class="panel"><div class="widget" data-w="strum"></div></div>`;
+  const a = mountStringCheck(host.querySelector('[data-w="strings"]'), app, { chord: id });
+  const b = mountStrumCheck(host.querySelector('[data-w="strum"]'), app, { chord: id, times: 4 });
+  return () => { a.destroy(); b.destroy(); };
+}
+
+// ---------- 메트로놈 ----------
+function renderMetro(host, app) {
+  host.innerHTML = `
+    <a class="back" href="#tools">도구</a><h1 class="title">메트로놈</h1>
+    <div class="panel metro">
+      <div class="pulse" aria-hidden="true"><span class="bpm-big">80</span><span>BPM</span></div>
+      <ol class="beats" aria-hidden="true"></ol>
+      <label class="field wide">빠르기 <input type="range" min="40" max="200" value="80" data-role="bpm"></label>
+      <label class="field">한 마디 박 수 <select data-role="bar"><option>2</option><option>3</option><option selected>4</option><option>6</option></select></label>
+      <div class="row center"><button type="button" class="btn primary big" data-act="toggle">시작</button></div>
+    </div>`;
+  const q = (sel) => host.querySelector(sel);
+  const el = { pulse: q('.pulse'), big: q('.bpm-big'), beats: q('.beats'), bpm: q('[data-role="bpm"]'), bar: q('[data-role="bar"]'), toggle: q('[data-act="toggle"]') };
+  let timer = null, nextAt = 0, beat = 0;
+  const timeouts = new Set();
+  const paintBeats = () => { el.beats.innerHTML = Array.from({ length: Number(el.bar.value) }, () => '<li></li>').join(''); };
+
+  function stop() {
+    if (timer) clearInterval(timer);
+    timer = null;
+    for (const t of timeouts) clearTimeout(t);
+    timeouts.clear();
+    app.audio.stopAll();
+    el.toggle.textContent = '시작';
+    el.pulse.classList.remove('on');
+  }
+  async function start() {
+    await app.audio.ensureContext();
+    beat = 0;
+    nextAt = performance.now() + 120;
+    el.toggle.textContent = '멈춤';
+    timer = setInterval(() => {
+      const now = performance.now();
+      while (nextAt < now + 130) {
+        const delay = Math.max(0, nextAt - now), n = beat % Number(el.bar.value);
+        app.audio.play(clickSamples(app.audio.sampleRate, n === 0), 'speakers', delay / 1000);
+        const t = setTimeout(() => {
+          timeouts.delete(t);
+          [...el.beats.children].forEach((li, i) => li.classList.toggle('on', i === n));
+          el.pulse.classList.remove('on');
+          void el.pulse.offsetWidth;
+          el.pulse.classList.add('on');
+        }, delay);
+        timeouts.add(t);
+        beat++;
+        nextAt += 60000 / Number(el.bpm.value);
+      }
+    }, 25);
+  }
+  const onClick = (e) => { if (e.target.closest('[data-act="toggle"]')) { if (timer) stop(); else start(); } };
+  const onInput = (e) => {
+    if (e.target === el.bpm) el.big.textContent = el.bpm.value;
+    if (e.target === el.bar) paintBeats();
+  };
+  host.addEventListener('click', onClick);
+  host.addEventListener('input', onInput);
+  paintBeats();
+  return () => { stop(); host.removeEventListener('click', onClick); host.removeEventListener('input', onInput); };
+}
+
+// ---------- 박자 보정 ----------
+function renderCalib(host, app) {
+  const BPM = 80, COUNT_IN = 4, BEATS = 8, beat = 60000 / BPM;
+  host.innerHTML = `
+    <a class="back" href="#tools">도구</a><h1 class="title">박자 보정</h1>
+    <div class="panel calib">
+      <p class="lead">기기마다 소리가 앱에 닿는 데 걸리는 시간이 다릅니다. 그 시간을 재서 박자 맞추기 판정에 반영합니다.</p>
+      <ol class="steps"><li>시작을 누르면 원이 네 번 깜박인 뒤 여덟 번 더 깜박입니다.</li><li>원이 가장 커지는 순간마다 아무 줄이나 한 번씩 치세요. 소리는 나지 않으니 눈으로 맞춥니다.</li></ol>
+      <div class="pulse calib-pulse" aria-hidden="true"><span class="bpm-big">-</span></div>
+      <p class="status" role="status" aria-live="polite"></p>
+      <p class="hint">지금 보정값: <strong data-role="latency"></strong>ms</p>
+      <div class="row center">
+        <button type="button" class="btn primary big" data-act="start">시작</button>
+        ${app.env.dev ? '<button type="button" class="btn ghost" data-act="auto">자동 연주(시험)</button>' : ''}
+      </div>
+    </div>`;
+  const q = (sel) => host.querySelector(sel);
+  const el = { pulse: q('.pulse'), big: q('.bpm-big'), status: q('.status'), latency: q('[data-role="latency"]') };
+  let unsub = null, raf = 0;
+  const paint = () => { el.latency.textContent = String(app.progress.latencyMs); };
+
+  function stop() {
+    if (unsub) unsub();
+    unsub = null;
+    cancelAnimationFrame(raf);
+    app.audio.stopAll();
+    el.pulse.style.transform = '';
+  }
+  async function start(auto) {
+    stop();
+    try { await app.ensureInput(); } catch (err) { el.status.textContent = micErrorMessage(err); el.status.dataset.kind = 'bad'; return; }
+    const t0 = performance.now() + 600;
+    const offsets = [];
+    const tracker = createNoteTracker(trackerOptions(app.progress.settings));
+    el.status.dataset.kind = '';
+    el.status.textContent = '원을 보며 준비하세요';
+    unsub = app.listener.subscribe((frame) => {
+      for (const ev of tracker.push(frame)) {
+        if (ev.type !== 'onset') continue;
+        const k = Math.round((ev.time - t0) / beat);
+        if (k < COUNT_IN || k >= COUNT_IN + BEATS) continue;
+        const off = ev.time - (t0 + k * beat);
+        if (Math.abs(off) < 300) offsets.push(off);
+      }
+    });
+    if (auto) for (let k = COUNT_IN; k < COUNT_IN + BEATS; k++) app.audio.play(clickSamples(app.audio.sampleRate, true), 'input', (t0 - performance.now() + k * beat + 60) / 1000);
+    const loop = () => {
+      const t = performance.now() - t0;
+      const k = Math.floor(t / beat), phase = (t / beat) - k;
+      el.pulse.style.transform = `scale(${(0.6 + 0.4 * Math.max(0, 1 - Math.min(phase, 1 - phase) * 4)).toFixed(3)})`;
+      el.big.textContent = t < 0 ? '-' : k < COUNT_IN ? String(COUNT_IN - k) : k < COUNT_IN + BEATS ? '치세요' : '끝';
+      if (k === COUNT_IN) el.status.textContent = '원이 커지는 순간마다 한 번씩 치세요';
+      if (t > (COUNT_IN + BEATS) * beat + 300) {
+        stop();
+        if (offsets.length < 4) { el.status.dataset.kind = 'warn'; el.status.textContent = `소리를 ${offsets.length}번밖에 듣지 못했어요. 조금 더 크게 치고 다시 해 보세요`; return; }
+        offsets.sort((a, b) => a - b);
+        const median = offsets[offsets.length >> 1];
+        app.progress.latencyMs = Math.max(0, Math.min(300, Math.round(median)));
+        app.save();
+        paint();
+        el.status.dataset.kind = 'good';
+        el.status.textContent = `${offsets.length}번을 듣고 ${app.progress.latencyMs}ms로 맞췄어요`;
+        return;
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+  }
+  const onClick = (e) => {
+    const a = e.target.closest('[data-act]');
+    if (a) start(a.dataset.act === 'auto');
+  };
+  host.addEventListener('click', onClick);
+  paint();
+  return () => { stop(); host.removeEventListener('click', onClick); };
+}
+
+// ---------- 설정 ----------
+function renderSettings(host, app) {
+  function paint(message = '') {
+    const s = app.progress.settings;
+    host.innerHTML = `
+      <a class="back" href="#tools">도구</a><h1 class="title">설정</h1>
+      <div class="panel settings">
+        <label class="field wide">마이크 민감도
+          <select data-role="sens">${[['low', '낮게(시끄러운 곳)'], ['normal', '보통'], ['high', '높게(소리가 작게 잡힐 때)']].map(([v, t]) => `<option value="${v}"${s.sensitivity === v ? ' selected' : ''}>${t}</option>`).join('')}</select>
+        </label>
+        <label class="field check"><input type="checkbox" data-role="click"${s.click ? ' checked' : ''}> 박자 맞추기에서 박자 소리 켜기</label>
+        <p class="hint">박자 보정값 ${app.progress.latencyMs}ms · <a href="#calib">다시 재기</a></p>
+        <h2>연습 기록</h2>
+        <p class="hint">기록은 이 기기의 브라우저에만 저장됩니다. 다른 기기로 옮기려면 내보낸 파일을 그 기기에서 가져오세요.</p>
+        <div class="row">
+          <button type="button" class="btn" data-act="export">기록 내보내기</button>
+          <label class="btn">기록 가져오기<input type="file" accept="application/json,.json" data-role="import" hidden></label>
+          <button type="button" class="btn ghost" data-act="reset">기록 지우기</button>
+        </div>
+        <p class="status" role="status">${esc(message)}</p>
+        <p class="foot">여섯줄 v0.5</p>
+      </div>`;
+  }
+  const onClick = (e) => {
+    const a = e.target.closest('[data-act]');
+    if (!a) return;
+    if (a.dataset.act === 'export') {
+      const url = URL.createObjectURL(new Blob([JSON.stringify(app.progress, null, 2)], { type: 'application/json' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `guitar-progress-${app.today()}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      paint('기록 파일을 내려받았어요');
+    } else if (a.dataset.act === 'reset') {
+      if (a.dataset.sure) { app.replaceProgress(emptyProgress()); paint('기록을 지웠어요'); }
+      else { a.dataset.sure = '1'; a.textContent = '정말 지우려면 한 번 더 누르세요'; }
+    }
+  };
+  const onChange = async (e) => {
+    const role = e.target.dataset.role;
+    if (role === 'sens') { app.progress.settings.sensitivity = e.target.value; app.save(); }
+    else if (role === 'click') { app.progress.settings.click = e.target.checked; app.save(); }
+    else if (role === 'import' && e.target.files[0]) {
+      try {
+        const data = JSON.parse(await e.target.files[0].text());
+        if (!data || data.version !== 1 || typeof data.lessons !== 'object') throw new Error('형식');
+        app.replaceProgress({ ...emptyProgress(), ...data, settings: { ...emptyProgress().settings, ...(data.settings || {}) } });
+        paint('기록을 가져왔어요');
+      } catch (err) { paint('이 앱의 기록 파일이 아니에요'); }
+    }
+  };
+  host.addEventListener('click', onClick);
+  host.addEventListener('change', onChange);
+  paint();
+  return () => { host.removeEventListener('click', onClick); host.removeEventListener('change', onChange); };
+}
+
 // ---- main.js ----
-// 앱 시작점: 화면 전환과 각 화면 초기화.
+// 앱 시작점: 공용 상태, 화면 전환.
 
 const env = { dev: new URLSearchParams(location.search).has('dev') };
 const appAudio = createAudio();
-const viewEls = {
-  home: document.getElementById('view-home'),
-  tuner: document.getElementById('view-tuner'),
-  check: document.getElementById('view-check'),
+const store = (() => { try { return window.localStorage; } catch (e) { return { getItem: () => null, setItem: () => {} }; } })();
+
+const app = {
+  env,
+  audio: appAudio,
+  listener: createListener(appAudio),
+  progress: loadProgress(store),
+  save() { saveProgress(store, app.progress); },
+  today() { return dayKey(new Date()); },
+  replaceProgress(next) { app.progress = next; app.save(); },
+  // 연습 화면이 소리를 듣기 전에 부른다. 개발 모드에서는 마이크 없이 합성음을 넣어 시험할 수 있다.
+  async ensureInput() {
+    if (env.dev && !appAudio.micOpen) { await appAudio.ensureContext(); return; }
+    await appAudio.openMic();
+  },
+  addPracticeTime(seconds) {
+    if (!(seconds > 1)) return;
+    touchDay(app.progress, app.today(), Math.min(seconds, 900));
+    app.save();
+  },
 };
-const tunerView = initTunerView(viewEls.tuner, appAudio, env);
-const checkView = initCheckView(viewEls.check, appAudio, env);
+
+const pageEl = document.getElementById('view-page');
+const staticViews = { tuner: document.getElementById('view-tuner'), check: document.getElementById('view-check') };
+const tunerView = initTunerView(staticViews.tuner, appAudio, env);
+const checkView = initCheckView(staticViews.check, appAudio, env);
+
+const PAGES = { home: renderHome, learn: renderLearn, lesson: renderLesson, songs: renderSongs, song: renderSong, tools: renderTools, chords: renderChords, chord: renderChord, metro: renderMetro, calib: renderCalib, settings: renderSettings };
+const NAV_OF = { home: 'home', learn: 'learn', lesson: 'learn', songs: 'songs', song: 'songs' };
+let cleanup = null;
 
 function route() {
-  const wanted = (location.hash || '#home').slice(1);
-  const name = viewEls[wanted] ? wanted : 'home';
-  for (const [key, node] of Object.entries(viewEls)) node.hidden = key !== name;
+  const raw = decodeURIComponent((location.hash || '#home').slice(1));
+  const cut = raw.indexOf('/');
+  let name = cut < 0 ? raw : raw.slice(0, cut);
+  const arg = cut < 0 ? '' : raw.slice(cut + 1);
+  if (!PAGES[name] && !staticViews[name]) name = 'home';
+
+  if (cleanup) { cleanup(); cleanup = null; }
+  for (const [key, node] of Object.entries(staticViews)) node.hidden = key !== name;
+  pageEl.hidden = !!staticViews[name];
+  tunerView.setVisible(name === 'tuner');
+  if (PAGES[name]) {
+    pageEl.dataset.page = name;
+    cleanup = PAGES[name](pageEl, app, arg) || null;
+  }
+  const nav = NAV_OF[name] || 'tools';
   for (const link of document.querySelectorAll('[data-nav]')) {
-    if (link.dataset.nav === name) link.setAttribute('aria-current', 'page');
+    if (link.dataset.nav === nav) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
-  tunerView.setVisible(name === 'tuner');
+  document.body.dataset.view = name;
   window.scrollTo(0, 0);
 }
 
 window.addEventListener('hashchange', route);
 route();
 
-if (env.dev) window.__dev = { audio: appAudio, tunerView, checkView };
+if (env.dev) window.__dev = { app, audio: appAudio, tunerView, checkView };
 
 })();
 </script>

@@ -14,7 +14,8 @@ export function micErrorMessage(err) {
 export function createAudio() {
   let ctx = null, input = null, filter = null, analyser = null, tap = null, sink = null;
   let micStream = null, micNode = null, micSettings = null, onChunk = null;
-  const frame = new Float32Array(4096);
+  const frame = new Float32Array(8192);
+  const live = new Set();
 
   function micSupported() {
     return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
@@ -64,21 +65,30 @@ export function createAudio() {
     micNode = null;
   }
 
-  function readFrame() {
+  // 가장 최근 n샘플. 튜너는 4096, 코드 확인은 8192를 쓴다.
+  function readFrame(n = 4096) {
     if (!analyser) return null;
     analyser.getFloatTimeDomainData(frame);
-    return frame;
+    return n >= frame.length ? frame : frame.subarray(frame.length - n);
   }
 
   // target: 'speakers'면 스피커로, 'input'이면 분석 경로로만 넣는다(개발용 시험 신호).
-  function play(samples, target = 'speakers') {
+  // delaySec 뒤에 재생한다. 예약한 소리는 stopAll() 로 한꺼번에 끌 수 있다.
+  function play(samples, target = 'speakers', delaySec = 0) {
     const buffer = ctx.createBuffer(1, samples.length, ctx.sampleRate);
     buffer.getChannelData(0).set(samples);
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.connect(target === 'input' ? input : ctx.destination);
-    source.start();
+    source.onended = () => live.delete(source);
+    live.add(source);
+    source.start(ctx.currentTime + Math.max(0, delaySec));
     return source;
+  }
+
+  function stopAll() {
+    for (const source of live) { try { source.stop(); } catch (e) { /* 이미 끝남 */ } }
+    live.clear();
   }
 
   function record(seconds) {
@@ -109,7 +119,7 @@ export function createAudio() {
   }
 
   return {
-    micSupported, ensureContext, openMic, closeMic, readFrame, play, record,
+    micSupported, ensureContext, openMic, closeMic, readFrame, play, stopAll, record,
     get sampleRate() { return ctx ? ctx.sampleRate : 0; },
     get micOpen() { return !!micStream; },
     get micSettings() { return micSettings; },

@@ -11,6 +11,46 @@ export function rmsLevel(buf) {
   return Math.sqrt(sum / (buf.length || 1));
 }
 
+// 날카로운(높은 주파수) 성분의 크기. 줄을 튕기는 순간에 크게 뛰고 금방 줄어들어 타격을 잡는 데 쓴다.
+export function hfLevel(buf) {
+  let sum = 0;
+  for (let i = 1; i < buf.length; i++) { const d = buf[i] - buf[i - 1]; sum += d * d; }
+  return Math.sqrt(sum / (buf.length - 1 || 1));
+}
+
+function nsdfAtLag(buf, lag) {
+  let acf = 0, m = 0;
+  for (let i = 0, end = buf.length - lag; i < end; i++) { const a = buf[i], b = buf[i + lag]; acf += a * b; m += a * a + b * b; }
+  return m > 1e-12 ? (2 * acf) / m : 0;
+}
+
+// freq 근처(±2.5%, 약 ±43센트) 주기에서 소리가 얼마나 되풀이되는지(0~1).
+export function salienceAt(buf, sampleRate, freq) {
+  const period = sampleRate / freq;
+  let best = -1;
+  for (let lag = Math.floor(period * 0.975); lag <= Math.ceil(period * 1.025); lag++) best = Math.max(best, nsdfAtLag(buf, lag));
+  return best;
+}
+
+// "이 음이 들리는가"를 확인한다. 다른 줄이 함께 울려도 통하도록, 무슨 음인지 맞히는 대신 기대한 음만 본다.
+// 들리면 또렷함(0~1), 아니면 0을 돌려준다. 인정 조건은 두 가지 중 하나다.
+//   (1) 또렷함이 min 이상이다.
+//   (2) baseline(줄을 튕기기 직전의 또렷함)이 주어졌고, 그보다 눈에 띄게 올랐다.
+//       크게 울리는 베이스 위에 한 옥타브 위 음을 살짝 친 경우처럼, 절대값은 낮아도 새로 생긴 음은 이것으로 잡는다.
+// 어느 경우든 옆 반음보다 또렷해야 하고, 한 옥타브·12도 위 음을 같은 음으로 착각하지 않게 그 주기들도 함께 본다.
+export function soundsLike(buf, sampleRate, freq, options = {}) {
+  const min = options.min ?? 0.7, gap = options.gap ?? 0.2;
+  const s = options.salience ?? salienceAt(buf, sampleRate, freq);
+  const risen = options.baseline != null && s >= 0.35 && s - options.baseline >= 0.25;
+  if (s < min && !risen) return 0;
+  const semitone = 2 ** (1 / 12);
+  if (salienceAt(buf, sampleRate, freq * semitone) > s) return 0;
+  if (salienceAt(buf, sampleRate, freq / semitone) > s) return 0;
+  if (salienceAt(buf, sampleRate, freq * 2) > s - gap) return 0;
+  if (salienceAt(buf, sampleRate, freq * 3) > s - gap) return 0;
+  return s;
+}
+
 export function detectPitch(buf, sampleRate, options = {}) {
   const minFreq = options.minFreq ?? 55;
   const maxFreq = options.maxFreq ?? 1500;

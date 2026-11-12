@@ -42,6 +42,7 @@ node spike/feasibility.mjs        # 타당성 실험 다시 돌리기
 src를 고친 뒤에는 반드시 빌드해서 index.html을 함께 커밋한다.
 
 ## 문서
+- [HANDOFF.md](HANDOFF.md): 인계(현재 상태, 다음 할 일, 재개 방법, 꼭 지킬 것)
 - [docs/기획서.md](docs/기획서.md): 목표, 참고 앱 분석, 기술 타당성, 커리큘럼, 기능, 판정 설계, 화면, 진행 단계
 - [docs/결정사항.md](docs/결정사항.md): 정해진 것과 정해야 할 것
 

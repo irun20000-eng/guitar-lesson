@@ -1,0 +1,1156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f6f2ea">
+<title>여섯줄 · 기타 연습</title>
+<style>
+:root {
+  --bg: #f6f2ea; --card: #fffdf8; --ink: #211c16; --muted: #6d6358; --line: #e3dbcd;
+  --accent: #a84f1c; --accent-ink: #fff; --good: #1d8348; --warn: #b9720b; --bad: #b3261e;
+  --good-bg: #e3f3e8; --warn-bg: #fbefd8; --bad-bg: #fbe4e1;
+  --radius: 18px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16130f; --card: #201c17; --ink: #f2ece2; --muted: #a99f92; --line: #3a332b;
+    --accent: #e39157; --accent-ink: #1b140d; --good: #56c988; --warn: #e6ab45; --bad: #f08178;
+    --good-bg: #173224; --warn-bg: #3a2c12; --bad-bg: #3d1c19;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  font-size: 17px; line-height: 1.6; word-break: keep-all; -webkit-tap-highlight-color: transparent;
+}
+a { color: var(--accent); }
+h1, h2, h3, p { margin: 0; }
+[hidden] { display: none !important; }
+
+.top {
+  position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px max(16px, env(safe-area-inset-left)) 10px max(16px, env(safe-area-inset-right));
+  background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+}
+.brand { font-weight: 800; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+.top nav { display: flex; gap: 4px; }
+.top nav a {
+  padding: 10px 14px; border-radius: 999px; color: var(--muted); text-decoration: none; font-weight: 600; min-height: 44px; display: inline-flex; align-items: center;
+}
+.top nav a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+
+main { max-width: 1040px; margin: 0 auto; padding: 20px 16px 56px; }
+.view > h2 { font-size: 20px; margin: 34px 0 12px; letter-spacing: -0.01em; }
+.title { font-size: 26px; letter-spacing: -0.02em; margin-bottom: 14px; }
+.lead { color: var(--muted); }
+
+.hero { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px 26px; }
+.hero h1 { font-size: clamp(28px, 4.6vw, 40px); line-height: 1.25; letter-spacing: -0.03em; margin: 4px 0 10px; }
+.hero .lead { max-width: 34em; margin-bottom: 20px; }
+.eyebrow { color: var(--accent); font-weight: 700; font-size: 15px; }
+
+.btn {
+  appearance: none; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-weight: 700;
+  padding: 10px 18px; min-height: 48px; border-radius: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.big { min-height: 56px; padding: 12px 26px; font-size: 18px; }
+.btn.ghost { background: transparent; color: var(--muted); }
+.btn.chip { border-radius: 999px; }
+.btn.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn:focus-visible, a:focus-visible, .string:focus-visible, .tone:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; text-decoration: none; color: var(--ink); }
+.card h3 { font-size: 19px; margin-bottom: 4px; }
+.card p { color: var(--muted); font-size: 16px; }
+
+.path { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.path li { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.path .n { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--bg); border: 1px solid var(--line); color: var(--muted); }
+.path li.now .n { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.path p { color: var(--muted); font-size: 15px; }
+.tag { font-size: 13px; font-weight: 700; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+.tag.on { color: var(--good); border-color: var(--good); background: var(--good-bg); }
+.foot { margin-top: 26px; color: var(--muted); font-size: 14px; }
+
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0; }
+.status { min-height: 1.6em; font-weight: 700; }
+.status[data-kind="good"] { color: var(--good); }
+.status[data-kind="bad"] { color: var(--bad); }
+
+.tuner { display: grid; gap: 14px; }
+@media (min-width: 760px) {
+  .tuner { grid-template-columns: 1.15fr 1fr; align-items: start; }
+  .gauge-panel { position: sticky; top: 78px; }
+}
+.gauge-panel { text-align: center; display: grid; justify-items: center; gap: 4px; }
+.gauge { width: min(100%, 440px); height: auto; }
+.gauge .arc { fill: none; stroke: var(--line); stroke-width: 10; stroke-linecap: round; }
+.gauge .zone { fill: none; stroke: var(--good); stroke-width: 12; stroke-linecap: round; opacity: 0.55; }
+.gauge .ticks line { stroke: var(--muted); stroke-width: 2; }
+.gauge text { fill: var(--muted); font-size: 13px; font-weight: 600; }
+.needle { transform-origin: 160px 170px; transition: transform 0.14s linear; }
+.needle line { stroke: var(--muted); stroke-width: 5; stroke-linecap: round; }
+.needle circle { fill: var(--muted); }
+[data-state="off"] .needle line, [data-state="far"] .needle line { stroke: var(--warn); }
+[data-state="off"] .needle circle, [data-state="far"] .needle circle { fill: var(--warn); }
+[data-state="in"] .needle line { stroke: var(--good); }
+[data-state="in"] .needle circle { fill: var(--good); }
+[data-state="in"] .zone { opacity: 1; }
+.note { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-top: -6px; }
+.note .letter { font-size: 84px; font-weight: 800; line-height: 1; letter-spacing: -0.04em; }
+.note sub { font-size: 30px; font-weight: 700; color: var(--muted); vertical-align: baseline; margin-left: 2px; }
+.note .ko, .note .which { font-size: 20px; font-weight: 700; color: var(--muted); min-width: 3.2em; }
+.note .which { text-align: right; }
+.note .ko { text-align: left; }
+[data-state="in"] .note .letter { color: var(--good); }
+.cents { font-size: 22px; font-weight: 800; min-height: 1.6em; }
+[data-state="in"] .cents { color: var(--good); }
+[data-state="off"] .cents, [data-state="far"] .cents { color: var(--warn); }
+.hint { color: var(--muted); min-height: 3.2em; max-width: 26em; }
+.heard { color: var(--muted); font-size: 14px; min-height: 1.6em; font-variant-numeric: tabular-nums; }
+.level { width: min(100%, 320px); height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; margin: 4px 0 14px; }
+.level > div { height: 100%; width: 0; background: var(--accent); transition: width 0.08s linear; }
+
+.strings { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.strings li { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.string {
+  appearance: none; font: inherit; color: var(--ink); text-align: left; cursor: pointer; background: var(--bg); border: 2px solid var(--line); border-radius: 14px;
+  min-height: 60px; padding: 6px 12px; display: grid; grid-template-columns: 40px 1fr 28px; align-items: center; gap: 10px;
+}
+.s-num { width: 36px; height: 36px; border-radius: 50%; display: inline-grid; place-items: center; font-weight: 800; background: var(--card); border: 1px solid var(--line); }
+.s-name { font-size: 22px; font-weight: 800; }
+.s-name small { font-size: 14px; color: var(--muted); }
+.s-name em, .check em { font-style: normal; font-size: 16px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+.s-label { display: grid; line-height: 1.2; }
+.s-hint { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.s-hint:empty { display: none; }
+.s-check { color: var(--good); opacity: 0; display: grid; place-items: center; }
+.strings li.done .s-check { opacity: 1; }
+.strings li.done .string { border-color: var(--good); background: var(--good-bg); }
+.strings li.active .string { border-color: var(--accent); }
+.string[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--accent); border-color: var(--accent); }
+.tone { appearance: none; font: inherit; font-size: 15px; font-weight: 700; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 14px; padding: 0 14px; min-height: 60px; cursor: pointer; }
+.all-done { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: var(--good-bg); color: var(--good); font-weight: 700; }
+.tips { margin: 16px 0 0; padding-left: 20px; color: var(--muted); font-size: 15px; }
+.tips li + li { margin-top: 4px; }
+.dev { margin-top: 14px; padding: 10px; border: 1px dashed var(--line); border-radius: 12px; font-size: 13px; color: var(--muted); }
+.dev button { font: inherit; margin: 2px; padding: 4px 8px; }
+
+.steps { margin: 12px 0 16px; padding-left: 22px; }
+.steps li + li { margin-top: 4px; }
+.table-wrap { overflow-x: auto; }
+.check { width: 100%; border-collapse: collapse; }
+.check th, .check td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.check thead th { font-size: 14px; color: var(--muted); }
+.check tbody th { white-space: nowrap; font-size: 19px; }
+.check .s-num { margin-right: 6px; font-size: 16px; }
+.ck-result .verdict { display: block; font-weight: 700; color: var(--muted); }
+.ck-result .detail { display: block; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+tr[data-kind="good"] .verdict { color: var(--good); }
+tr[data-kind="warn"] .verdict { color: var(--warn); }
+tr[data-kind="bad"] .verdict { color: var(--bad); }
+textarea { width: 100%; margin-top: 8px; font: 14px/1.5 ui-monospace, Consolas, monospace; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .note .letter { font-size: 68px; }
+  .path li { grid-template-columns: 40px 1fr; }
+  .path .tag { grid-column: 2; justify-self: start; }
+}
+@media (prefers-reduced-motion: reduce) { .needle, .level > div { transition: none; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#home">여섯줄</a>
+  <nav aria-label="주요 화면">
+    <a href="#home" data-nav="home">홈</a>
+    <a href="#tuner" data-nav="tuner">튜너</a>
+    <a href="#check" data-nav="check">소리 점검</a>
+  </nav>
+</header>
+
+<main>
+  <section id="view-home" class="view">
+    <div class="hero">
+      <p class="eyebrow">클래식 기타 첫걸음</p>
+      <h1>치면, 듣고 알려 줍니다</h1>
+      <p class="lead">기타를 처음 잡는 사람을 위한 연습 앱입니다. 마이크로 소리를 듣고 맞았는지 바로 알려 줍니다. 오늘은 튜닝부터 시작하세요.</p>
+      <a class="btn primary big" href="#tuner">튜너 열기</a>
+    </div>
+
+    <h2>지금 쓸 수 있는 것</h2>
+    <div class="cards">
+      <a class="card" href="#tuner">
+        <h3>튜너</h3>
+        <p>여섯 줄을 차례로 맞춥니다. 줄을 치면 높은지 낮은지 알려 주고, 맞으면 표시합니다.</p>
+      </a>
+      <a class="card" href="#check">
+        <h3>소리 점검</h3>
+        <p>이 기기의 마이크가 기타 소리를 잘 듣는지 줄마다 확인합니다. 결과는 앱을 다듬는 데 씁니다.</p>
+      </a>
+    </div>
+
+    <h2>배우는 순서</h2>
+    <ol class="path">
+      <li class="now"><span class="n">0</span><div><strong>준비</strong><p>기타 각 부분, 앉는 자세, 오른손 손가락 이름, 튜닝</p></div><span class="tag on">튜닝 가능</span></li>
+      <li><span class="n">1</span><div><strong>줄과 프렛</strong><p>줄 번호와 개방현 음, TAB 악보 읽기</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">2</span><div><strong>단음 멜로디</strong><p>1~3번줄에서 검지와 중지를 번갈아 쳐서 쉬운 멜로디</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">3</span><div><strong>첫 코드</strong><p>Em, Am. 코드표 읽기와 한 줄씩 점검</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">4</span><div><strong>코드 넓히기 1</strong><p>C, G, D와 1분 코드 전환</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">5</span><div><strong>스트로크와 박자</strong><p>엄지와 검지로 쓸어 치기, 메트로놈</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">6</span><div><strong>첫 곡 반주</strong><p>코드 네 개로 한 곡을 끝까지</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">7</span><div><strong>아르페지오</strong><p>엄지 베이스와 검지·중지·약지 패턴</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">8</span><div><strong>코드 넓히기 2</strong><p>E, A, Dm, 세븐스 코드</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">9</span><div><strong>F 코드</strong><p>Fmaj7 → 작은 F → 바레 F로 천천히</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">10</span><div><strong>멜로디와 베이스 함께</strong><p>혼자서 반주와 멜로디를 같이 치는 독주 기초</p></div><span class="tag">준비 중</span></li>
+    </ol>
+    <p class="foot">v0.1 · 1단계(소리 엔진과 튜너)</p>
+  </section>
+
+  <section id="view-tuner" class="view" hidden>
+    <h1 class="title">튜너</h1>
+    <div class="tuner">
+      <div class="panel gauge-panel" data-state="idle">
+        <p class="status" id="tn-status" role="status" aria-live="polite"></p>
+        <svg class="gauge" viewBox="0 0 320 190" role="img" aria-label="음이 낮은지 높은지 보여 주는 바늘">
+          <path class="arc" d="M47.4 105 A130 130 0 0 1 272.6 105"/>
+          <path class="zone" d="M143.7 41 A130 130 0 0 1 176.3 41"/>
+          <g class="ticks" id="tn-ticks"></g>
+          <text x="38" y="128" text-anchor="middle">낮음</text>
+          <text x="282" y="128" text-anchor="middle">높음</text>
+          <g id="tn-needle" class="needle">
+            <line x1="160" y1="170" x2="160" y2="50"/>
+            <circle cx="160" cy="170" r="9"/>
+          </g>
+        </svg>
+        <div class="note">
+          <span class="which" id="tn-which"></span>
+          <span class="letter"><span id="tn-note">–</span><sub id="tn-oct"></sub></span>
+          <span class="ko" id="tn-ko"></span>
+        </div>
+        <p class="cents" id="tn-cents"></p>
+        <p class="hint" id="tn-hint"></p>
+        <p class="heard" id="tn-heard"></p>
+        <div class="level" aria-hidden="true"><div id="tn-level"></div></div>
+        <button type="button" id="tn-mic" class="btn primary big">마이크 켜기</button>
+      </div>
+
+      <div class="panel strings-panel">
+        <div class="row">
+          <button type="button" id="tn-auto" class="btn chip" aria-pressed="true">자동으로 줄 찾기</button>
+          <button type="button" id="tn-reset" class="btn ghost">표시 지우기</button>
+        </div>
+        <ol class="strings" id="tn-strings"></ol>
+        <p class="all-done" id="tn-done" hidden>여섯 줄을 모두 맞췄어요. 줄 하나를 조이면 다른 줄이 살짝 풀리니 6번줄부터 한 번 더 확인하면 더 정확합니다.</p>
+        <ul class="tips">
+          <li>줄 이름을 누르면 그 줄만 봅니다. 줄이 많이 풀렸을 때 쓰세요.</li>
+          <li>새 나일론 줄은 며칠 동안 계속 풀립니다. 연습 전마다 맞춰 주세요.</li>
+          <li>낮은 쪽에서 올리면서 맞추면 덜 풀립니다. 높으면 조금 더 풀었다가 다시 올리세요.</li>
+          <li>조용한 곳에서 기기를 기타 앞 30~50cm에 두세요.</li>
+        </ul>
+        <div class="dev" id="tn-dev" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-check" class="view" hidden>
+    <h1 class="title">소리 점검</h1>
+    <div class="panel">
+      <p class="lead">이 기기의 마이크가 기타 소리를 얼마나 잘 듣는지 확인합니다.</p>
+      <ol class="steps">
+        <li>먼저 <a href="#tuner">튜너</a>로 여섯 줄을 맞춥니다.</li>
+        <li>줄마다 [녹음]을 누르고, 그 줄을 한 번 쳐서 그대로 울리게 둡니다. 3초 동안 듣습니다.</li>
+        <li>여섯 줄이 끝나면 [결과 복사]를 눌러 결과를 보내 주세요. 다음 단계의 판정 기준을 이 결과로 맞춥니다.</li>
+      </ol>
+      <p class="status" id="ck-status" role="status" aria-live="polite"></p>
+      <div class="table-wrap">
+        <table class="check">
+          <thead><tr><th scope="col">줄</th><th scope="col">녹음</th><th scope="col">결과</th><th scope="col">파일</th></tr></thead>
+          <tbody id="ck-rows"></tbody>
+        </table>
+      </div>
+      <div class="row">
+        <button type="button" id="ck-copy" class="btn primary" disabled>결과 복사</button>
+        <label class="dev" id="ck-dev" hidden><input type="checkbox" id="ck-fake"> 합성음으로 시험</label>
+      </div>
+      <textarea id="ck-report" rows="9" readonly hidden aria-label="점검 결과"></textarea>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+'use strict';
+// ---- notes.js ----
+// 음 이름, 주파수, 줄·프렛 변환. 화면과 무관한 순수 함수만 둔다.
+
+const A4_DEFAULT = 440;
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const NOTE_KO = ['도', '도#', '레', '레#', '미', '파', '파#', '솔', '솔#', '라', '라#', '시'];
+
+// 표준 튜닝. 6번줄(가장 굵은 줄)부터 1번줄(가장 가는 줄)까지.
+const STRINGS = [
+  { num: 6, midi: 40, hint: '가장 굵은 줄' },
+  { num: 5, midi: 45, hint: '' },
+  { num: 4, midi: 50, hint: '' },
+  { num: 3, midi: 55, hint: '' },
+  { num: 2, midi: 59, hint: '' },
+  { num: 1, midi: 64, hint: '가장 가는 줄' },
+];
+
+function freqToMidi(freq, a4 = A4_DEFAULT) {
+  return 69 + 12 * Math.log2(freq / a4);
+}
+
+function midiToFreq(midi, a4 = A4_DEFAULT) {
+  return a4 * 2 ** ((midi - 69) / 12);
+}
+
+function centsBetween(freq, refFreq) {
+  return 1200 * Math.log2(freq / refFreq);
+}
+
+function pitchClass(midi) {
+  return ((Math.round(midi) % 12) + 12) % 12;
+}
+
+function midiToOctave(midi) {
+  return Math.floor(Math.round(midi) / 12) - 1;
+}
+
+function midiToName(midi) {
+  return NOTE_NAMES[pitchClass(midi)] + midiToOctave(midi);
+}
+
+function midiToKo(midi) {
+  return NOTE_KO[pitchClass(midi)];
+}
+
+// 주파수를 가장 가까운 음과 그 음에서 벗어난 정도(센트)로 풀어 준다.
+function describeFreq(freq, a4 = A4_DEFAULT) {
+  const exact = freqToMidi(freq, a4);
+  const midi = Math.round(exact);
+  return {
+    midi,
+    letter: NOTE_NAMES[pitchClass(midi)],
+    octave: midiToOctave(midi),
+    name: midiToName(midi),
+    ko: midiToKo(midi),
+    cents: (exact - midi) * 100,
+  };
+}
+
+function stringByNum(num) {
+  return STRINGS.find((s) => s.num === num) || null;
+}
+
+// 들린 주파수에 가장 가까운 개방현과, 그 줄 기준으로 벗어난 센트.
+function nearestString(freq, a4 = A4_DEFAULT) {
+  let best = null;
+  for (const s of STRINGS) {
+    const cents = centsBetween(freq, midiToFreq(s.midi, a4));
+    if (!best || Math.abs(cents) < Math.abs(best.cents)) best = { string: s, cents };
+  }
+  return best;
+}
+
+function fretToMidi(stringNum, fret) {
+  const s = stringByNum(stringNum);
+  if (!s || fret < 0) return null;
+  return s.midi + fret;
+}
+
+// ---- pitch.js ----
+// 단음 피치 검출: McLeod Pitch Method.
+// 정규화 제곱차 함수(NSDF)를 구하고, 가장 큰 봉우리의 cutoff 배 이상인 첫 봉우리를 주기로 고른다.
+// 기타처럼 배음이 센 소리에서 옥타브를 헷갈리지 않게 해 주는 부분이 이 "첫 봉우리" 규칙이다.
+
+const NO_PITCH = Object.freeze({ freq: 0, clarity: 0 });
+let scratch = new Float32Array(0);
+
+function rmsLevel(buf) {
+  let sum = 0;
+  for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+  return Math.sqrt(sum / (buf.length || 1));
+}
+
+function detectPitch(buf, sampleRate, options = {}) {
+  const minFreq = options.minFreq ?? 55;
+  const maxFreq = options.maxFreq ?? 1500;
+  const cutoff = options.cutoff ?? 0.93;
+  const n = buf.length;
+  const maxLag = Math.min((n >> 1) - 1, Math.floor(sampleRate / minFreq));
+  const minLag = Math.max(2, Math.floor(sampleRate / maxFreq));
+  if (maxLag <= minLag) return NO_PITCH;
+
+  if (scratch.length < maxLag + 2) scratch = new Float32Array(maxLag + 2);
+  const nsdf = scratch;
+
+  // m(0) = 2 * 전체 에너지. m(tau) = m(tau-1) - x[tau-1]^2 - x[n-tau]^2 로 줄여 나간다.
+  let m = 0;
+  for (let i = 0; i < n; i++) m += buf[i] * buf[i];
+  m *= 2;
+  if (m <= 1e-12) return NO_PITCH;
+  nsdf[0] = 1;
+  for (let tau = 1; tau <= maxLag + 1; tau++) {
+    m -= buf[tau - 1] * buf[tau - 1] + buf[n - tau] * buf[n - tau];
+    let acf = 0;
+    for (let i = 0, end = n - tau; i < end; i++) acf += buf[i] * buf[i + tau];
+    nsdf[tau] = m > 1e-12 ? (2 * acf) / m : 0;
+  }
+
+  // 0을 지나 올라왔다가 다시 내려가는 구간마다 가장 높은 점 하나씩을 후보로 모은다.
+  let tau = 1;
+  while (tau < maxLag && nsdf[tau] > 0) tau++;
+  let bestTau = -1, bestVal = 0, chosen = -1;
+  const candTau = [], candVal = [];
+  while (tau < maxLag) {
+    while (tau < maxLag && nsdf[tau] <= 0) tau++;
+    let localTau = -1, localVal = -1;
+    while (tau <= maxLag && nsdf[tau] > 0) {
+      if (nsdf[tau] > localVal && nsdf[tau] >= nsdf[tau - 1] && nsdf[tau] >= nsdf[tau + 1]) {
+        localVal = nsdf[tau];
+        localTau = tau;
+      }
+      tau++;
+    }
+    if (localTau >= minLag) {
+      candTau.push(localTau);
+      candVal.push(localVal);
+      if (localVal > bestVal) { bestVal = localVal; bestTau = localTau; }
+    }
+  }
+  if (bestTau < 0) return NO_PITCH;
+  for (let i = 0; i < candTau.length; i++) {
+    if (candVal[i] >= cutoff * bestVal) { chosen = candTau[i]; break; }
+  }
+
+  // 포물선 보간으로 샘플 사이의 봉우리 위치를 구한다.
+  const a = nsdf[chosen - 1], b = nsdf[chosen], c = nsdf[chosen + 1];
+  const denom = a - 2 * b + c;
+  const shift = denom !== 0 ? (0.5 * (a - c)) / denom : 0;
+  const clarity = denom !== 0 ? b - ((a - c) * shift) / 4 : b;
+  return { freq: sampleRate / (chosen + shift), clarity: Math.min(1, clarity) };
+}
+
+// ---- tuner.js ----
+// 튜너 판단 로직. 소리 프레임을 받아 "어느 줄이 얼마나 벗어났는지, 맞춘 상태로 유지했는지"를 돌려준다.
+
+const TUNER_DEFAULTS = {
+  a4: 440,
+  tolerance: 6,        // 이 센트 안이면 맞은 것으로 본다
+  holdMs: 600,         // 이만큼 유지해야 "맞춤 완료"
+  medianSize: 5,       // 최근 몇 프레임의 중앙값을 쓸지
+  minClarity: 0.85,    // 이보다 흐린 소리는 판단하지 않는다
+  minRms: 0.004,       // 이보다 작은 소리는 조용한 것으로 본다
+  silenceResetMs: 500, // 이만큼 조용하면 기록을 지운다
+  switchFrames: 2,     // 자동 모드에서 다른 줄로 넘어가려면 연속 몇 프레임 필요한지
+};
+
+function median(values) {
+  if (!values.length) return NaN;
+  const sorted = Array.from(values).sort((x, y) => x - y);
+  const mid = sorted.length >> 1;
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+function createTuner(options = {}) {
+  const o = { ...TUNER_DEFAULTS, ...options };
+  let history = [];
+  let current = null;        // 지금 보고 있는 줄 번호
+  let pending = null;        // 자동 모드에서 넘어가려는 줄 번호
+  let pendingCount = 0;
+  let inSince = null;
+  let lastSoundAt = -Infinity;
+  let last = null;
+
+  function reset() {
+    history = [];
+    current = null;
+    pending = null;
+    pendingCount = 0;
+    inSince = null;
+    last = null;
+  }
+
+  // frame: { freq, clarity, rms }, timeMs: 단조 증가 시각, targetNum: 줄을 직접 골랐으면 그 번호
+  function update(frame, timeMs, targetNum = null) {
+    const heard = frame.rms >= o.minRms && frame.clarity >= o.minClarity && frame.freq > 0;
+    if (!heard) {
+      if (timeMs - lastSoundAt > o.silenceResetMs) {
+        history = [];
+        inSince = null;
+        pending = null;
+        pendingCount = 0;
+        last = null;
+        return { status: frame.rms < o.minRms ? 'silent' : 'unclear', stringNum: targetNum ?? current };
+      }
+      return last ? { ...last, status: 'hold' } : { status: 'silent', stringNum: targetNum ?? current };
+    }
+    lastSoundAt = timeMs;
+
+    let string, cents;
+    if (targetNum) {
+      string = stringByNum(targetNum);
+      cents = centsBetween(frame.freq, midiToFreq(string.midi, o.a4));
+    } else {
+      ({ string, cents } = nearestString(frame.freq, o.a4));
+      if (current !== null && string.num !== current) {
+        // 한 프레임만 튄 값으로 줄을 바꾸지 않는다.
+        if (pending === string.num) pendingCount++;
+        else { pending = string.num; pendingCount = 1; }
+        if (pendingCount < o.switchFrames) return last ? { ...last, status: 'hold' } : { status: 'unclear', stringNum: current };
+      }
+      pending = null;
+      pendingCount = 0;
+    }
+    if (string.num !== current) {
+      history = [];
+      inSince = null;
+      current = string.num;
+    }
+
+    history.push(cents);
+    if (history.length > o.medianSize) history.shift();
+    const c = median(history);
+    const inTune = history.length >= 3 && Math.abs(c) <= o.tolerance;
+    if (inTune) { if (inSince === null) inSince = timeMs; } else inSince = null;
+    const locked = inTune && timeMs - inSince >= o.holdMs;
+    last = {
+      status: 'ok',
+      stringNum: string.num,
+      cents: c,
+      freq: frame.freq,
+      direction: c < -o.tolerance ? 'low' : c > o.tolerance ? 'high' : 'in',
+      inTune,
+      locked,
+    };
+    return last;
+  }
+
+  return { update, reset, options: o };
+}
+
+const ALL_STRING_NUMS = STRINGS.map((s) => s.num);
+
+// ---- check.js ----
+// 소리 점검: 녹음한 한 음을 프레임으로 잘라 검출 결과를 통계로 만든다.
+
+function analyzeTake(samples, sampleRate, expectedMidi, options = {}) {
+  const frame = options.frame ?? 4096;
+  const hop = options.hop ?? 2048;
+  const minRms = options.minRms ?? 0.004;
+  const minClarity = options.minClarity ?? 0.85;
+  const a4 = options.a4 ?? 440;
+  const target = midiToFreq(expectedMidi, a4);
+
+  let frames = 0, heard = 0, correct = 0, peakRms = 0;
+  const cents = [], clarities = [], others = {};
+  for (let start = 0; start + frame <= samples.length; start += hop) {
+    const buf = samples.subarray(start, start + frame);
+    frames++;
+    const level = rmsLevel(buf);
+    if (level > peakRms) peakRms = level;
+    if (level < minRms) continue;
+    const { freq, clarity } = detectPitch(buf, sampleRate);
+    if (!(freq > 0) || clarity < minClarity) continue;
+    heard++;
+    clarities.push(clarity);
+    const c = centsBetween(freq, target);
+    if (Math.abs(c) < 50) {
+      correct++;
+      cents.push(c);
+    } else {
+      const name = describeFreq(freq, a4).name;
+      others[name] = (others[name] || 0) + 1;
+    }
+  }
+  return {
+    frames,
+    heard,
+    correct,
+    hitRate: heard ? correct / heard : 0,
+    medianCents: cents.length ? median(cents) : null,
+    medianClarity: clarities.length ? median(clarities) : null,
+    peakRms,
+    others,
+  };
+}
+
+// ---- wav.js ----
+// Float32 샘플(-1~1)을 16비트 모노 WAV로 바꾼다.
+
+function encodeWav(samples, sampleRate) {
+  const dataBytes = samples.length * 2;
+  const buffer = new ArrayBuffer(44 + dataBytes);
+  const view = new DataView(buffer);
+  const writeText = (offset, text) => { for (let i = 0; i < text.length; i++) view.setUint8(offset + i, text.charCodeAt(i)); };
+  writeText(0, 'RIFF');
+  view.setUint32(4, 36 + dataBytes, true);
+  writeText(8, 'WAVE');
+  writeText(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);              // PCM
+  view.setUint16(22, 1, true);              // 모노
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true); // 초당 바이트
+  view.setUint16(32, 2, true);              // 블록 크기
+  view.setUint16(34, 16, true);             // 비트 수
+  writeText(36, 'data');
+  view.setUint32(40, dataBytes, true);
+  for (let i = 0; i < samples.length; i++) {
+    const v = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(44 + i * 2, Math.round(v < 0 ? v * 0x8000 : v * 0x7fff), true);
+  }
+  return buffer;
+}
+
+function decodeWav(buffer) {
+  const view = new DataView(buffer);
+  const sampleRate = view.getUint32(24, true);
+  const count = view.getUint32(40, true) / 2;
+  const samples = new Float32Array(count);
+  for (let i = 0; i < count; i++) {
+    const v = view.getInt16(44 + i * 2, true);
+    samples[i] = v < 0 ? v / 0x8000 : v / 0x7fff;
+  }
+  return { sampleRate, samples };
+}
+
+// ---- synth.js ----
+// 줄 튕기는 소리 합성. 기준음으로 쓰이므로 주파수가 정확해야 해서 배음을 직접 더하는 방식으로 만든다.
+// brightness가 클수록 배음이 빨리 약해져 나일론 줄처럼 부드러운 소리가 난다.
+
+function renderPluck(freq, sampleRate, seconds = 2, options = {}) {
+  const brightness = options.brightness ?? 1.6;
+  const sustain = options.sustain ?? false;
+  const n = Math.floor(sampleRate * seconds);
+  const out = new Float32Array(n);
+  for (let k = 1; k <= 10; k++) {
+    const fk = k * freq;
+    if (fk > sampleRate * 0.45) break;
+    const amp = 1 / k ** brightness;
+    const decay = sustain ? 0.12 : 1.2 + 0.7 * k;
+    const w = (2 * Math.PI * fk) / sampleRate;
+    for (let i = 0; i < n; i++) out[i] += amp * Math.exp((-decay * i) / sampleRate) * Math.sin(w * i);
+  }
+  const attack = Math.min(n, Math.floor(sampleRate * 0.004));
+  const release = Math.min(n, Math.floor(sampleRate * 0.05));
+  for (let i = 0; i < attack; i++) out[i] *= i / attack;
+  for (let i = 0; i < release; i++) out[n - 1 - i] *= i / release;
+  let peak = 0;
+  for (let i = 0; i < n; i++) peak = Math.max(peak, Math.abs(out[i]));
+  if (peak > 0) for (let i = 0; i < n; i++) out[i] *= 0.6 / peak;
+  return out;
+}
+
+// ---- audio.js ----
+// 브라우저 소리 입출력.
+// 마이크 → input → 고역통과(50Hz, 웅웅거리는 잡음 제거) → analyser. 녹음할 때만 tap을 붙인다.
+
+function micErrorMessage(err) {
+  const name = err && err.name;
+  if (name === 'InsecureContext') return '이 주소에서는 브라우저가 마이크를 허락하지 않아요. https:// 로 시작하는 주소나 PC의 localhost 주소로 열어 주세요.';
+  if (name === 'NotAllowedError' || name === 'SecurityError') return '마이크 사용이 거부됐어요. 주소창 옆 자물쇠(사이트 설정)에서 마이크를 허용한 뒤 다시 눌러 주세요.';
+  if (name === 'NotFoundError' || name === 'OverconstrainedError') return '마이크를 찾지 못했어요. 마이크가 연결돼 있는지 확인해 주세요.';
+  if (name === 'NotReadableError') return '다른 앱이 마이크를 쓰고 있어요. 그 앱을 닫고 다시 눌러 주세요.';
+  if (name === 'NoWebAudio') return '이 브라우저는 소리 분석 기능을 지원하지 않아요. 최신 Chrome이나 Safari로 열어 주세요.';
+  return '마이크를 켜지 못했어요. (' + (name || '알 수 없는 오류') + ')';
+}
+
+function createAudio() {
+  let ctx = null, input = null, filter = null, analyser = null, tap = null, sink = null;
+  let micStream = null, micNode = null, micSettings = null, onChunk = null;
+  const frame = new Float32Array(4096);
+
+  function micSupported() {
+    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  }
+
+  async function ensureContext() {
+    if (!ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) throw Object.assign(new Error('Web Audio 미지원'), { name: 'NoWebAudio' });
+      ctx = new AC({ latencyHint: 'interactive' });
+      input = ctx.createGain();
+      filter = ctx.createBiquadFilter();
+      filter.type = 'highpass';
+      filter.frequency.value = 50;
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = frame.length;
+      analyser.smoothingTimeConstant = 0;
+      input.connect(filter);
+      filter.connect(analyser);
+    }
+    if (ctx.state !== 'running') await ctx.resume();
+    return ctx;
+  }
+
+  async function openMic() {
+    if (micStream) return micSettings;
+    if (!micSupported()) throw Object.assign(new Error('보안 연결 아님'), { name: 'InsecureContext' });
+    // 권한 창이 뜨기 전에, 사용자가 누른 그 동작 안에서 소리 장치를 먼저 깨운다(iOS 대비).
+    await ensureContext();
+    // 통화용 보정 세 가지는 악기 소리를 망가뜨리므로 모두 끈다.
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 },
+    });
+    micStream = stream;
+    micNode = ctx.createMediaStreamSource(stream);
+    micNode.connect(input);
+    const track = stream.getAudioTracks()[0];
+    micSettings = track && track.getSettings ? track.getSettings() : {};
+    return micSettings;
+  }
+
+  function closeMic() {
+    if (!micStream) return;
+    try { micNode.disconnect(); } catch (e) { /* 이미 끊김 */ }
+    micStream.getTracks().forEach((t) => t.stop());
+    micStream = null;
+    micNode = null;
+  }
+
+  function readFrame() {
+    if (!analyser) return null;
+    analyser.getFloatTimeDomainData(frame);
+    return frame;
+  }
+
+  // target: 'speakers'면 스피커로, 'input'이면 분석 경로로만 넣는다(개발용 시험 신호).
+  function play(samples, target = 'speakers') {
+    const buffer = ctx.createBuffer(1, samples.length, ctx.sampleRate);
+    buffer.getChannelData(0).set(samples);
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(target === 'input' ? input : ctx.destination);
+    source.start();
+    return source;
+  }
+
+  function record(seconds) {
+    return new Promise((resolve) => {
+      const total = Math.floor(ctx.sampleRate * seconds);
+      const out = new Float32Array(total);
+      let pos = 0;
+      if (!tap) {
+        tap = ctx.createScriptProcessor(4096, 1, 1);
+        sink = ctx.createGain();
+        sink.gain.value = 0;
+        tap.onaudioprocess = (e) => { if (onChunk) onChunk(e.inputBuffer.getChannelData(0)); };
+      }
+      filter.connect(tap);
+      tap.connect(sink);
+      sink.connect(ctx.destination);
+      onChunk = (chunk) => {
+        const n = Math.min(chunk.length, total - pos);
+        out.set(chunk.subarray(0, n), pos);
+        pos += n;
+        if (pos >= total) {
+          onChunk = null;
+          try { filter.disconnect(tap); tap.disconnect(); sink.disconnect(); } catch (e) { /* 이미 끊김 */ }
+          resolve(out);
+        }
+      };
+    });
+  }
+
+  return {
+    micSupported, ensureContext, openMic, closeMic, readFrame, play, record,
+    get sampleRate() { return ctx ? ctx.sampleRate : 0; },
+    get micOpen() { return !!micStream; },
+    get micSettings() { return micSettings; },
+    get ready() { return !!ctx; },
+  };
+}
+
+// ---- ui-tuner.js ----
+// 튜너 화면.
+
+const CHECK_SVG = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function initTunerView(root, audio, env) {
+  const q = (sel) => root.querySelector(sel);
+  const el = {
+    panel: q('.gauge-panel'), status: q('#tn-status'), needle: q('#tn-needle'), ticks: q('#tn-ticks'),
+    note: q('#tn-note'), oct: q('#tn-oct'), ko: q('#tn-ko'), which: q('#tn-which'),
+    cents: q('#tn-cents'), hint: q('#tn-hint'), heard: q('#tn-heard'), level: q('#tn-level'),
+    mic: q('#tn-mic'), list: q('#tn-strings'), auto: q('#tn-auto'), reset: q('#tn-reset'),
+    done: q('#tn-done'), dev: q('#tn-dev'),
+  };
+  const tuner = createTuner();
+  const state = { target: null, done: new Set(), timer: null, running: false, visible: false, pauseUntil: 0, wake: null, devSource: null };
+
+  // 눈금: -50 ~ +50센트, 10센트 간격. 바늘은 ±60도 안에서 움직인다.
+  let ticks = '';
+  for (let c = -50; c <= 50; c += 10) {
+    const a = (c / 50) * 60 * Math.PI / 180, r1 = c === 0 ? 112 : 119, r2 = 130;
+    ticks += `<line x1="${(160 + r1 * Math.sin(a)).toFixed(1)}" y1="${(170 - r1 * Math.cos(a)).toFixed(1)}" x2="${(160 + r2 * Math.sin(a)).toFixed(1)}" y2="${(170 - r2 * Math.cos(a)).toFixed(1)}"/>`;
+  }
+  el.ticks.innerHTML = ticks;
+
+  el.list.innerHTML = STRINGS.map((s) => `
+    <li data-row="${s.num}">
+      <button type="button" class="string" data-num="${s.num}" aria-pressed="false">
+        <span class="s-num">${s.num}</span>
+        <span class="s-label"><span class="s-name">${NOTE_NAMES[pitchClass(s.midi)]}<small>${midiToOctave(s.midi)}</small> <em>${midiToKo(s.midi)}</em></span><span class="s-hint">${s.hint}</span></span>
+        <span class="s-check">${CHECK_SVG}</span>
+      </button>
+      <button type="button" class="tone" data-tone="${s.num}" aria-label="${s.num}번줄 기준음 듣기">기준음</button>
+    </li>`).join('');
+
+  function setStatus(text, kind = '') {
+    el.status.textContent = text;
+    el.status.dataset.kind = kind;
+  }
+
+  function showNote(midi, label) {
+    if (midi === null) {
+      el.note.textContent = '–';
+      el.oct.textContent = '';
+      el.ko.textContent = '';
+    } else {
+      el.note.textContent = NOTE_NAMES[pitchClass(midi)];
+      el.oct.textContent = midiToOctave(midi);
+      el.ko.textContent = midiToKo(midi);
+    }
+    el.which.textContent = label || '';
+  }
+
+  function paintStrings(activeNum = null) {
+    for (const li of el.list.children) {
+      const num = Number(li.dataset.row);
+      li.classList.toggle('done', state.done.has(num));
+      li.classList.toggle('active', num === activeNum);
+      li.querySelector('.string').setAttribute('aria-pressed', String(state.target === num));
+    }
+    el.auto.setAttribute('aria-pressed', String(state.target === null));
+    el.done.hidden = state.done.size < STRINGS.length;
+  }
+
+  function setLevel(level) {
+    // -60dB ~ -6dB 를 0~100%로
+    const db = 20 * Math.log10(Math.max(level, 1e-6));
+    el.level.style.width = Math.max(0, Math.min(100, ((db + 60) / 54) * 100)).toFixed(0) + '%';
+  }
+
+  function idle(text, kind) {
+    el.panel.dataset.state = 'idle';
+    el.needle.style.transform = 'rotate(0deg)';
+    const t = state.target ? stringByNum(state.target) : null;
+    showNote(t ? t.midi : null, t ? `${t.num}번줄` : '');
+    el.cents.textContent = '';
+    el.hint.textContent = '';
+    el.heard.textContent = '';
+    setStatus(text, kind);
+    paintStrings(state.target);
+  }
+
+  function render(r) {
+    if ((r.status !== 'ok' && r.status !== 'hold') || r.cents === undefined) {
+      if (r.status === 'paused') return idle('기준음을 듣는 중이에요', '');
+      if (r.status === 'unclear') return idle('소리가 또렷하지 않아요. 한 줄만 쳐서 길게 울려 주세요', '');
+      return idle(state.target ? `${state.target}번줄을 쳐 보세요` : '줄을 하나 쳐 보세요', '');
+    }
+    const s = stringByNum(r.stringNum);
+    const c = r.cents;
+    const far = Math.abs(c) > 120;
+    showNote(s.midi, `${s.num}번줄`);
+    el.needle.style.transform = `rotate(${((Math.max(-50, Math.min(50, c)) / 50) * 60).toFixed(1)}deg)`;
+    el.panel.dataset.state = r.inTune ? 'in' : far ? 'far' : 'off';
+    const rounded = Math.round(Math.abs(c));
+    // 반음 넘게 벗어나면 숫자가 오히려 헷갈리므로 말로만 알려 준다.
+    el.cents.textContent = far ? (c < 0 ? '많이 낮아요' : '많이 높아요') : rounded === 0 ? '딱 맞아요' : `${rounded}센트 ${c < 0 ? '낮아요' : '높아요'}`;
+    if (r.inTune) el.hint.textContent = '좋아요. 그대로 두세요.';
+    else if (far) el.hint.textContent = c < 0 ? '[기준음]을 듣고 비슷해질 때까지 줄감개를 천천히 감으세요.' : '줄이 끊어지지 않게 줄감개를 천천히 풀어 주세요.';
+    else el.hint.textContent = c < 0 ? '줄감개를 조금 감아 음을 올리세요.' : '줄감개를 조금 풀어 음을 내리세요.';
+    el.heard.textContent = `지금 소리 ${describeFreq(r.freq).name} · ${r.freq.toFixed(1)}Hz`;
+    if (r.locked && !state.done.has(s.num)) state.done.add(s.num);
+    if (r.locked) setStatus(`${s.num}번줄 맞았어요`, 'good');
+    else setStatus(`${s.num}번줄 맞추는 중`, '');
+    paintStrings(s.num);
+  }
+
+  function tick() {
+    const buf = audio.readFrame();
+    if (!buf) return;
+    const now = performance.now();
+    const level = rmsLevel(buf);
+    setLevel(level);
+    if (now < state.pauseUntil) return render({ status: 'paused' });
+    const p = detectPitch(buf, audio.sampleRate);
+    render(tuner.update({ freq: p.freq, clarity: p.clarity, rms: level }, now, state.target));
+  }
+
+  function startLoop() {
+    state.running = true;
+    if (!state.timer && state.visible) state.timer = setInterval(tick, 50);
+  }
+
+  function stopLoop() {
+    if (state.timer) clearInterval(state.timer);
+    state.timer = null;
+  }
+
+  async function keepAwake() {
+    try { if (navigator.wakeLock && !state.wake) state.wake = await navigator.wakeLock.request('screen'); } catch (e) { /* 화면 켜짐 유지는 없어도 된다 */ }
+  }
+
+  el.mic.addEventListener('click', async () => {
+    if (audio.micOpen) {
+      audio.closeMic();
+      stopLoop();
+      state.running = false;
+      el.mic.textContent = '마이크 켜기';
+      el.mic.classList.add('primary');
+      setLevel(0);
+      idle('마이크를 켜면 시작합니다', '');
+      return;
+    }
+    el.mic.disabled = true;
+    try {
+      await audio.openMic();
+      el.mic.textContent = '마이크 끄기';
+      el.mic.classList.remove('primary');
+      tuner.reset();
+      startLoop();
+      keepAwake();
+      idle('줄을 하나 쳐 보세요', '');
+    } catch (err) {
+      setStatus(micErrorMessage(err), 'bad');
+    } finally {
+      el.mic.disabled = false;
+    }
+  });
+
+  el.list.addEventListener('click', async (e) => {
+    const toneBtn = e.target.closest('.tone');
+    if (toneBtn) {
+      const s = stringByNum(Number(toneBtn.dataset.tone));
+      await audio.ensureContext();
+      audio.play(renderPluck(midiToFreq(s.midi), audio.sampleRate, 2.4));
+      // 스피커 소리를 줄 소리로 착각하지 않게 잠깐 판단을 멈춘다.
+      state.pauseUntil = performance.now() + 2600;
+      tuner.reset();
+      return;
+    }
+    const strBtn = e.target.closest('.string');
+    if (strBtn) {
+      state.target = Number(strBtn.dataset.num);
+      tuner.reset();
+      idle(audio.micOpen || state.running ? `${state.target}번줄을 쳐 보세요` : '마이크를 켜면 시작합니다', '');
+    }
+  });
+
+  el.auto.addEventListener('click', () => {
+    state.target = null;
+    tuner.reset();
+    idle(audio.micOpen || state.running ? '줄을 하나 쳐 보세요' : '마이크를 켜면 시작합니다', '');
+  });
+
+  el.reset.addEventListener('click', () => {
+    state.done.clear();
+    paintStrings(state.target);
+  });
+
+  if (env.dev) {
+    // 개발용: 합성한 줄 소리를 스피커가 아니라 분석 경로에 바로 넣어 튜너 반응을 본다.
+    el.dev.hidden = false;
+    el.dev.innerHTML = '<strong>시험 신호</strong> ' + STRINGS.map((s) => [-30, 0, 12].map((c) =>
+      `<button type="button" data-dev-num="${s.num}" data-dev-cents="${c}">${s.num}번 ${c > 0 ? '+' : ''}${c}</button>`).join('')).join(' ') +
+      ' <button type="button" data-dev-stop>멈춤</button>';
+    el.dev.addEventListener('click', async (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      await audio.ensureContext();
+      if (state.devSource) { try { state.devSource.stop(); } catch (err) { /* 이미 끝남 */ } state.devSource = null; }
+      if (b.hasAttribute('data-dev-stop')) return;
+      const s = stringByNum(Number(b.dataset.devNum));
+      const f = midiToFreq(s.midi) * 2 ** (Number(b.dataset.devCents) / 1200);
+      state.devSource = audio.play(renderPluck(f, audio.sampleRate, 8, { sustain: true }), 'input');
+      startLoop();
+    });
+  }
+
+  idle('마이크를 켜면 시작합니다', '');
+
+  return {
+    setVisible(visible) {
+      state.visible = visible;
+      if (visible && state.running) startLoop();
+      else stopLoop();
+    },
+    tick,
+    state,
+  };
+}
+
+// ---- ui-check.js ----
+// 소리 점검 화면: 줄마다 3초씩 듣고, 이 기기의 마이크가 기타 소리를 얼마나 잘 받는지 숫자로 보여 준다.
+
+const TAKE_SECONDS = 3;
+
+function initCheckView(root, audio, env) {
+  const q = (sel) => root.querySelector(sel);
+  const el = { status: q('#ck-status'), rows: q('#ck-rows'), copy: q('#ck-copy'), report: q('#ck-report'), devWrap: q('#ck-dev'), devFake: q('#ck-fake') };
+  const takes = new Map();
+
+  el.rows.innerHTML = STRINGS.map((s) => `
+    <tr data-row="${s.num}">
+      <th scope="row"><span class="s-num">${s.num}</span> ${midiToName(s.midi)} <em>${midiToKo(s.midi)}</em></th>
+      <td><button type="button" class="btn rec" data-rec="${s.num}">녹음</button></td>
+      <td class="ck-result"><span class="verdict">아직 안 했어요</span><span class="detail"></span></td>
+      <td><button type="button" class="btn ghost save" data-save="${s.num}" disabled>WAV 저장</button></td>
+    </tr>`).join('');
+  if (env.dev) el.devWrap.hidden = false;
+
+  function setStatus(text, kind = '') {
+    el.status.textContent = text;
+    el.status.dataset.kind = kind;
+  }
+
+  function verdictOf(r) {
+    if (r.heard < 5) return ['warn', '소리가 너무 작거나 흐려요. 기기를 기타 가까이에 두고 다시 해 보세요'];
+    if (r.hitRate >= 0.9) return ['good', '잘 들려요'];
+    if (r.hitRate >= 0.6) return ['warn', '대체로 들리지만 가끔 놓쳐요'];
+    const top = Object.entries(r.others).sort((a, b) => b[1] - a[1])[0];
+    return ['bad', top ? `다른 음(${top[0]})으로 들려요. 튜닝을 먼저 확인해 주세요` : '음을 알아듣지 못했어요'];
+  }
+
+  function detailOf(r) {
+    const parts = [`들린 구간 ${r.heard}/${r.frames}`, `맞힘 ${Math.round(r.hitRate * 100)}%`];
+    if (r.medianCents !== null) parts.push(`오차 ${r.medianCents >= 0 ? '+' : '-'}${Math.abs(r.medianCents).toFixed(1)}센트`);
+    if (r.medianClarity !== null) parts.push(`선명도 ${r.medianClarity.toFixed(2)}`);
+    parts.push(`음량 ${r.peakRms.toFixed(3)}`);
+    return parts.join(' · ');
+  }
+
+  function paintRow(num) {
+    const row = el.rows.querySelector(`[data-row="${num}"]`);
+    const take = takes.get(num);
+    const [kind, text] = verdictOf(take.result);
+    row.dataset.kind = kind;
+    row.querySelector('.verdict').textContent = text;
+    row.querySelector('.detail').textContent = detailOf(take.result);
+    row.querySelector('.save').disabled = false;
+    el.copy.disabled = false;
+  }
+
+  function setBusy(busy) {
+    for (const b of el.rows.querySelectorAll('.rec')) b.disabled = busy;
+  }
+
+  async function recordString(num, button) {
+    const s = STRINGS.find((x) => x.num === num);
+    const fake = env.dev && el.devFake.checked;
+    try {
+      if (fake) await audio.ensureContext();
+      else await audio.openMic();
+    } catch (err) {
+      setStatus(micErrorMessage(err), 'bad');
+      return;
+    }
+    setBusy(true);
+    button.textContent = '듣는 중';
+    setStatus(`${s.num}번줄을 한 번 치고 그대로 울리게 두세요 (${TAKE_SECONDS}초)`, '');
+    if (fake) audio.play(renderPluck(midiToFreq(s.midi), audio.sampleRate, TAKE_SECONDS), 'input');
+    const samples = await audio.record(TAKE_SECONDS);
+    takes.set(num, { samples, sampleRate: audio.sampleRate, result: analyzeTake(samples, audio.sampleRate, s.midi) });
+    paintRow(num);
+    button.textContent = '다시 녹음';
+    setBusy(false);
+    setStatus(takes.size < STRINGS.length ? `${takes.size}/${STRINGS.length}줄 완료. 다음 줄을 녹음해 주세요` : '여섯 줄 모두 끝났어요. 아래 [결과 복사]를 눌러 보내 주세요', takes.size < STRINGS.length ? '' : 'good');
+  }
+
+  function buildReport() {
+    const st = audio.micSettings || {};
+    const flag = (v) => (v === undefined ? '?' : v ? '켜짐' : '꺼짐');
+    const lines = [
+      `[여섯줄 소리 점검] ${new Date().toLocaleString('ko-KR')}`,
+      `기기: ${navigator.userAgent}`,
+      `샘플레이트 ${audio.sampleRate}Hz · 울림 제거 ${flag(st.echoCancellation)} · 잡음 억제 ${flag(st.noiseSuppression)} · 자동 음량 ${flag(st.autoGainControl)}`,
+    ];
+    for (const s of STRINGS) {
+      const take = takes.get(s.num);
+      lines.push(`${s.num}번줄 ${midiToName(s.midi)}: ` + (take ? `${verdictOf(take.result)[1]} | ${detailOf(take.result)}` + (Object.keys(take.result.others).length ? ` | 다른 음 ${JSON.stringify(take.result.others)}` : '') : '안 함'));
+    }
+    return lines.join('\n');
+  }
+
+  el.rows.addEventListener('click', (e) => {
+    const rec = e.target.closest('.rec');
+    if (rec) return void recordString(Number(rec.dataset.rec), rec);
+    const save = e.target.closest('.save');
+    if (save) {
+      const num = Number(save.dataset.save), take = takes.get(num), s = STRINGS.find((x) => x.num === num);
+      const url = URL.createObjectURL(new Blob([encodeWav(take.samples, take.sampleRate)], { type: 'audio/wav' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `string${num}_${midiToName(s.midi)}.wav`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+  });
+
+  el.copy.addEventListener('click', async () => {
+    const text = buildReport();
+    el.report.hidden = false;
+    el.report.value = text;
+    try {
+      await navigator.clipboard.writeText(text);
+      setStatus('결과를 복사했어요. 채팅창에 붙여 넣어 보내 주세요', 'good');
+    } catch (err) {
+      el.report.focus();
+      el.report.select();
+      setStatus('아래 글상자의 내용을 길게 눌러 복사해 주세요', '');
+    }
+  });
+
+  return { buildReport, takes };
+}
+
+// ---- main.js ----
+// 앱 시작점: 화면 전환과 각 화면 초기화.
+
+const env = { dev: new URLSearchParams(location.search).has('dev') };
+const appAudio = createAudio();
+const viewEls = {
+  home: document.getElementById('view-home'),
+  tuner: document.getElementById('view-tuner'),
+  check: document.getElementById('view-check'),
+};
+const tunerView = initTunerView(viewEls.tuner, appAudio, env);
+const checkView = initCheckView(viewEls.check, appAudio, env);
+
+function route() {
+  const wanted = (location.hash || '#home').slice(1);
+  const name = viewEls[wanted] ? wanted : 'home';
+  for (const [key, node] of Object.entries(viewEls)) node.hidden = key !== name;
+  for (const link of document.querySelectorAll('[data-nav]')) {
+    if (link.dataset.nav === name) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  }
+  tunerView.setVisible(name === 'tuner');
+  window.scrollTo(0, 0);
+}
+
+window.addEventListener('hashchange', route);
+route();
+
+if (env.dev) window.__dev = { audio: appAudio, tunerView, checkView };
+
+})();
+</script>
+</body>
+</html>

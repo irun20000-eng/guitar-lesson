@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f6f2ea">
+<title>여섯줄 · 기타 연습</title>
+<style>
+/*__CSS__*/
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#home">여섯줄</a>
+  <nav aria-label="주요 화면">
+    <a href="#home" data-nav="home">홈</a>
+    <a href="#tuner" data-nav="tuner">튜너</a>
+    <a href="#check" data-nav="check">소리 점검</a>
+  </nav>
+</header>
+
+<main>
+  <section id="view-home" class="view">
+    <div class="hero">
+      <p class="eyebrow">클래식 기타 첫걸음</p>
+      <h1>치면, 듣고 알려 줍니다</h1>
+      <p class="lead">기타를 처음 잡는 사람을 위한 연습 앱입니다. 마이크로 소리를 듣고 맞았는지 바로 알려 줍니다. 오늘은 튜닝부터 시작하세요.</p>
+      <a class="btn primary big" href="#tuner">튜너 열기</a>
+    </div>
+
+    <h2>지금 쓸 수 있는 것</h2>
+    <div class="cards">
+      <a class="card" href="#tuner">
+        <h3>튜너</h3>
+        <p>여섯 줄을 차례로 맞춥니다. 줄을 치면 높은지 낮은지 알려 주고, 맞으면 표시합니다.</p>
+      </a>
+      <a class="card" href="#check">
+        <h3>소리 점검</h3>
+        <p>이 기기의 마이크가 기타 소리를 잘 듣는지 줄마다 확인합니다. 결과는 앱을 다듬는 데 씁니다.</p>
+      </a>
+    </div>
+
+    <h2>배우는 순서</h2>
+    <ol class="path">
+      <li class="now"><span class="n">0</span><div><strong>준비</strong><p>기타 각 부분, 앉는 자세, 오른손 손가락 이름, 튜닝</p></div><span class="tag on">튜닝 가능</span></li>
+      <li><span class="n">1</span><div><strong>줄과 프렛</strong><p>줄 번호와 개방현 음, TAB 악보 읽기</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">2</span><div><strong>단음 멜로디</strong><p>1~3번줄에서 검지와 중지를 번갈아 쳐서 쉬운 멜로디</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">3</span><div><strong>첫 코드</strong><p>Em, Am. 코드표 읽기와 한 줄씩 점검</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">4</span><div><strong>코드 넓히기 1</strong><p>C, G, D와 1분 코드 전환</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">5</span><div><strong>스트로크와 박자</strong><p>엄지와 검지로 쓸어 치기, 메트로놈</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">6</span><div><strong>첫 곡 반주</strong><p>코드 네 개로 한 곡을 끝까지</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">7</span><div><strong>아르페지오</strong><p>엄지 베이스와 검지·중지·약지 패턴</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">8</span><div><strong>코드 넓히기 2</strong><p>E, A, Dm, 세븐스 코드</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">9</span><div><strong>F 코드</strong><p>Fmaj7 → 작은 F → 바레 F로 천천히</p></div><span class="tag">준비 중</span></li>
+      <li><span class="n">10</span><div><strong>멜로디와 베이스 함께</strong><p>혼자서 반주와 멜로디를 같이 치는 독주 기초</p></div><span class="tag">준비 중</span></li>
+    </ol>
+    <p class="foot">v0.1 · 1단계(소리 엔진과 튜너)</p>
+  </section>
+
+  <section id="view-tuner" class="view" hidden>
+    <h1 class="title">튜너</h1>
+    <div class="tuner">
+      <div class="panel gauge-panel" data-state="idle">
+        <p class="status" id="tn-status" role="status" aria-live="polite"></p>
+        <svg class="gauge" viewBox="0 0 320 190" role="img" aria-label="음이 낮은지 높은지 보여 주는 바늘">
+          <path class="arc" d="M47.4 105 A130 130 0 0 1 272.6 105"/>
+          <path class="zone" d="M143.7 41 A130 130 0 0 1 176.3 41"/>
+          <g class="ticks" id="tn-ticks"></g>
+          <text x="38" y="128" text-anchor="middle">낮음</text>
+          <text x="282" y="128" text-anchor="middle">높음</text>
+          <g id="tn-needle" class="needle">
+            <line x1="160" y1="170" x2="160" y2="50"/>
+            <circle cx="160" cy="170" r="9"/>
+          </g>
+        </svg>
+        <div class="note">
+          <span class="which" id="tn-which"></span>
+          <span class="letter"><span id="tn-note">–</span><sub id="tn-oct"></sub></span>
+          <span class="ko" id="tn-ko"></span>
+        </div>
+        <p class="cents" id="tn-cents"></p>
+        <p class="hint" id="tn-hint"></p>
+        <p class="heard" id="tn-heard"></p>
+        <div class="level" aria-hidden="true"><div id="tn-level"></div></div>
+        <button type="button" id="tn-mic" class="btn primary big">마이크 켜기</button>
+      </div>
+
+      <div class="panel strings-panel">
+        <div class="row">
+          <button type="button" id="tn-auto" class="btn chip" aria-pressed="true">자동으로 줄 찾기</button>
+          <button type="button" id="tn-reset" class="btn ghost">표시 지우기</button>
+        </div>
+        <ol class="strings" id="tn-strings"></ol>
+        <p class="all-done" id="tn-done" hidden>여섯 줄을 모두 맞췄어요. 줄 하나를 조이면 다른 줄이 살짝 풀리니 6번줄부터 한 번 더 확인하면 더 정확합니다.</p>
+        <ul class="tips">
+          <li>줄 이름을 누르면 그 줄만 봅니다. 줄이 많이 풀렸을 때 쓰세요.</li>
+          <li>새 나일론 줄은 며칠 동안 계속 풀립니다. 연습 전마다 맞춰 주세요.</li>
+          <li>낮은 쪽에서 올리면서 맞추면 덜 풀립니다. 높으면 조금 더 풀었다가 다시 올리세요.</li>
+          <li>조용한 곳에서 기기를 기타 앞 30~50cm에 두세요.</li>
+        </ul>
+        <div class="dev" id="tn-dev" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-check" class="view" hidden>
+    <h1 class="title">소리 점검</h1>
+    <div class="panel">
+      <p class="lead">이 기기의 마이크가 기타 소리를 얼마나 잘 듣는지 확인합니다.</p>
+      <ol class="steps">
+        <li>먼저 <a href="#tuner">튜너</a>로 여섯 줄을 맞춥니다.</li>
+        <li>줄마다 [녹음]을 누르고, 그 줄을 한 번 쳐서 그대로 울리게 둡니다. 3초 동안 듣습니다.</li>
+        <li>여섯 줄이 끝나면 [결과 복사]를 눌러 결과를 보내 주세요. 다음 단계의 판정 기준을 이 결과로 맞춥니다.</li>
+      </ol>
+      <p class="status" id="ck-status" role="status" aria-live="polite"></p>
+      <div class="table-wrap">
+        <table class="check">
+          <thead><tr><th scope="col">줄</th><th scope="col">녹음</th><th scope="col">결과</th><th scope="col">파일</th></tr></thead>
+          <tbody id="ck-rows"></tbody>
+        </table>
+      </div>
+      <div class="row">
+        <button type="button" id="ck-copy" class="btn primary" disabled>결과 복사</button>
+        <label class="dev" id="ck-dev" hidden><input type="checkbox" id="ck-fake"> 합성음으로 시험</label>
+      </div>
+      <textarea id="ck-report" rows="9" readonly hidden aria-label="점검 결과"></textarea>
+    </div>
+  </section>
+</main>
+
+<script>
+/*__JS__*/
+</script>
+</body>
+</html>

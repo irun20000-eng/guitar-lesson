@@ -3,9 +3,10 @@
 초급자를 위한 기타 레슨 웹앱. 클래식 기타를 처음 잡는 사람이 마이크 앞에서 치면 맞았는지 바로 알려 주는 무료 한국어 연습 앱을 목표로 한다.
 
 ## 지금 상태
-- 0단계 기획 완료, 1단계(소리 엔진과 튜너) 구현 완료 (2026-11-12).
-- 남은 일: 실제 기타와 태블릿 마이크로 확인.
-- 쓸 수 있는 화면: 홈, 튜너, 소리 점검.
+- 1~5단계 구현 완료, 전체 디자인 개편 완료 (2026-11-12, v0.5).
+- 화면: 홈(오늘의 연습, 연속 연습일), 배우기(0~10단계 레슨 39개), 곡(멜로디 4곡, 반주 3곡, 내 곡 만들기), 도구(튜너, 코드표 15개, 메트로놈, 박자 보정, 소리 점검, 설정).
+- 판정: 단음(기다려 주기, 박자 맞추기), 코드 한 줄씩 점검, 코드 확인, 1분 코드 전환, 스트로크 박자.
+- 남은 일: 실제 기타와 태블릿 마이크로 확인하고 판정 기준 조정.
 
 ## 열어 보기 (태블릿·휴대폰·PC 공통)
 - https://irun20000-eng.github.io/guitar-lesson/
@@ -22,8 +23,9 @@
 index.html        빌드 결과. 이 파일 하나가 앱 전체다
 src/app.html      화면 뼈대
 src/style.css     모양
-src/js/           notes(음 이름) pitch(피치 검출) tuner(튜너 판단) check(소리 점검 분석)
-                  wav synth(합성 기준음) audio(마이크·스피커) ui-tuner ui-check main
+src/js/           엔진: notes pitch tuner tracker(음 추적) judge(채점) chroma chords score progress(기록)
+                  자료: lessons-data(레슨·곡) diagram(코드표·지판 그림)
+                  화면: audio listen ui-tuner ui-check ui-play ui-chord ui-lesson ui-pages main
 build.mjs         src를 index.html 하나로 합침
 tests/            node 단위 시험
 tools/serve.mjs   PC용 작은 서버
@@ -34,7 +36,7 @@ docs/             기획서, 결정사항
 ## 명령
 ```
 node build.mjs                    # index.html 다시 만들기
-node --test "tests/*.test.mjs"    # 시험 21개
+node --test "tests/*.test.mjs"    # 시험 46개
 node spike/feasibility.mjs        # 타당성 실험 다시 돌리기
 ```
 src를 고친 뒤에는 반드시 빌드해서 index.html을 함께 커밋한다.
@@ -47,8 +49,10 @@ src를 고친 뒤에는 반드시 빌드해서 index.html을 함께 커밋한다
 | 단계 | 내용 | 상태 |
 |---|---|---|
 | 0 | 기획 | 완료 |
-| 1 | 소리 엔진과 튜너 | 구현 완료, 실제 기타 확인 대기 |
-| 2 | 단음 판정 연습 | 대기 |
-| 3 | 흘러가는 TAB | 대기 |
-| 4 | 코드 | 대기 |
-| 5 | 완성(레슨 채우기, 곡, 기록) | 대기 |
+| 1 | 소리 엔진과 튜너 | 완료 |
+| 2 | 단음 판정 연습 | 완료 |
+| 3 | 흘러가는 TAB | 완료 |
+| 4 | 코드 | 완료 |
+| 5 | 완성(레슨 채우기, 곡, 기록) | 완료 |
+| 디자인 | 야간 무대(어두운 그라디언트, 유리 패널) | 완료 |
+| 확인 | 실제 기타·태블릿으로 판정 기준 조정 | 대기 |

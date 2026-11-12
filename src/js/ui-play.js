@@ -77,7 +77,7 @@ export function mountNotePlayer(host, app, spec) {
   function colors() {
     const cs = getComputedStyle(host);
     const v = (name, fallback) => cs.getPropertyValue(name).trim() || fallback;
-    return { line: v('--tab-line', '#b8ad9c'), ink: v('--ink', '#222'), muted: v('--muted', '#777'), note: v('--tab-note', '#a84f1c'), noteInk: v('--tab-note-ink', '#fff'), good: v('--good', '#1d8348'), warn: v('--warn', '#b9720b'), bad: v('--bad', '#b3261e'), hit: v('--tab-hit', '#1d8348') };
+    return { line: v('--tab-line', '#b8ad9c'), ink: v('--ink', '#222'), muted: v('--muted', '#777'), note: v('--tab-note', '#a84f1c'), noteInk: v('--tab-note-ink', '#fff'), good: v('--good', '#1d8348'), warn: v('--tab-good', '#b9720b'), bad: v('--bad', '#b3261e'), hit: v('--tab-hit', '#1d8348') };
   }
 
   function draw() {
@@ -125,7 +125,7 @@ export function mountNotePlayer(host, app, spec) {
     if (v) {
       v.notes.forEach((n, i) => {
         const x = xOf(n.t), y = yOf(n.string);
-        if (x < 20 || x > W + 30) return;
+        if (x < 44 || x > W + 30) return;   // 왼쪽 줄 번호 위로는 그리지 않는다
         const st = v.states[i];
         const tail = Math.max(0, n.dur * ppb - 34);
         const fill = st === 'hit' || st === 'perfect' ? c.good : st === 'good' ? c.warn : st === 'miss' ? c.bad : c.note;

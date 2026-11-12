@@ -13,6 +13,10 @@ const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
 const PATTERNS = [['D-D-D-D-', '네 번 내려치기'], ['DUDUDUDU', '8비트(내리고 올리기)'], ['D-DU-UDU', '칼립소']];
 const patternArrows = (p) => [...p].map((ch) => (ch === 'D' ? '↓' : ch === 'U' ? '↑' : '·')).join(' ');
 
+// 홈 화면 그림: 조명 아래 놓인 기타의 울림구멍과 여섯 줄. 사진 대신 벡터로 그려 파일 하나에 담는다.
+const HERO_ART = '<svg viewBox="0 0 900 420" preserveAspectRatio="xMaxYMid slice" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ha-spot" cx="18%" cy="0%" r="95%"><stop offset="0" stop-color="#f5b342" stop-opacity=".5"/><stop offset=".5" stop-color="#f5b342" stop-opacity=".1"/><stop offset="1" stop-color="#f5b342" stop-opacity="0"/></radialGradient><radialGradient id="ha-top" cx="58%" cy="42%" r="78%"><stop offset="0" stop-color="#d39a52"/><stop offset=".5" stop-color="#8a5530"/><stop offset="1" stop-color="#2a1a22"/></radialGradient><linearGradient id="ha-neck" x1="0" x2="1"><stop offset="0" stop-color="#120e19"/><stop offset="1" stop-color="#2b1d24"/></linearGradient><filter id="ha-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="16"/></filter><filter id="ha-glow" x="-10%" y="-400%" width="120%" height="900%"><feGaussianBlur stdDeviation="2.4"/></filter></defs><rect width="900" height="420" fill="#141126"/><g filter="url(#ha-blur)"><circle cx="120" cy="70" r="46" fill="#f5b342" opacity=".5"/><circle cx="300" cy="350" r="38" fill="#5cd3c0" opacity=".35"/><circle cx="60" cy="330" r="30" fill="#ff8f82" opacity=".35"/><circle cx="380" cy="60" r="24" fill="#a08cff" opacity=".45"/></g><path d="M430-40C560-70 900-60 980 120c60 140-20 350-220 380-160 20-290-30-330-80z" fill="url(#ha-top)"/><g transform="translate(660 215)"><circle r="118" fill="none" stroke="#2a1a22" stroke-width="22" opacity=".5"/><circle r="126" fill="none" stroke="#f5b342" stroke-width="2"/><circle r="117" fill="none" stroke="#5cd3c0" stroke-width="6" stroke-dasharray="3 9"/><circle r="107" fill="none" stroke="#ff8f82" stroke-width="7" stroke-dasharray="14 6" opacity=".85"/><circle r="98" fill="none" stroke="#f5b342" stroke-width="2"/><circle r="91" fill="#07080d"/></g><path d="M-20 166L560 149v134L-20 264z" fill="url(#ha-neck)"/><path d="M70 163.9L70 266.4" stroke="#d9d2c2" stroke-opacity=".55" stroke-width="3"/><path d="M190 160.3L190 270.5" stroke="#d9d2c2" stroke-opacity=".55" stroke-width="3"/><path d="M320 156.4L320 274.9" stroke="#d9d2c2" stroke-opacity=".55" stroke-width="3"/><path d="M450 152.5L450 279.3" stroke="#d9d2c2" stroke-opacity=".55" stroke-width="3"/><path d="M-20 192L920 176.5" stroke="#f5b342" stroke-width="5" filter="url(#ha-glow)" opacity=".55"/><path d="M-20 240L920 256" stroke="#f5b342" stroke-width="5" filter="url(#ha-glow)" opacity=".55"/><path d="M-20 176L920 150" stroke="#fff4dc" stroke-opacity=".86" stroke-width="1.00"/><path d="M-20 192L920 176.5" stroke="#fff4dc" stroke-opacity=".86" stroke-width="1.36"/><path d="M-20 208L920 203" stroke="#fff4dc" stroke-opacity=".86" stroke-width="1.72"/><path d="M-20 224L920 229.5" stroke="#fff4dc" stroke-opacity=".86" stroke-width="2.08"/><path d="M-20 240L920 256" stroke="#fff4dc" stroke-opacity=".86" stroke-width="2.44"/><path d="M-20 256L920 282.5" stroke="#fff4dc" stroke-opacity=".86" stroke-width="2.80"/><rect width="900" height="420" fill="url(#ha-spot)"/></svg>';
+const FLAME = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.4 2c.9 3.2-1 4.9-2.6 6.9C8.3 10.8 7 12.5 7 15a5 5 0 0 0 10 0c0-2.1-1-3.6-2.1-4.7-.3 1.6-1 2.4-2 2.7.9-2.8.6-6.700-.5-11z"/></svg>';
+
 // ---------- 홈 ----------
 export function renderHome(host, app) {
   const today = app.today();
@@ -21,18 +25,24 @@ export function renderHome(host, app) {
   const plan = todayPlan(app.progress, LESSON_INDEX);
   const minutes = Math.round((app.progress.days[today] || 0) / 60);
   const doneCount = LESSON_INDEX.filter((l) => lessonStars(app.progress, l.id) > 0).length;
+  const first = plan.find((p) => p.kind === 'new') || plan.find((p) => p.kind === 'review');
+  const cta = first ? `#lesson/${first.lesson.id}` : '#songs';
   const item = (href, kind, title, sub) => `<li><a href="${href}"><span class="plan-kind">${kind}</span><span class="plan-text"><strong>${esc(title)}</strong><em>${esc(sub)}</em></span><span class="plan-go" aria-hidden="true">›</span></a></li>`;
   host.innerHTML = `
     <div class="hero">
-      <p class="eyebrow">클래식 기타 첫걸음</p>
-      <h1>${streak.doneToday ? '오늘도 기타를 잡았네요' : '오늘의 연습을 시작해요'}</h1>
-      <p class="lead">하루 15분이면 충분합니다. 치면 듣고 맞았는지 알려 줍니다.</p>
-      <div class="stats">
-        <div class="stat"><strong>${streak.current}</strong><span>일 연속</span></div>
-        <div class="stat"><strong>${minutes}</strong><span>분 · 오늘</span></div>
-        <div class="stat"><strong>${doneCount}</strong><span>/ ${LESSON_INDEX.length} 레슨</span></div>
+      <div class="hero-art" aria-hidden="true">${HERO_ART}</div>
+      <div class="hero-body">
+        <p class="eyebrow">클래식 기타 첫걸음</p>
+        <h1>${streak.doneToday ? '오늘도 <em>기타를 잡았네요</em>' : '치면, <em>듣고 알려 줍니다</em>'}</h1>
+        <p class="lead">하루 15분이면 충분합니다. 마이크로 소리를 듣고 맞았는지 바로 알려 줍니다.</p>
+        <a class="btn primary big" href="${cta}">${streak.doneToday ? '이어서 연습하기' : '오늘의 연습 시작'}</a>
+        <div class="stats">
+          <div class="stat streak">${FLAME}<strong>${streak.current}</strong><span>일 연속</span></div>
+          <div class="stat"><strong>${minutes}</strong><span>분 · 오늘</span></div>
+          <div class="stat"><strong>${doneCount}</strong><span>/ ${LESSON_INDEX.length} 레슨</span></div>
+        </div>
+        <ol class="week" aria-label="이번 주 연습">${week.map((d) => `<li class="${d.done ? 'done' : ''}${d.key === today ? ' today' : ''}"><span>${WEEKDAY[new Date(d.key + 'T00:00:00').getDay()]}</span></li>`).join('')}</ol>
       </div>
-      <ol class="week" aria-label="이번 주 연습">${week.map((d) => `<li class="${d.done ? 'done' : ''}${d.key === today ? ' today' : ''}"><span>${WEEKDAY[new Date(d.key + 'T00:00:00').getDay()]}</span></li>`).join('')}</ol>
     </div>
     <h2>오늘 할 것</h2>
     <ol class="plan">
@@ -57,7 +67,7 @@ export function renderLearn(host, app) {
     const sum = stageSummary(app.progress, LESSON_INDEX, st.n);
     return `
       <section class="stage${sum.done === sum.total ? ' complete' : ''}">
-        <header><span class="n">${st.n}</span><div><h2>${esc(st.title)}</h2><p>${esc(st.desc)}</p></div><span class="tag${sum.done ? ' on' : ''}">${sum.done}/${sum.total}</span></header>
+        <header><span class="ring" style="--p:${sum.total ? Math.round((sum.done / sum.total) * 100) : 0}"><span>${st.n}</span></span><div><h2>${esc(st.title)}</h2><p>${esc(st.desc)}</p></div><span class="tag${sum.done ? ' on' : ''}">${sum.done}/${sum.total}</span></header>
         <ul class="lesson-list">${LESSONS.filter((l) => l.stage === st.n).map((l) => `<li><a href="#lesson/${l.id}"><span class="l-title">${esc(l.title)}</span><span class="l-goal">${esc(l.goal)}</span>${starsHtml(lessonStars(app.progress, l.id))}</a></li>`).join('')}</ul>
       </section>`;
   }).join('');

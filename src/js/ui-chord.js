@@ -334,7 +334,7 @@ export function mountRhythm(host, app, spec) {
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.clearRect(0, 0, W, H);
     const cs = getComputedStyle(host), v = (name, fb) => cs.getPropertyValue(name).trim() || fb;
-    const c = { line: v('--tab-line', '#b8ad9c'), ink: v('--ink', '#222'), muted: v('--muted', '#777'), note: v('--tab-note', '#a84f1c'), good: v('--good', '#1d8348'), warn: v('--warn', '#b9720b'), bad: v('--bad', '#b3261e'), hit: v('--tab-hit', '#1d8348') };
+    const c = { line: v('--tab-line', '#b8ad9c'), ink: v('--ink', '#222'), muted: v('--muted', '#777'), note: v('--tab-note', '#a84f1c'), good: v('--good', '#1d8348'), warn: v('--tab-good', '#b9720b'), bad: v('--bad', '#b3261e'), hit: v('--tab-hit', '#1d8348') };
     const hitX = Math.max(84, W * 0.2), ppb = Math.max(70, Math.min(130, W / 7)), y = H * 0.6;
     const xOf = (t) => hitX + (t - view.pos) * ppb;
     g.textAlign = 'center'; g.textBaseline = 'middle';
@@ -353,7 +353,7 @@ export function mountRhythm(host, app, spec) {
     g.globalAlpha = 1;
     hits.forEach((h, i) => {
       const x = xOf(h.t);
-      if (x < -20 || x > W + 20) return;
+      if (x < 24 || x > W + 20) return;
       const st = view.states[i];
       g.fillStyle = st === 'perfect' ? c.good : st === 'good' ? c.warn : st === 'miss' ? c.bad : c.note;
       g.globalAlpha = st ? 0.5 : 1;

@@ -76,7 +76,7 @@ export function initCheckView(root, audio, env) {
     paintRow(num);
     button.textContent = '다시 녹음';
     setBusy(false);
-    setStatus(takes.size < STRINGS.length ? `${takes.size}/${STRINGS.length}줄 완료. 다음 줄을 녹음해 주세요` : '여섯 줄 모두 끝났어요. 아래 [결과 복사]를 눌러 보내 주세요', takes.size < STRINGS.length ? '' : 'good');
+    setStatus(takes.size < STRINGS.length ? `${takes.size}/${STRINGS.length}줄 완료. 다음 줄을 녹음해 주세요` : '여섯 줄 모두 끝났어요. 판정 기준을 맞추려면 보정 도우미를 쓰세요', takes.size < STRINGS.length ? '' : 'good');
   }
 
   function buildReport() {

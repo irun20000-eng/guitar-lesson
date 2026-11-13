@@ -10,6 +10,7 @@ import { chordSvg } from './diagram.js';
 import { micErrorMessage } from './audio.js';
 import { starsHtml, clickSamples, trackerOptions, esc } from './listen.js';
 import { bestChange, recordChange } from './progress.js';
+import { chordMinScore } from './calibrate.js';
 
 const CHROMA_DELAY_MS = 180;   // 쓸어 친 뒤 여섯 줄이 다 울릴 때까지 기다렸다가 코드를 확인한다
 const strumCache = new Map();
@@ -161,8 +162,14 @@ export function mountStrumCheck(host, app, spec) {
       if (tracker.push(frame).some((e) => e.type === 'onset') && pendingAt === null) pendingAt = frame.time + CHROMA_DELAY_MS;
       if (pendingAt === null || frame.time < pendingAt) return;
       pendingAt = null;
+      const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), spec.chord, frame.sampleRate, { minScore: chordMinScore(app.progress.settings) });
+      // 기준 바로 아래(애매함)는 시도로 세지 않는다.
+      if (v.reason === 'unsure') {
+        el.status.dataset.kind = '';
+        el.status.textContent = '다시 쳐 볼까요? 코드 소리가 애매하게 들렸어요. 여섯 줄을 고르게 쓸어 쳐 보세요';
+        return;
+      }
       attempts++;
-      const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), spec.chord, frame.sampleRate);
       if (v.ok) {
         ok++;
         el.status.dataset.kind = 'good';
@@ -414,7 +421,8 @@ export function mountRhythm(host, app, spec) {
         while (run.pending.length && frame.time >= run.pending[0].at) {
           const p = run.pending.shift();
           const id = spec.bars[p.bar];
-          const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), id, frame.sampleRate, { rivals: pieceChords.filter((x) => x !== id) });
+          const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), id, frame.sampleRate, { rivals: pieceChords.filter((x) => x !== id), minScore: chordMinScore(app.progress.settings) });
+          if (v.reason === 'unsure') { el.heard.textContent = '다시 쳐 볼까요? 코드 소리가 애매했어요'; continue; }
           run.votes[p.bar].total++;
           if (v.ok) run.votes[p.bar].ok++;
           el.heard.textContent = v.ok ? `${CHORDS[id].name} 좋아요` : v.reason === 'rival' ? `${CHORDS[v.rival.id].name}처럼 들려요` : '코드 소리가 또렷하지 않아요';

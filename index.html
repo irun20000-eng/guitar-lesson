@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -12,6 +12,7 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="여섯줄">
 <meta name="application-name" content="여섯줄">
+<script>try{var s=(JSON.parse(localStorage.getItem("guitar-lesson.progress.v1")||"{}")||{}).settings||{},t=s.theme||"auto";if(t==="auto")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=t;}catch(e){}</script>
 <style>
 /* 여섯줄 디자인: "야간 무대". 어두운 인디고 객석, 앰버 조명, 유리 패널.
    배경은 단색이 아니라 그라디언트 여러 겹 + 빛망울 + 입자 질감이다. */
@@ -384,6 +385,92 @@ tr[data-kind="bad"] .verdict { color: var(--bad); }
   .change-mid { grid-column: 1 / -1; grid-row: 1; }
 }
 @media (prefers-reduced-motion: reduce) { .needle, .level > div, .btn, .view > * { transition: none; animation: none; } }
+
+/* ---------- v0.6: 보정 도우미, 새로 생긴 것 ---------- */
+.adjust { display: grid; gap: 12px; }
+.adj-now { display: grid; gap: 4px; justify-items: center; text-align: center; padding: 16px; border-radius: var(--radius-s); background: var(--glass-2); border: 1px solid var(--line); }
+.adj-count { color: var(--muted); font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.adj-prompt { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+.adj-sub { color: var(--muted); font-size: 15px; max-width: 32em; }
+.adj-fig { width: 160px; }
+.adj-now .timer { width: min(100%, 320px); }
+.adj-now .timer > div { transform-origin: left center; transform: scaleX(0); }
+.adj-track { list-style: none; display: flex; flex-wrap: wrap; gap: 4px; padding: 0; margin: 0; }
+.adj-track li { font-size: 13px; font-weight: 700; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+.adj-track li.now { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.adj-track li[data-kind="done"] { background: var(--good-bg); color: var(--good); }
+.adj-track li[data-kind="warn"] { background: var(--warn-bg); color: var(--warn); }
+.adj-track li[data-kind="done"]::before { content: "✓ "; }
+.adj-track li[data-kind="warn"]::before { content: "! "; }
+.adj-result { display: grid; gap: 12px; }
+.adj-result h2 { font-size: 18px; margin-top: 4px; }
+.adj-notes { margin: 0; padding: 12px 16px 12px 36px; border-radius: var(--radius-s); background: var(--warn-bg); color: var(--ink); }
+.adj-notes li + li { margin-top: 4px; }
+.adj-heard { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0; }
+.adj-heard li { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 4px 12px 4px 4px; border-radius: 999px; border: 1px solid var(--line); font-size: 15px; font-weight: 700; }
+.adj-heard li strong { padding-left: 8px; }
+.adj-heard li[data-kind="good"] { color: var(--good); background: var(--good-bg); }
+.adj-heard li[data-kind="warn"] { color: var(--warn); background: var(--warn-bg); }
+.adj-heard .s-num { width: 32px; height: 32px; font-size: 15px; color: var(--ink); }
+.adj-table td { font-variant-numeric: tabular-nums; }
+.check.adj-table tbody th { font-size: 16px; font-weight: 700; white-space: normal; }
+.news { display: grid; gap: 8px; margin-bottom: 16px; border-color: var(--accent); }
+.news h2 { font-size: 18px; }
+.news ul { margin: 0; padding-left: 20px; }
+.news li + li { margin-top: 4px; }
+.news .btn { justify-self: start; }
+.calib-hint { margin-top: 12px; }
+
+/* ---------- v0.6: 밝은 화면 ----------
+   밝은 화면에서는 빛 번짐(글로우), 빛망울, 입자 질감, 그림자를 뺀다. 홈 첫 그림(hero)만 어두운 무대로 남긴다.
+   강조색은 글자로도 쓰이므로 밝은 바탕에서 대비 4.5 이상이 되는 진한 호박색으로 바꾸고, 그 위 글자는 흰색으로 한다. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f3ec; --bg-2: #f6f3ec; --bg-3: #ece6da;
+  --ink: #1d1a2b; --muted: #555066;
+  --accent: #8f5d00; --accent-deep: #6e4700; --accent-ink: #ffffff;
+  --good: #0f7a6a; --warn: #8f5d00; --bad: #b3261e;
+  --good-bg: rgba(15, 122, 106, 0.1); --warn-bg: rgba(143, 93, 0, 0.1); --bad-bg: rgba(179, 38, 30, 0.1);
+  --glass: #fffdf9; --glass-2: #f1ece2; --line: rgba(29, 26, 43, 0.16);
+  --shadow: none;
+  --tab-line: rgba(29, 26, 43, 0.32); --tab-note: #8f5d00; --tab-note-ink: #ffffff; --tab-hit: #0f7a6a; --tab-good: #4f7d10;
+}
+:root[data-theme="light"] body { background: var(--bg); }
+:root[data-theme="light"] body::before, :root[data-theme="light"] body::after { display: none; }
+:root[data-theme="light"] body *:not(.hero-art *) { text-shadow: none !important; filter: none !important; }
+:root[data-theme="light"] body *:not(.hero, .hero *) { box-shadow: none !important; }
+:root[data-theme="light"] .panel, :root[data-theme="light"] .card, :root[data-theme="light"] .top nav, :root[data-theme="light"] .top { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:root[data-theme="light"] .top nav { background: var(--glass); }
+@media (min-width: 900px) { :root[data-theme="light"] .top { background: var(--glass); } :root[data-theme="light"] .top nav { background: none; } }
+:root[data-theme="light"] .btn { border-color: rgba(29, 26, 43, 0.3); }
+:root[data-theme="light"] .btn.primary { border-color: var(--accent); }
+:root[data-theme="light"] .btn.primary:hover { background: var(--accent-deep); }
+:root[data-theme="light"] select, :root[data-theme="light"] input[type="number"], :root[data-theme="light"] input[type="text"], :root[data-theme="light"] input:not([type]), :root[data-theme="light"] textarea { background: #ffffff; }
+:root[data-theme="light"] .string, :root[data-theme="light"] .figure, :root[data-theme="light"] .chord-fig, :root[data-theme="light"] .plan a::before { background: var(--bg); }
+:root[data-theme="light"] .tab-wrap { background: #ffffff; }
+:root[data-theme="light"] .custom { border-color: rgba(29, 26, 43, 0.3); }
+:root[data-theme="light"] .star { fill: rgba(29, 26, 43, 0.18); }
+:root[data-theme="light"] .ring { background: conic-gradient(var(--accent) calc(var(--p) * 1%), rgba(29, 26, 43, 0.12) 0); }
+:root[data-theme="light"] .stage.complete .ring { background: conic-gradient(var(--good) 100%, transparent 0); }
+:root[data-theme="light"] .ring::before { background: var(--glass); }
+:root[data-theme="light"] .dg-string, :root[data-theme="light"] .dg-fret { stroke: rgba(29, 26, 43, 0.55); }
+:root[data-theme="light"] .dg-finger.is-current, :root[data-theme="light"] .dg-openlabel.is-current { fill: #ffffff; }
+:root[data-theme="light"] .timer, :root[data-theme="light"] .level, :root[data-theme="light"] .beats li { background: rgba(29, 26, 43, 0.12); }
+:root[data-theme="light"] .gauge .arc { stroke: rgba(29, 26, 43, 0.14); }
+:root[data-theme="light"] .gauge .ticks line { stroke: rgba(29, 26, 43, 0.4); }
+:root[data-theme="light"] .needle line { stroke: rgba(29, 26, 43, 0.5); }
+:root[data-theme="light"] .needle circle { fill: rgba(29, 26, 43, 0.5); }
+:root[data-theme="light"] .s-num { background: rgba(29, 26, 43, 0.06); }
+:root[data-theme="light"] .string[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--accent) !important; }
+:root[data-theme="light"] .string-results li.now { background: var(--warn-bg); }
+:root[data-theme="light"] ::selection { background: rgba(143, 93, 0, 0.25); }
+/* 홈 첫 그림은 밝은 화면에서도 어두운 무대로 둔다. 그 안의 글자는 어두운 화면 색을 쓴다. */
+:root[data-theme="light"] .hero {
+  --ink: #f4f1ea; --muted: #c9c5da; --line: rgba(255, 255, 255, 0.18);
+  --accent: #f5b342; --accent-deep: #b07a12; --accent-ink: #1a1206;
+  color: var(--ink); background: #1a1633; border-color: transparent;
+}
+:root[data-theme="light"] .hero .btn.primary:hover { background: #ffc35a; }
 </style>
 </head>
 <body>
@@ -438,6 +525,7 @@ tr[data-kind="bad"] .verdict { color: var(--bad); }
           <button type="button" id="tn-reset" class="btn ghost">표시 지우기</button>
         </div>
         <ol class="strings" id="tn-strings"></ol>
+        <p class="hint calib-hint" id="tn-calib" hidden>처음이면 튜닝을 마친 뒤 <a href="#adjust">보정 도우미</a>로 이 기기 마이크에 맞게 판정 기준을 맞춰 보세요(1분).</p>
         <p class="all-done" id="tn-done" hidden>여섯 줄을 모두 맞췄어요. 줄 하나를 조이면 다른 줄이 살짝 풀리니 6번줄부터 한 번 더 확인하면 더 정확합니다.</p>
         <ul class="tips">
           <li>줄 이름을 누르면 그 줄만 봅니다. 줄이 많이 풀렸을 때 쓰세요.</li>
@@ -458,7 +546,7 @@ tr[data-kind="bad"] .verdict { color: var(--bad); }
       <ol class="steps">
         <li>먼저 <a href="#tuner">튜너</a>로 여섯 줄을 맞춥니다.</li>
         <li>줄마다 [녹음]을 누르고, 그 줄을 한 번 쳐서 그대로 울리게 둡니다. 3초 동안 듣습니다.</li>
-        <li>여섯 줄이 끝나면 [결과 복사]를 눌러 결과를 보내 주세요. 다음 단계의 판정 기준을 이 결과로 맞춥니다.</li>
+        <li>줄마다 맞힘 비율과 선명도를 볼 수 있습니다. 판정 기준은 <a href="#adjust">보정 도우미</a>가 알아서 맞추므로 결과를 보낼 필요는 없습니다.</li>
       </ol>
       <p class="status" id="ck-status" role="status" aria-live="polite"></p>
       <div class="table-wrap">
@@ -1005,6 +1093,7 @@ function scoreChord(chroma, id, sampleRate, size) {
 // 지금 쳐야 하는 코드가 맞는지 확인한다. 헷갈리기 쉬운 코드(rivals) 쪽이 더 비슷하면 그 이름을 알려 준다.
 function verifyChord(chroma, expectedId, sampleRate, options = {}) {
   const minScore = options.minScore ?? 0.78;
+  const unsureMargin = options.unsureMargin ?? 0.05;
   const margin = options.margin ?? 0.02;
   const size = options.size;
   const rivals = (options.rivals ?? CHORDS[expectedId].rivals).filter((id) => id !== expectedId && CHORDS[id]);
@@ -1015,7 +1104,8 @@ function verifyChord(chroma, expectedId, sampleRate, options = {}) {
     if (!rival || s > rival.score) rival = { id, score: s };
   }
   if (rival && rival.score > score + margin) return { ok: false, score, reason: 'rival', rival };
-  if (score < minScore) return { ok: false, score, reason: 'unclear', rival };
+  // 기준 바로 아래면 틀렸다고 하지 않고 다시 쳐 보게 한다.
+  if (score < minScore) return { ok: false, score, reason: score >= minScore - unsureMargin ? 'unsure' : 'unclear', rival };
   return { ok: true, score, rival };
 }
 
@@ -1076,6 +1166,183 @@ function createStringCheck(id, options = {}) {
     retry(i) { if (i < index) { index = i; results.fill(null, i); openAt = null; } },
   };
 }
+
+// ---- calibrate.js ----
+// 보정 도우미 계산: 이 기기의 마이크로 잰 소리로 판정 기준을 정한다. 화면과 무관한 순수 함수라 node에서 시험한다.
+// 순서: 조용한 방 3초 → 개방현 여섯 줄 3초씩 → 코드 Em, C, G 3초씩. 잰 값에서 기준을 계산하고 안전한 범위로 묶는다.
+// 원칙: 음이 또렷한지, 코드가 맞는지를 보는 기준은 기본값보다 "까다롭게" 만들지 않는다(느슨하게만 푼다).
+//       소리 크기 기준만 방의 잡음과 기타 소리 크기에 맞춰 올리거나 내린다.
+
+const CALIB_VERSION = 1;
+const CALIB_DEFAULTS = { minRms: 0.004, minClarity: 0.8, minSalience: 0.7, chordMinScore: 0.78 };
+const CALIB_LIMITS = { minRms: [0.0015, 0.02], minClarity: [0.7, 0.88], minSalience: [0.55, 0.8], chordMinScore: [0.62, 0.85] };
+// 기준 바로 아래(이 폭 안)에 걸친 판정은 틀림이 아니라 "다시 쳐 볼까요"로 처리한다.
+const UNSURE_MARGIN = { clarity: 0.05, chord: 0.05, cents: 35 };
+const CALIB_CHORDS = ['Em', 'C', 'G'];
+
+const CAL_WIN = 2048;
+const calClamp = (v, [lo, hi]) => Math.min(hi, Math.max(lo, v));
+const calRound = (v, digits) => Number(v.toFixed(digits));
+
+function percentile(values, p) {
+  if (!values.length) return null;
+  const s = values.slice().sort((a, b) => a - b);
+  const i = Math.min(s.length - 1, Math.max(0, Math.round(p * (s.length - 1))));
+  return s[i];
+}
+
+// 25ms 간격으로 최근 2048샘플 조각을 넘긴다(듣기 루프와 같은 크기).
+function eachWindow(samples, sampleRate, fn) {
+  const hop = Math.max(1, Math.round(sampleRate * 0.025));
+  for (let end = CAL_WIN, i = 0; end <= samples.length; end += hop, i++) fn(samples.subarray(end - CAL_WIN, end), i, end / sampleRate);
+}
+
+function measureNoise(samples, sampleRate) {
+  const levels = [];
+  eachWindow(samples, sampleRate, (w) => levels.push(rmsLevel(w)));
+  return { rms: percentile(levels, 0.9) ?? 0, median: percentile(levels, 0.5) ?? 0 };
+}
+
+// 개방현 한 줄: 가장 큰 순간(튕김)을 찾고, 그 뒤 1.2초 동안 음이 얼마나 또렷하게 들리는지 잰다.
+function measurePluck(samples, sampleRate, midi, options = {}) {
+  const a4 = options.a4 ?? 440;
+  const target = midiToFreq(midi, a4);
+  const wins = [];
+  eachWindow(samples, sampleRate, (w, i, t) => wins.push({ w, t, rms: rmsLevel(w) }));
+  if (!wins.length) return { peakRms: 0, sustainRms: 0, hitRate: 0, frames: 0, clarity: null, salience: null, medianCents: null, others: 0 };
+  let peak = 0;
+  for (let i = 1; i < wins.length; i++) if (wins[i].rms > wins[peak].rms) peak = i;
+  const peakRms = wins[peak].rms, peakT = wins[peak].t;
+  const after = wins.filter((x) => x.t >= peakT + 0.05 && x.t <= peakT + 1.2 && x.rms >= Math.max(peakRms * 0.08, 1e-4));
+  const sustain = wins.filter((x) => x.t >= peakT + 0.3 && x.t <= peakT + 0.7).map((x) => x.rms);
+  const clarities = [], saliences = [], cents = [];
+  let hits = 0, others = 0;
+  for (const x of after) {
+    const p = detectPitch(x.w, sampleRate, { minFreq: 70 });
+    saliences.push(salienceAt(x.w, sampleRate, target));
+    if (!(p.freq > 0)) continue;
+    const c = centsBetween(p.freq, target);
+    if (Math.abs(c) < 50) { hits++; clarities.push(p.clarity); cents.push(c); }
+    else if (p.clarity >= 0.8) others++;
+  }
+  return {
+    peakRms,
+    sustainRms: percentile(sustain, 0.5) ?? peakRms * 0.3,
+    frames: after.length,
+    hitRate: after.length ? hits / after.length : 0,
+    clarity: clarities.length >= 3 ? percentile(clarities, 0.25) : null,
+    salience: saliences.length >= 3 ? percentile(saliences, 0.25) : null,
+    medianCents: cents.length ? percentile(cents, 0.5) : null,
+    others,
+  };
+}
+
+// 코드 한 번 쓸어 치기: 튕긴 뒤 0.18초, 0.4초, 0.7초에 코드 점수를 재서 가운데 값을 쓴다.
+function measureChord(samples, sampleRate, id) {
+  const size = 8192;
+  let peakAt = 0, peak = 0;
+  eachWindow(samples, sampleRate, (w, i, t) => { const r = rmsLevel(w); if (r > peak) { peak = r; peakAt = t; } });
+  const scores = [];
+  for (const d of [0.18, 0.4, 0.7]) {
+    const end = Math.floor((peakAt + d) * sampleRate);
+    if (end > samples.length || end - size < 0) continue;
+    scores.push(verifyChord(chromaOf(samples.subarray(end - size, end), sampleRate), id, sampleRate).score);
+  }
+  return { id, peakRms: peak, score: percentile(scores, 0.5) ?? 0, best: scores.length ? Math.max(...scores) : 0 };
+}
+
+// m: { noise: { rms }, strings: [{ num, midi, ...measurePluck }], chords: [{ id, ...measureChord }] }
+// → { values, notes: [{ kind, text }], quality: 'good' | 'warn' }
+function computeThresholds(m) {
+  const notes = [];
+  const strings = (m.strings || []).filter(Boolean);
+  const heardStrings = strings.filter((s) => s.hitRate >= 0.5);
+  const noiseFloor = (m.noise?.rms ?? 0) * 3;
+
+  // 소리 크기: 방의 잡음보다는 크고, 가장 작게 울리는 줄보다는 충분히 작게.
+  let minRms = CALIB_DEFAULTS.minRms;
+  const softest = heardStrings.length ? Math.min(...heardStrings.map((s) => s.sustainRms)) : null;
+  if (softest != null) {
+    const ceiling = softest * 0.3;
+    if (noiseFloor <= ceiling) minRms = Math.max(noiseFloor, Math.min(ceiling, CALIB_DEFAULTS.minRms));
+    else {
+      minRms = Math.sqrt(noiseFloor * ceiling);
+      // 울리는 기타 소리가 잡음의 여섯 배도 안 되면 알려 준다.
+      if (noiseFloor > softest * 0.5) notes.push({ kind: 'warn', text: '주변 소리가 기타 소리에 비해 커요. 조용한 곳에서 다시 보정하면 더 정확해요' });
+    }
+  } else if (noiseFloor > CALIB_DEFAULTS.minRms) minRms = noiseFloor;
+  if (noiseFloor > CALIB_LIMITS.minRms[1]) notes.push({ kind: 'warn', text: '주변이 많이 시끄러워요. 판정이 자주 놓칠 수 있어요' });
+
+  // 음의 또렷함: 여섯 줄 가운데 가장 흐린 줄도 통과하도록, 기본값보다 까다롭게는 하지 않는다.
+  const clar = heardStrings.map((s) => s.clarity).filter((v) => v != null);
+  const minClarity = clar.length ? Math.min(CALIB_DEFAULTS.minClarity, Math.min(...clar) - 0.04) : CALIB_DEFAULTS.minClarity;
+  const sal = heardStrings.map((s) => s.salience).filter((v) => v != null);
+  const minSalience = sal.length ? Math.min(CALIB_DEFAULTS.minSalience, Math.min(...sal) - 0.05) : CALIB_DEFAULTS.minSalience;
+
+  for (const s of strings) {
+    if (s.hitRate >= 0.5) continue;
+    notes.push({ kind: 'warn', text: s.others > s.frames * 0.3 ? `${s.num}번줄이 다른 음으로 들려요. 튜닝을 확인해 주세요` : `${s.num}번줄이 잘 안 들려요. 기기를 기타 가까이에 두거나 조금 더 세게 쳐 보세요` });
+  }
+
+  // 코드: 세 코드 중 가장 낮은 점수보다 조금 아래로. 역시 기본값보다 까다롭게는 하지 않는다.
+  const chordScores = (m.chords || []).filter(Boolean).map((c) => c.score);
+  const chordMinScore = chordScores.length ? Math.min(CALIB_DEFAULTS.chordMinScore, Math.min(...chordScores) - 0.05) : CALIB_DEFAULTS.chordMinScore;
+  for (const c of (m.chords || []).filter(Boolean)) {
+    if (c.score < CALIB_LIMITS.chordMinScore[0] + 0.05) notes.push({ kind: 'warn', text: `${c.id} 코드가 또렷하게 들리지 않았어요. 코드표를 보고 손가락 자리를 확인한 뒤 다시 보정해 보세요` });
+  }
+
+  const values = {
+    minRms: calRound(calClamp(minRms, CALIB_LIMITS.minRms), 5),
+    minClarity: calRound(calClamp(minClarity, CALIB_LIMITS.minClarity), 3),
+    minSalience: calRound(calClamp(minSalience, CALIB_LIMITS.minSalience), 3),
+    chordMinScore: calRound(calClamp(chordMinScore, CALIB_LIMITS.chordMinScore), 3),
+  };
+  return { values, notes, quality: notes.length ? 'warn' : 'good' };
+}
+
+// 저장된 보정값(없거나 망가졌으면 기본값). 범위를 벗어난 값은 다시 묶는다.
+function calibValues(settings) {
+  const v = settings && settings.calib && settings.calib.version === CALIB_VERSION ? settings.calib.values || {} : {};
+  const out = {};
+  for (const key of Object.keys(CALIB_DEFAULTS)) {
+    const x = Number(v[key]);
+    out[key] = Number.isFinite(x) ? calClamp(x, CALIB_LIMITS[key]) : CALIB_DEFAULTS[key];
+  }
+  return out;
+}
+
+function isCalibrated(settings) {
+  return !!(settings && settings.calib && settings.calib.version === CALIB_VERSION && settings.calib.values);
+}
+
+function chordMinScore(settings) {
+  return calibValues(settings).chordMinScore;
+}
+
+// 보정 결과를 기록에 넣을 모양으로. 잰 숫자도 함께 남겨 나중에 기준을 다시 검토할 수 있게 한다.
+function makeCalibRecord(m, result, info = {}) {
+  const r3 = (x) => (x == null ? null : calRound(x, 4));
+  return {
+    version: CALIB_VERSION,
+    date: info.date || null,
+    sampleRate: info.sampleRate || null,
+    values: result.values,
+    quality: result.quality,
+    measured: {
+      noise: r3(m.noise?.rms),
+      strings: (m.strings || []).filter(Boolean).map((s) => ({ num: s.num, peak: r3(s.peakRms), sustain: r3(s.sustainRms), hit: r3(s.hitRate), clarity: r3(s.clarity), salience: r3(s.salience) })),
+      chords: (m.chords || []).filter(Boolean).map((c) => ({ id: c.id, score: r3(c.score) })),
+    },
+  };
+}
+
+// 화면에 보여 줄 기준 설명(쉬운 말).
+const CALIB_LABELS = {
+  minRms: '들었다고 볼 가장 작은 소리',
+  minClarity: '음이 또렷하다고 볼 기준',
+  minSalience: '쳐야 할 음이 들린다고 볼 기준',
+  chordMinScore: '코드가 맞다고 볼 기준',
+};
 
 // ---- score.js ----
 // 악보 자료 도우미. 악보는 { title, bpm, beatsPerBar, notes: [{ t, string, fret, dur, midi }] } 꼴이고 t, dur 단위는 박이다.
@@ -1139,6 +1406,9 @@ const TRACKER_DEFAULTS = {
   segment: 2048,      // 기대한 음을 확인할 때 쓰는 소리 길이(샘플)
   minRms: 0.004,      // 이보다 작으면 조용한 것으로 본다
   minClarity: 0.8,    // 이보다 흐리면 음을 판단하지 않는다
+  minSalience: 0.7,   // 기대한 음이 이만큼 또렷하면 들린 것으로 본다(soundsLike의 min)
+  unsureClarity: 0.05, // 기대 밖 음이 기준을 이 폭 안으로만 넘으면 '애매함'으로 표시한다
+  unsureCents: 35,    // 두 음 사이(반음의 35% 넘게 어긋남)에 걸친 음도 '애매함'
   stableFrames: 2,    // 튕긴 직후 같은 음이 연속 몇 프레임 나와야 인정할지
   slowFrames: 5,      // 튕긴 순간을 못 잡았을 때, 새 음이 연속 몇 프레임 나와야 인정할지(기대 음이 없을 때)
   softFrames: 3,      // 기대 음이 있을 때: 살짝 쳐서 튕김을 못 잡았어도, 기대 음이 새로 들리고 음량이 늘면 인정
@@ -1215,7 +1485,7 @@ function createNoteTracker(options = {}) {
         for (const m of expected) {
           const f = midiToFreq(m, o.a4);
           const raw = salienceAt(seg, frame.sampleRate, f);
-          const s = soundsLike(seg, frame.sampleRate, f, { salience: raw, baseline: onsetOpen ? baseAtOnset.get(m) : undefined });
+          const s = soundsLike(seg, frame.sampleRate, f, { min: o.minSalience, salience: raw, baseline: onsetOpen ? baseAtOnset.get(m) : undefined });
           if (s > best) { best = s; midi = m; }
           const values = salHistory.get(m) || [];
           values.push(raw);
@@ -1238,6 +1508,7 @@ function createNoteTracker(options = {}) {
     if (midi === cand) candCount++;
     else { cand = midi; candCount = 1; candSince = t; candExpected = matched; }
     candCents = cents;
+    const candClarity = clarity;
 
     // 기대 음이 있는데 다른 음이 들린 경우에는 조금 더 지켜본다. 튕긴 직후에는 울리던 음이 먼저 잡힐 수 있기 때문이다.
     const viaOnset = onsetOpen && candCount >= (expected && !candExpected ? o.stableFrames + 2 : o.stableFrames);
@@ -1248,7 +1519,9 @@ function createNoteTracker(options = {}) {
       ? candExpected && candCount >= o.softFrames && frame.rms >= levelBefore * 1.05
       : candCount >= o.slowFrames);
     if (viaOnset || viaChange) {
-      events.push({ type: 'note', midi: cand, cents: candCents, clarity, time: viaOnset ? lastOnsetAt : candSince });
+      // 기대한 음으로 확인된 것이 아니고, 또렷함이 기준을 겨우 넘었거나 두 음 사이에 걸쳤으면 애매한 음으로 표시한다.
+      const unsure = !candExpected && (candClarity < o.minClarity + o.unsureClarity || Math.abs(candCents) > o.unsureCents);
+      events.push({ type: 'note', midi: cand, cents: candCents, clarity, time: viaOnset ? lastOnsetAt : candSince, unsure });
       current = cand;
       onsetOpen = false;
     }
@@ -1282,6 +1555,8 @@ function createWaitJudge(notes) {
       }
       // 방금 맞힌 음이 아직 울려서 다시 들린 것은 틀림으로 세지 않는다.
       if (index > 0 && ev.midi === notes[index - 1].midi) return { type: 'echo' };
+      // 애매하게 들린 음(기준을 겨우 넘었거나 두 음 사이)은 틀림으로 세지 않고 다시 쳐 보게 한다.
+      if (ev.unsure) return { type: 'unsure', heard: ev.midi, expected: notes[index].midi, index };
       wrong++;
       return { type: 'wrong', heard: ev.midi, expected: notes[index].midi, index };
     },
@@ -1349,7 +1624,7 @@ function createTimedJudge(notes, options = {}) {
 const PROGRESS_KEY = 'guitar-lesson.progress.v1';
 
 function emptyProgress() {
-  return { version: 1, lessons: {}, changes: {}, days: {}, custom: [], latencyMs: 80, settings: { sensitivity: 'normal', click: true } };
+  return { version: 1, lessons: {}, changes: {}, days: {}, custom: [], latencyMs: 80, settings: { sensitivity: 'normal', click: true, theme: 'auto', seen: null } };
 }
 
 function loadProgress(storage) {
@@ -1990,10 +2265,11 @@ function clickSamples(sampleRate, accent = false) {
   return out;
 }
 
-// 마이크 민감도 설정 → 추적기 옵션
+// 보정값(없으면 기본값) + 마이크 민감도 설정 → 추적기 옵션. 민감도는 보정된 소리 크기 기준에 곱한다(낮게 2배, 높게 절반).
 function trackerOptions(settings, extra = {}) {
-  const minRms = { low: 0.008, normal: 0.004, high: 0.002 }[settings.sensitivity] ?? 0.004;
-  return { minRms, ...extra };
+  const c = calibValues(settings);
+  const factor = { low: 2, normal: 1, high: 0.5 }[settings && settings.sensitivity] ?? 1;
+  return { minRms: c.minRms * factor, minClarity: c.minClarity, minSalience: c.minSalience, ...extra };
 }
 
 // ---- ui-tuner.js ----
@@ -2291,7 +2567,7 @@ function initCheckView(root, audio, env) {
     paintRow(num);
     button.textContent = '다시 녹음';
     setBusy(false);
-    setStatus(takes.size < STRINGS.length ? `${takes.size}/${STRINGS.length}줄 완료. 다음 줄을 녹음해 주세요` : '여섯 줄 모두 끝났어요. 아래 [결과 복사]를 눌러 보내 주세요', takes.size < STRINGS.length ? '' : 'good');
+    setStatus(takes.size < STRINGS.length ? `${takes.size}/${STRINGS.length}줄 완료. 다음 줄을 녹음해 주세요` : '여섯 줄 모두 끝났어요. 판정 기준을 맞추려면 보정 도우미를 쓰세요', takes.size < STRINGS.length ? '' : 'good');
   }
 
   function buildReport() {
@@ -2584,6 +2860,8 @@ function mountNotePlayer(host, app, spec) {
               if (out.done) { finish(); return; }
               tracker.setExpected([notes[view.current].midi]);
               showTarget(notes[view.current]);
+            } else if (out.type === 'unsure') {
+              setInfo(`다시 쳐 볼까요? 소리가 애매하게 들렸어요. 칠 음: ${describeNote(notes[view.current])}`, '');
             } else if (out.type === 'wrong') {
               setInfo(`다른 음이 들렸어요(${describeMidi(out.heard)}). 칠 음: ${describeNote(notes[view.current])}`, 'warn');
             }
@@ -2800,8 +3078,14 @@ function mountStrumCheck(host, app, spec) {
       if (tracker.push(frame).some((e) => e.type === 'onset') && pendingAt === null) pendingAt = frame.time + CHROMA_DELAY_MS;
       if (pendingAt === null || frame.time < pendingAt) return;
       pendingAt = null;
+      const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), spec.chord, frame.sampleRate, { minScore: chordMinScore(app.progress.settings) });
+      // 기준 바로 아래(애매함)는 시도로 세지 않는다.
+      if (v.reason === 'unsure') {
+        el.status.dataset.kind = '';
+        el.status.textContent = '다시 쳐 볼까요? 코드 소리가 애매하게 들렸어요. 여섯 줄을 고르게 쓸어 쳐 보세요';
+        return;
+      }
       attempts++;
-      const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), spec.chord, frame.sampleRate);
       if (v.ok) {
         ok++;
         el.status.dataset.kind = 'good';
@@ -3053,7 +3337,8 @@ function mountRhythm(host, app, spec) {
         while (run.pending.length && frame.time >= run.pending[0].at) {
           const p = run.pending.shift();
           const id = spec.bars[p.bar];
-          const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), id, frame.sampleRate, { rivals: pieceChords.filter((x) => x !== id) });
+          const v = verifyChord(chromaOf(frame.buf, frame.sampleRate), id, frame.sampleRate, { rivals: pieceChords.filter((x) => x !== id), minScore: chordMinScore(app.progress.settings) });
+          if (v.reason === 'unsure') { el.heard.textContent = '다시 쳐 볼까요? 코드 소리가 애매했어요'; continue; }
           run.votes[p.bar].total++;
           if (v.ok) run.votes[p.bar].ok++;
           el.heard.textContent = v.ok ? `${CHORDS[id].name} 좋아요` : v.reason === 'rival' ? `${CHORDS[v.rival.id].name}처럼 들려요` : '코드 소리가 또렷하지 않아요';
@@ -3204,8 +3489,283 @@ function renderLesson(host, app, arg) {
   };
 }
 
+// ---- ui-adjust.js ----
+// 보정 도우미 화면: 조용한 방 3초 → 개방현 여섯 줄 → 코드 세 개를 차례로 듣고, 이 기기에 맞는 판정 기준을 저장한다.
+// 사용자가 결과를 복사해 보내지 않아도 앱이 스스로 기준을 정한다. 녹음은 이 화면에만 잠시 두고, 원하면 WAV로 내려받는다.
+
+const ADJ_TAKE_SECONDS = 3;
+const ADJ_READY_MS = 1400;
+
+function adjustSteps() {
+  return [
+    { kind: 'quiet', key: 'quiet', short: '조용히', prompt: '3초 동안 조용히 해 주세요', sub: '손바닥을 줄에 가볍게 얹어 울림을 막아 두세요. 방의 잡음을 잽니다.' },
+    ...STRINGS.map((s) => ({ kind: 'string', key: `s${s.num}`, s, short: `${s.num}번줄`, prompt: `${s.num}번줄을 한 번 치세요`, sub: `${midiToName(s.midi)} ${midiToKo(s.midi)} · 개방현(누르지 않고). 친 뒤에는 그대로 울리게 두세요.` })),
+    ...CALIB_CHORDS.map((id) => ({ kind: 'chord', key: `c${id}`, id, short: CHORDS[id].name, prompt: `${CHORDS[id].name} 코드를 잡고 한 번 쓸어 치세요`, sub: '굵은 줄에서 가는 줄 쪽으로 천천히 한 번. 그대로 울리게 두세요.' })),
+  ];
+}
+
+const adjFmt = (key, v) => (key === 'minRms' ? v.toFixed(4) : v.toFixed(2));
+
+function renderAdjust(host, app) {
+  const steps = adjustSteps();
+  let running = false, token = 0, timer = null, takes = [], measured = null, lastRecord = null, message = '';
+
+  host.innerHTML = `
+    <a class="back" href="#tools">도구</a><h1 class="title">보정 도우미</h1>
+    <div class="panel adjust">
+      <p class="lead">이 기기의 마이크와 지금 있는 방에 맞게 판정 기준을 맞춥니다. 1분쯤 걸리고, 결과는 이 기기에만 저장됩니다.</p>
+      <ol class="steps" data-role="intro">
+        <li>먼저 <a href="#tuner">튜너</a>로 여섯 줄을 맞춥니다.</li>
+        <li>기기를 기타 앞 30~50cm에 두고 [보정 시작]을 누릅니다.</li>
+        <li>화면에 나오는 대로 조용히 3초, 개방현 여섯 줄, 코드 Em·C·G를 한 번씩 칩니다.</li>
+      </ol>
+      <div class="adj-now" data-role="now" hidden>
+        <p class="adj-count" data-role="count"></p>
+        <p class="adj-prompt" data-role="prompt"></p>
+        <p class="adj-sub" data-role="sub"></p>
+        <div class="adj-fig" data-role="fig" hidden></div>
+        <div class="timer" aria-hidden="true"><div data-role="bar"></div></div>
+      </div>
+      <ol class="adj-track" data-role="track" aria-label="보정 순서">${steps.map((st) => `<li data-key="${st.key}">${esc(st.short)}</li>`).join('')}</ol>
+      <p class="status" data-role="status" role="status" aria-live="polite"></p>
+      <div class="adj-result" data-role="result" hidden></div>
+      <div class="row">
+        <button type="button" class="btn primary big" data-act="start">보정 시작</button>
+        <button type="button" class="btn ghost" data-act="stop" hidden>그만하기</button>
+        <button type="button" class="btn" data-act="copy" hidden>결과 복사</button>
+        <button type="button" class="btn" data-act="wav" hidden>녹음 WAV 저장</button>
+        <button type="button" class="btn ghost" data-act="defaults">기본값으로</button>
+        ${app.env.dev ? '<label class="dev"><input type="checkbox" data-role="fake"> 합성음으로 시험</label>' : ''}
+      </div>
+      <p class="hint" data-role="state"></p>
+    </div>`;
+  const q = (role) => host.querySelector(`[data-role="${role}"]`);
+  const btn = (act) => host.querySelector(`[data-act="${act}"]`);
+  const el = { intro: q('intro'), now: q('now'), count: q('count'), prompt: q('prompt'), sub: q('sub'), fig: q('fig'), bar: q('bar'), track: q('track'), status: q('status'), result: q('result'), state: q('state'), fake: q('fake') };
+
+  function setStatus(text, kind = '') { el.status.textContent = text; el.status.dataset.kind = kind; }
+  function paintState() {
+    const s = app.progress.settings;
+    el.state.textContent = isCalibrated(s) ? `지금은 ${s.calib.date || ''} 보정값으로 판정합니다.` : '아직 보정하지 않아 기본값으로 판정합니다.';
+    btn('defaults').hidden = !isCalibrated(s);
+  }
+  function mark(key, kind) {
+    const li = el.track.querySelector(`[data-key="${key}"]`);
+    if (li) li.dataset.kind = kind;
+  }
+  function showStep(i, retry) {
+    const st = steps[i];
+    el.now.hidden = false;
+    el.count.textContent = `${i + 1} / ${steps.length}`;
+    el.prompt.textContent = retry ? `한 번 더: ${st.prompt}` : st.prompt;
+    el.sub.textContent = st.sub;
+    el.fig.hidden = st.kind !== 'chord';
+    el.fig.innerHTML = st.kind === 'chord' ? chordSvg(st.id) : '';
+    el.bar.style.transform = 'scaleX(0)';
+    for (const li of el.track.children) li.classList.toggle('now', li.dataset.key === st.key);
+  }
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  async function recordTake(seconds) {
+    const started = performance.now();
+    clearInterval(timer);
+    timer = setInterval(() => { el.bar.style.transform = `scaleX(${Math.min(1, (performance.now() - started) / (seconds * 1000)).toFixed(3)})`; }, 50);
+    const samples = await app.audio.record(seconds);
+    clearInterval(timer);
+    el.bar.style.transform = 'scaleX(1)';
+    return samples;
+  }
+
+  function playFake(st) {
+    const sr = app.audio.sampleRate;
+    if (st.kind === 'string') app.audio.play(renderPluck(midiToFreq(st.s.midi), sr, 2.6), 'input', 0.35);
+    else if (st.kind === 'chord') app.audio.play(strumSamples(st.id, sr, 2.6), 'input', 0.35);
+  }
+
+  function heardEnough(st, m) {
+    const floor = Math.max((measured.noise?.rms ?? 0) * 4, 0.0015);
+    if (st.kind === 'string') return m.peakRms >= floor && m.hitRate > 0;
+    return m.peakRms >= floor;
+  }
+
+  async function start() {
+    if (running) return;
+    const fake = !!(el.fake && el.fake.checked);
+    try {
+      if (fake) await app.audio.ensureContext();
+      else await app.ensureInput();
+    } catch (err) { setStatus(micErrorMessage(err), 'bad'); return; }
+    running = true;
+    const my = ++token;
+    const alive = () => running && token === my;
+    takes = [];
+    measured = { noise: null, strings: [], chords: [] };
+    el.intro.hidden = true;
+    el.result.hidden = true;
+    btn('start').hidden = true; btn('stop').hidden = false; btn('copy').hidden = true; btn('wav').hidden = true; btn('defaults').hidden = true;
+    for (const li of el.track.children) delete li.dataset.kind;
+    const sr = app.audio.sampleRate;
+    for (let i = 0; i < steps.length; i++) {
+      const st = steps[i];
+      let m = null, ok = false;
+      for (let attempt = 0; attempt < 2 && !ok; attempt++) {
+        showStep(i, attempt > 0);
+        setStatus('준비하세요');
+        await wait(ADJ_READY_MS);
+        if (!alive()) return;
+        setStatus(st.kind === 'quiet' ? '듣는 중이에요. 조용히 기다려 주세요' : '지금 치세요', '');
+        if (fake) playFake(st);
+        const samples = await recordTake(ADJ_TAKE_SECONDS);
+        if (!alive()) return;
+        takes.push({ key: st.key, label: st.short, samples, sampleRate: sr });
+        if (st.kind === 'quiet') { m = measureNoise(samples, sr); ok = true; }
+        else if (st.kind === 'string') { m = { num: st.s.num, midi: st.s.midi, ...measurePluck(samples, sr, st.s.midi) }; ok = heardEnough(st, m); }
+        else { m = measureChord(samples, sr, st.id); ok = heardEnough(st, m); }
+        if (!ok && attempt === 0) setStatus('소리를 잘 듣지 못했어요. 한 번 더 해 볼게요', 'warn');
+      }
+      if (st.kind === 'quiet') measured.noise = m;
+      else if (st.kind === 'string') measured.strings.push(m);
+      else measured.chords.push(m);
+      mark(st.key, ok ? 'done' : 'warn');
+    }
+    running = false;
+    finish();
+  }
+
+  function finish() {
+    const result = computeThresholds(measured);
+    lastRecord = makeCalibRecord(measured, result, { date: app.today(), sampleRate: app.audio.sampleRate });
+    app.progress.settings.calib = lastRecord;
+    app.save();
+    el.now.hidden = true;
+    for (const li of el.track.children) li.classList.remove('now');
+    btn('start').hidden = false; btn('start').textContent = '다시 보정';
+    btn('stop').hidden = true; btn('copy').hidden = false; btn('wav').hidden = !takes.length;
+    setStatus(result.quality === 'good' ? '다 맞췄어요. 이제 이 기기에 맞는 기준으로 판정합니다' : '맞췄어요. 아래 안내를 한 번 확인해 주세요', result.quality === 'good' ? 'good' : 'warn');
+    paintResult(result);
+    paintState();
+  }
+
+  function stringVerdict(s) {
+    if (!s || s.hitRate === 0) return ['warn', '못 들었어요'];
+    if (s.hitRate >= 0.8) return ['good', '잘 들려요'];
+    if (s.hitRate >= 0.5) return ['good', '들려요'];
+    return ['warn', '잘 안 들려요'];
+  }
+
+  function paintResult(result) {
+    const v = result.values;
+    const strings = measured.strings.map((s) => { const [kind, text] = stringVerdict(s); return `<li data-kind="${kind}"><span class="s-num">${s.num}</span>${esc(text)}</li>`; }).join('');
+    const chords = measured.chords.map((c) => `<li data-kind="${c.score >= v.chordMinScore ? 'good' : 'warn'}"><strong>${esc(CHORDS[c.id].name)}</strong>${c.score >= v.chordMinScore ? '잘 들려요' : '애매해요'}</li>`).join('');
+    el.result.hidden = false;
+    el.result.innerHTML = `
+      ${result.notes.length ? `<ul class="adj-notes">${result.notes.map((n) => `<li>${esc(n.text)}</li>`).join('')}</ul>` : ''}
+      <h2>들린 소리</h2>
+      <ul class="adj-heard">${strings}${chords}</ul>
+      <h2>판정 기준</h2>
+      <div class="table-wrap"><table class="check adj-table">
+        <thead><tr><th scope="col">기준</th><th scope="col">기본값</th><th scope="col">이 기기</th></tr></thead>
+        <tbody>${Object.keys(CALIB_DEFAULTS).map((k) => `<tr><th scope="row">${esc(CALIB_LABELS[k])}</th><td>${adjFmt(k, CALIB_DEFAULTS[k])}</td><td><strong>${adjFmt(k, v[k])}</strong></td></tr>`).join('')}</tbody>
+      </table></div>
+      <p class="hint">기준은 기본값보다 까다로워지지 않습니다. 소리 크기 기준만 방의 잡음에 맞춰 오르내립니다. 설정의 마이크 민감도는 이 값에 한 번 더 곱해집니다.</p>`;
+  }
+
+  function reportText() {
+    const r = lastRecord || app.progress.settings.calib;
+    if (!r) return '';
+    const lines = [`여섯줄 보정 결과 ${r.date || ''}`, `샘플레이트 ${r.sampleRate || '-'}Hz, 방 잡음 ${r.measured.noise ?? '-'}`];
+    for (const s of r.measured.strings) lines.push(`${s.num}번줄: 최대 ${s.peak} 울림 ${s.sustain} 맞힘 ${s.hit} 선명도 ${s.clarity ?? '-'} 들림 ${s.salience ?? '-'}`);
+    for (const c of r.measured.chords) lines.push(`${c.id}: 점수 ${c.score}`);
+    lines.push('기준: ' + Object.entries(r.values).map(([k, x]) => `${k}=${x}`).join(', '));
+    if (takes.length) {
+      let at = 0;
+      lines.push('녹음 구간(초): ' + takes.map((t) => { const s = `${t.label} ${at.toFixed(1)}`; at += t.samples.length / t.sampleRate + 0.5; return s; }).join(', '));
+    }
+    return lines.join('\n');
+  }
+
+  async function copy() {
+    const text = reportText();
+    // 권한 창이 뜬 채 답이 없으면 기다리지 않고 예전 방식으로 복사한다.
+    const timeout = new Promise((resolve, reject) => setTimeout(() => reject(new Error('timeout')), 1500));
+    try { await Promise.race([navigator.clipboard.writeText(text), timeout]); setStatus('결과를 복사했어요', 'good'); }
+    catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); setStatus('결과를 복사했어요', 'good'); } catch (err) { setStatus('복사하지 못했어요', 'warn'); }
+      ta.remove();
+    }
+  }
+
+  function saveWav() {
+    if (!takes.length) return;
+    const sr = takes[0].sampleRate, gap = Math.floor(sr * 0.5);
+    const total = takes.reduce((n, t) => n + t.samples.length + gap, 0);
+    const all = new Float32Array(total);
+    let pos = 0;
+    for (const t of takes) { all.set(t.samples, pos); pos += t.samples.length + gap; }
+    const url = URL.createObjectURL(new Blob([encodeWav(all, sr)], { type: 'audio/wav' }));
+    const a = document.createElement('a');
+    a.href = url; a.download = `guitar-calib-${app.today()}.wav`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    setStatus('녹음 파일을 내려받았어요. 구간은 [결과 복사]에 적혀 있어요', 'good');
+  }
+
+  function stop(text = '보정을 멈췄어요. 저장된 기준은 그대로예요') {
+    if (!running) return;
+    running = false;
+    token++;
+    clearInterval(timer);
+    app.audio.stopAll();
+    el.now.hidden = true;
+    el.intro.hidden = false;
+    btn('start').hidden = false; btn('stop').hidden = true;
+    setStatus(text, '');
+    paintState();
+  }
+
+  const onClick = (e) => {
+    const a = e.target.closest('[data-act]');
+    if (!a) return;
+    const act = a.dataset.act;
+    if (act === 'start') start();
+    else if (act === 'stop') stop();
+    else if (act === 'copy') copy();
+    else if (act === 'wav') saveWav();
+    else if (act === 'defaults') {
+      delete app.progress.settings.calib;
+      app.save();
+      lastRecord = null;
+      el.result.hidden = true;
+      btn('copy').hidden = true;
+      setStatus('기본값으로 되돌렸어요', '');
+      paintState();
+    }
+  };
+  host.addEventListener('click', onClick);
+  paintState();
+  if (isCalibrated(app.progress.settings)) {
+    const v = calibValues(app.progress.settings);
+    message = `지난 보정 기준: ${Object.keys(CALIB_DEFAULTS).map((k) => `${CALIB_LABELS[k]} ${adjFmt(k, v[k])}`).join(' · ')}`;
+    btn('start').textContent = '다시 보정';
+    btn('copy').hidden = false;
+    setStatus(message, '');
+  }
+  return () => { stop(''); host.removeEventListener('click', onClick); };
+}
+
 // ---- ui-pages.js ----
 // 홈, 배우는 순서, 곡, 도구(코드표, 메트로놈, 박자 보정, 설정) 화면.
+
+const APP_VERSION = '0.6';
+// 업데이트 뒤 한 번만 보여 주는 '새로 생긴 것'.
+const NEWS = [
+  '보정 도우미: 1분 동안 줄과 코드를 쳐 보면 이 기기 마이크에 맞게 판정 기준을 스스로 맞춥니다(도구 → 보정 도우미)',
+  '애매하게 들린 소리는 틀림으로 세지 않고 「다시 쳐 볼까요」로 알려 줍니다',
+  '밝은 화면: 설정에서 자동(기기 따라)·어둡게·밝게를 고를 수 있습니다',
+  '인터넷 없이 열기: 한 번 연 뒤에는 연결이 없어도 앱이 열립니다',
+];
 
 const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
 const PATTERNS = [['D-D-D-D-', '네 번 내려치기'], ['DUDUDUDU', '8비트(내리고 올리기)'], ['D-DU-UDU', '칼립소']];
@@ -3226,7 +3786,10 @@ function renderHome(host, app) {
   const first = plan.find((p) => p.kind === 'new') || plan.find((p) => p.kind === 'review');
   const cta = first ? `#lesson/${first.lesson.id}` : '#songs';
   const item = (href, kind, title, sub) => `<li><a href="${href}"><span class="plan-kind">${kind}</span><span class="plan-text"><strong>${esc(title)}</strong><em>${esc(sub)}</em></span><span class="plan-go" aria-hidden="true">›</span></a></li>`;
+  const showNews = app.progress.settings.seen !== APP_VERSION;
+  const needCalib = !isCalibrated(app.progress.settings);
   host.innerHTML = `
+    ${showNews ? `<section class="panel news" aria-labelledby="news-h"><h2 id="news-h">v${APP_VERSION}에서 새로 생긴 것</h2><ul>${NEWS.map((n) => `<li>${esc(n)}</li>`).join('')}</ul><button type="button" class="btn" data-act="news-ok">확인했어요</button></section>` : ''}
     <div class="hero">
       <div class="hero-art" aria-hidden="true">${HERO_ART}</div>
       <div class="hero-body">
@@ -3244,7 +3807,7 @@ function renderHome(host, app) {
     </div>
     <h2>오늘 할 것</h2>
     <ol class="plan">
-      ${plan.map((p) => p.kind === 'tuner' ? item('#tuner', '1분', '튜닝 확인', '여섯 줄이 맞는지 먼저 봅니다')
+      ${plan.map((p) => p.kind === 'tuner' ? item('#tuner', '1분', '튜닝 확인', '여섯 줄이 맞는지 먼저 봅니다') + (needCalib ? item('#adjust', '처음 한 번', '보정 도우미', '1분 동안 줄과 코드를 쳐서 이 기기 마이크에 맞춥니다') : '')
         : p.kind === 'review' ? item(`#lesson/${p.lesson.id}`, '복습', p.lesson.title, `${STAGES[p.lesson.stage].n}단계 · ${STAGES[p.lesson.stage].title}`)
         : item(`#lesson/${p.lesson.id}`, '새 레슨', p.lesson.title, `${STAGES[p.lesson.stage].n}단계 · ${STAGES[p.lesson.stage].title}`)).join('')}
       ${plan.some((p) => p.kind === 'new') ? '' : item('#songs', '곡', '곡 연습', '모든 레슨을 마쳤어요. 곡으로 다져 보세요')}
@@ -3256,7 +3819,15 @@ function renderHome(host, app) {
       <a class="card" href="#chords"><h3>코드표</h3><p>코드 15개의 운지와 한 줄씩 점검</p></a>
       <a class="card" href="#tuner"><h3>튜너</h3><p>여섯 줄을 차례로 맞춥니다</p></a>
     </div>`;
-  return null;
+  const onClick = (e) => {
+    if (!e.target.closest('[data-act="news-ok"]')) return;
+    app.progress.settings.seen = APP_VERSION;
+    app.save();
+    const box = host.querySelector('.news');
+    if (box) box.remove();
+  };
+  host.addEventListener('click', onClick);
+  return () => host.removeEventListener('click', onClick);
 }
 
 // ---------- 배우는 순서 ----------
@@ -3339,9 +3910,10 @@ function renderTools(host) {
       <a class="card" href="#tuner"><h3>튜너</h3><p>여섯 줄을 차례로 맞춥니다</p></a>
       <a class="card" href="#chords"><h3>코드표</h3><p>운지 그림, 소리 듣기, 한 줄씩 점검</p></a>
       <a class="card" href="#metro"><h3>메트로놈</h3><p>일정한 박자를 들려줍니다</p></a>
+      <a class="card" href="#adjust"><h3>보정 도우미</h3><p>줄과 코드를 쳐서 이 기기 마이크에 맞게 판정 기준을 맞춥니다</p></a>
       <a class="card" href="#calib"><h3>박자 보정</h3><p>이 기기의 소리 지연을 재서 박자 판정을 맞춥니다</p></a>
-      <a class="card" href="#check"><h3>소리 점검</h3><p>마이크가 기타 소리를 잘 듣는지 확인합니다</p></a>
-      <a class="card" href="#settings"><h3>설정</h3><p>마이크 민감도, 기록 내보내기와 가져오기</p></a>
+      <a class="card" href="#check"><h3>소리 점검</h3><p>줄마다 들린 정도를 자세한 숫자로 봅니다</p></a>
+      <a class="card" href="#settings"><h3>설정</h3><p>화면 밝기, 마이크 민감도, 기록 내보내기와 가져오기</p></a>
     </div>`;
   return null;
 }
@@ -3507,11 +4079,15 @@ function renderSettings(host, app) {
     host.innerHTML = `
       <a class="back" href="#tools">도구</a><h1 class="title">설정</h1>
       <div class="panel settings">
+        <label class="field wide">화면 밝기
+          <select data-role="theme">${[['auto', '자동(기기 설정 따라)'], ['dark', '어둡게'], ['light', '밝게']].map(([v, t]) => `<option value="${v}"${(s.theme || 'auto') === v ? ' selected' : ''}>${t}</option>`).join('')}</select>
+        </label>
         <label class="field wide">마이크 민감도
           <select data-role="sens">${[['low', '낮게(시끄러운 곳)'], ['normal', '보통'], ['high', '높게(소리가 작게 잡힐 때)']].map(([v, t]) => `<option value="${v}"${s.sensitivity === v ? ' selected' : ''}>${t}</option>`).join('')}</select>
         </label>
         <label class="field check"><input type="checkbox" data-role="click"${s.click ? ' checked' : ''}> 박자 맞추기에서 박자 소리 켜기</label>
         <p class="hint">박자 보정값 ${app.progress.latencyMs}ms · <a href="#calib">다시 재기</a></p>
+        <p class="hint">판정 기준: ${isCalibrated(s) ? `${esc(s.calib.date || '')} 보정값 사용` : '기본값 사용(아직 보정하지 않음)'} · <a href="#adjust">보정 도우미</a></p>
         <h2>연습 기록</h2>
         <p class="hint">기록은 이 기기의 브라우저에만 저장됩니다. 다른 기기로 옮기려면 내보낸 파일을 그 기기에서 가져오세요.</p>
         <div class="row">
@@ -3520,7 +4096,8 @@ function renderSettings(host, app) {
           <button type="button" class="btn ghost" data-act="reset">기록 지우기</button>
         </div>
         <p class="status" role="status">${esc(message)}</p>
-        <p class="foot">여섯줄 v0.5</p>
+        <p class="hint">보정값과 화면 설정도 기록 파일에 함께 담깁니다.</p>
+        <p class="foot">여섯줄 v${APP_VERSION}</p>
       </div>`;
   }
   const onClick = (e) => {
@@ -3544,12 +4121,14 @@ function renderSettings(host, app) {
   const onChange = async (e) => {
     const role = e.target.dataset.role;
     if (role === 'sens') { app.progress.settings.sensitivity = e.target.value; app.save(); }
+    else if (role === 'theme') { app.progress.settings.theme = e.target.value; app.save(); if (app.applyTheme) app.applyTheme(); }
     else if (role === 'click') { app.progress.settings.click = e.target.checked; app.save(); }
     else if (role === 'import' && e.target.files[0]) {
       try {
         const data = JSON.parse(await e.target.files[0].text());
         if (!data || data.version !== 1 || typeof data.lessons !== 'object') throw new Error('형식');
         app.replaceProgress({ ...emptyProgress(), ...data, settings: { ...emptyProgress().settings, ...(data.settings || {}) } });
+        if (app.applyTheme) app.applyTheme();
         paint('기록을 가져왔어요');
       } catch (err) { paint('이 앱의 기록 파일이 아니에요'); }
     }
@@ -3574,7 +4153,8 @@ const app = {
   progress: loadProgress(store),
   save() { saveProgress(store, app.progress); },
   today() { return dayKey(new Date()); },
-  replaceProgress(next) { app.progress = next; app.save(); },
+  replaceProgress(next) { app.progress = next; app.save(); applyTheme(); },
+  applyTheme() { applyTheme(); },
   // 연습 화면이 소리를 듣기 전에 부른다. 개발 모드에서는 마이크 없이 합성음을 넣어 시험할 수 있다.
   async ensureInput() {
     if (env.dev && !appAudio.micOpen) { await appAudio.ensureContext(); return; }
@@ -3587,12 +4167,33 @@ const app = {
   },
 };
 
+// 화면 밝기: 자동이면 기기 설정을 따른다. 첫 그림이 깜박이지 않도록 head의 작은 스크립트가 먼저 한 번 정해 둔다.
+const lightQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
+function applyTheme() {
+  const pref = app.progress.settings.theme || 'auto';
+  const theme = pref === 'auto' ? (lightQuery && lightQuery.matches ? 'light' : 'dark') : pref;
+  document.documentElement.dataset.theme = theme;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute('content', theme === 'light' ? '#f6f3ec' : '#14112a');
+}
+applyTheme();
+if (lightQuery) {
+  if (lightQuery.addEventListener) lightQuery.addEventListener('change', applyTheme);
+  else if (lightQuery.addListener) lightQuery.addListener(applyTheme);
+}
+
+// 처음 쓰는 사람에게는 '새로 생긴 것'을 보여 주지 않는다(바뀐 것이 없으므로).
+if (app.progress.settings.seen == null && !Object.keys(app.progress.lessons).length && !Object.keys(app.progress.days).length && !isCalibrated(app.progress.settings)) {
+  app.progress.settings.seen = APP_VERSION;
+  app.save();
+}
+
 const pageEl = document.getElementById('view-page');
 const staticViews = { tuner: document.getElementById('view-tuner'), check: document.getElementById('view-check') };
 const tunerView = initTunerView(staticViews.tuner, appAudio, env);
 const checkView = initCheckView(staticViews.check, appAudio, env);
 
-const PAGES = { home: renderHome, learn: renderLearn, lesson: renderLesson, songs: renderSongs, song: renderSong, tools: renderTools, chords: renderChords, chord: renderChord, metro: renderMetro, calib: renderCalib, settings: renderSettings };
+const PAGES = { home: renderHome, learn: renderLearn, lesson: renderLesson, songs: renderSongs, song: renderSong, tools: renderTools, chords: renderChords, chord: renderChord, metro: renderMetro, calib: renderCalib, adjust: renderAdjust, settings: renderSettings };
 const NAV_OF = { home: 'home', learn: 'learn', lesson: 'learn', songs: 'songs', song: 'songs' };
 let cleanup = null;
 
@@ -3607,6 +4208,7 @@ function route() {
   for (const [key, node] of Object.entries(staticViews)) node.hidden = key !== name;
   pageEl.hidden = !!staticViews[name];
   tunerView.setVisible(name === 'tuner');
+  if (name === 'tuner') { const hint = document.getElementById('tn-calib'); if (hint) hint.hidden = isCalibrated(app.progress.settings); }
   if (PAGES[name]) {
     pageEl.dataset.page = name;
     cleanup = PAGES[name](pageEl, app, arg) || null;
@@ -3624,6 +4226,11 @@ window.addEventListener('hashchange', route);
 route();
 
 if (env.dev) window.__dev = { app, audio: appAudio, tunerView, checkView };
+
+// 인터넷 없이 열기: https 주소(또는 이 PC의 localhost)에서만 서비스 워커를 등록한다. 파일로 열었을 때는 쓰지 않는다.
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
 
 })();
 </script>

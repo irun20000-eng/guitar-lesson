@@ -8,6 +8,16 @@ import { createNoteTracker } from './tracker.js';
 import { streakOf, weekDays, todayPlan, stageSummary, lessonStars, emptyProgress, PROGRESS_KEY } from './progress.js';
 import { micErrorMessage } from './audio.js';
 import { starsHtml, esc, clickSamples, trackerOptions } from './listen.js';
+import { isCalibrated } from './calibrate.js';
+
+export const APP_VERSION = '0.6';
+// 업데이트 뒤 한 번만 보여 주는 '새로 생긴 것'.
+export const NEWS = [
+  '보정 도우미: 1분 동안 줄과 코드를 쳐 보면 이 기기 마이크에 맞게 판정 기준을 스스로 맞춥니다(도구 → 보정 도우미)',
+  '애매하게 들린 소리는 틀림으로 세지 않고 「다시 쳐 볼까요」로 알려 줍니다',
+  '밝은 화면: 설정에서 자동(기기 따라)·어둡게·밝게를 고를 수 있습니다',
+  '인터넷 없이 열기: 한 번 연 뒤에는 연결이 없어도 앱이 열립니다',
+];
 
 const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
 const PATTERNS = [['D-D-D-D-', '네 번 내려치기'], ['DUDUDUDU', '8비트(내리고 올리기)'], ['D-DU-UDU', '칼립소']];
@@ -28,7 +38,10 @@ export function renderHome(host, app) {
   const first = plan.find((p) => p.kind === 'new') || plan.find((p) => p.kind === 'review');
   const cta = first ? `#lesson/${first.lesson.id}` : '#songs';
   const item = (href, kind, title, sub) => `<li><a href="${href}"><span class="plan-kind">${kind}</span><span class="plan-text"><strong>${esc(title)}</strong><em>${esc(sub)}</em></span><span class="plan-go" aria-hidden="true">›</span></a></li>`;
+  const showNews = app.progress.settings.seen !== APP_VERSION;
+  const needCalib = !isCalibrated(app.progress.settings);
   host.innerHTML = `
+    ${showNews ? `<section class="panel news" aria-labelledby="news-h"><h2 id="news-h">v${APP_VERSION}에서 새로 생긴 것</h2><ul>${NEWS.map((n) => `<li>${esc(n)}</li>`).join('')}</ul><button type="button" class="btn" data-act="news-ok">확인했어요</button></section>` : ''}
     <div class="hero">
       <div class="hero-art" aria-hidden="true">${HERO_ART}</div>
       <div class="hero-body">
@@ -46,7 +59,7 @@ export function renderHome(host, app) {
     </div>
     <h2>오늘 할 것</h2>
     <ol class="plan">
-      ${plan.map((p) => p.kind === 'tuner' ? item('#tuner', '1분', '튜닝 확인', '여섯 줄이 맞는지 먼저 봅니다')
+      ${plan.map((p) => p.kind === 'tuner' ? item('#tuner', '1분', '튜닝 확인', '여섯 줄이 맞는지 먼저 봅니다') + (needCalib ? item('#adjust', '처음 한 번', '보정 도우미', '1분 동안 줄과 코드를 쳐서 이 기기 마이크에 맞춥니다') : '')
         : p.kind === 'review' ? item(`#lesson/${p.lesson.id}`, '복습', p.lesson.title, `${STAGES[p.lesson.stage].n}단계 · ${STAGES[p.lesson.stage].title}`)
         : item(`#lesson/${p.lesson.id}`, '새 레슨', p.lesson.title, `${STAGES[p.lesson.stage].n}단계 · ${STAGES[p.lesson.stage].title}`)).join('')}
       ${plan.some((p) => p.kind === 'new') ? '' : item('#songs', '곡', '곡 연습', '모든 레슨을 마쳤어요. 곡으로 다져 보세요')}
@@ -58,7 +71,15 @@ export function renderHome(host, app) {
       <a class="card" href="#chords"><h3>코드표</h3><p>코드 15개의 운지와 한 줄씩 점검</p></a>
       <a class="card" href="#tuner"><h3>튜너</h3><p>여섯 줄을 차례로 맞춥니다</p></a>
     </div>`;
-  return null;
+  const onClick = (e) => {
+    if (!e.target.closest('[data-act="news-ok"]')) return;
+    app.progress.settings.seen = APP_VERSION;
+    app.save();
+    const box = host.querySelector('.news');
+    if (box) box.remove();
+  };
+  host.addEventListener('click', onClick);
+  return () => host.removeEventListener('click', onClick);
 }
 
 // ---------- 배우는 순서 ----------
@@ -141,9 +162,10 @@ export function renderTools(host) {
       <a class="card" href="#tuner"><h3>튜너</h3><p>여섯 줄을 차례로 맞춥니다</p></a>
       <a class="card" href="#chords"><h3>코드표</h3><p>운지 그림, 소리 듣기, 한 줄씩 점검</p></a>
       <a class="card" href="#metro"><h3>메트로놈</h3><p>일정한 박자를 들려줍니다</p></a>
+      <a class="card" href="#adjust"><h3>보정 도우미</h3><p>줄과 코드를 쳐서 이 기기 마이크에 맞게 판정 기준을 맞춥니다</p></a>
       <a class="card" href="#calib"><h3>박자 보정</h3><p>이 기기의 소리 지연을 재서 박자 판정을 맞춥니다</p></a>
-      <a class="card" href="#check"><h3>소리 점검</h3><p>마이크가 기타 소리를 잘 듣는지 확인합니다</p></a>
-      <a class="card" href="#settings"><h3>설정</h3><p>마이크 민감도, 기록 내보내기와 가져오기</p></a>
+      <a class="card" href="#check"><h3>소리 점검</h3><p>줄마다 들린 정도를 자세한 숫자로 봅니다</p></a>
+      <a class="card" href="#settings"><h3>설정</h3><p>화면 밝기, 마이크 민감도, 기록 내보내기와 가져오기</p></a>
     </div>`;
   return null;
 }
@@ -309,11 +331,15 @@ export function renderSettings(host, app) {
     host.innerHTML = `
       <a class="back" href="#tools">도구</a><h1 class="title">설정</h1>
       <div class="panel settings">
+        <label class="field wide">화면 밝기
+          <select data-role="theme">${[['auto', '자동(기기 설정 따라)'], ['dark', '어둡게'], ['light', '밝게']].map(([v, t]) => `<option value="${v}"${(s.theme || 'auto') === v ? ' selected' : ''}>${t}</option>`).join('')}</select>
+        </label>
         <label class="field wide">마이크 민감도
           <select data-role="sens">${[['low', '낮게(시끄러운 곳)'], ['normal', '보통'], ['high', '높게(소리가 작게 잡힐 때)']].map(([v, t]) => `<option value="${v}"${s.sensitivity === v ? ' selected' : ''}>${t}</option>`).join('')}</select>
         </label>
         <label class="field check"><input type="checkbox" data-role="click"${s.click ? ' checked' : ''}> 박자 맞추기에서 박자 소리 켜기</label>
         <p class="hint">박자 보정값 ${app.progress.latencyMs}ms · <a href="#calib">다시 재기</a></p>
+        <p class="hint">판정 기준: ${isCalibrated(s) ? `${esc(s.calib.date || '')} 보정값 사용` : '기본값 사용(아직 보정하지 않음)'} · <a href="#adjust">보정 도우미</a></p>
         <h2>연습 기록</h2>
         <p class="hint">기록은 이 기기의 브라우저에만 저장됩니다. 다른 기기로 옮기려면 내보낸 파일을 그 기기에서 가져오세요.</p>
         <div class="row">
@@ -322,7 +348,8 @@ export function renderSettings(host, app) {
           <button type="button" class="btn ghost" data-act="reset">기록 지우기</button>
         </div>
         <p class="status" role="status">${esc(message)}</p>
-        <p class="foot">여섯줄 v0.5</p>
+        <p class="hint">보정값과 화면 설정도 기록 파일에 함께 담깁니다.</p>
+        <p class="foot">여섯줄 v${APP_VERSION}</p>
       </div>`;
   }
   const onClick = (e) => {
@@ -346,12 +373,14 @@ export function renderSettings(host, app) {
   const onChange = async (e) => {
     const role = e.target.dataset.role;
     if (role === 'sens') { app.progress.settings.sensitivity = e.target.value; app.save(); }
+    else if (role === 'theme') { app.progress.settings.theme = e.target.value; app.save(); if (app.applyTheme) app.applyTheme(); }
     else if (role === 'click') { app.progress.settings.click = e.target.checked; app.save(); }
     else if (role === 'import' && e.target.files[0]) {
       try {
         const data = JSON.parse(await e.target.files[0].text());
         if (!data || data.version !== 1 || typeof data.lessons !== 'object') throw new Error('형식');
         app.replaceProgress({ ...emptyProgress(), ...data, settings: { ...emptyProgress().settings, ...(data.settings || {}) } });
+        if (app.applyTheme) app.applyTheme();
         paint('기록을 가져왔어요');
       } catch (err) { paint('이 앱의 기록 파일이 아니에요'); }
     }

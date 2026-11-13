@@ -21,6 +21,8 @@ export function createWaitJudge(notes) {
       }
       // 방금 맞힌 음이 아직 울려서 다시 들린 것은 틀림으로 세지 않는다.
       if (index > 0 && ev.midi === notes[index - 1].midi) return { type: 'echo' };
+      // 애매하게 들린 음(기준을 겨우 넘었거나 두 음 사이)은 틀림으로 세지 않고 다시 쳐 보게 한다.
+      if (ev.unsure) return { type: 'unsure', heard: ev.midi, expected: notes[index].midi, index };
       wrong++;
       return { type: 'wrong', heard: ev.midi, expected: notes[index].midi, index };
     },

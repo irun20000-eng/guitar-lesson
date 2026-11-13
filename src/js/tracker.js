@@ -9,6 +9,9 @@ export const TRACKER_DEFAULTS = {
   segment: 2048,      // 기대한 음을 확인할 때 쓰는 소리 길이(샘플)
   minRms: 0.004,      // 이보다 작으면 조용한 것으로 본다
   minClarity: 0.8,    // 이보다 흐리면 음을 판단하지 않는다
+  minSalience: 0.7,   // 기대한 음이 이만큼 또렷하면 들린 것으로 본다(soundsLike의 min)
+  unsureClarity: 0.05, // 기대 밖 음이 기준을 이 폭 안으로만 넘으면 '애매함'으로 표시한다
+  unsureCents: 35,    // 두 음 사이(반음의 35% 넘게 어긋남)에 걸친 음도 '애매함'
   stableFrames: 2,    // 튕긴 직후 같은 음이 연속 몇 프레임 나와야 인정할지
   slowFrames: 5,      // 튕긴 순간을 못 잡았을 때, 새 음이 연속 몇 프레임 나와야 인정할지(기대 음이 없을 때)
   softFrames: 3,      // 기대 음이 있을 때: 살짝 쳐서 튕김을 못 잡았어도, 기대 음이 새로 들리고 음량이 늘면 인정
@@ -85,7 +88,7 @@ export function createNoteTracker(options = {}) {
         for (const m of expected) {
           const f = midiToFreq(m, o.a4);
           const raw = salienceAt(seg, frame.sampleRate, f);
-          const s = soundsLike(seg, frame.sampleRate, f, { salience: raw, baseline: onsetOpen ? baseAtOnset.get(m) : undefined });
+          const s = soundsLike(seg, frame.sampleRate, f, { min: o.minSalience, salience: raw, baseline: onsetOpen ? baseAtOnset.get(m) : undefined });
           if (s > best) { best = s; midi = m; }
           const values = salHistory.get(m) || [];
           values.push(raw);
@@ -108,6 +111,7 @@ export function createNoteTracker(options = {}) {
     if (midi === cand) candCount++;
     else { cand = midi; candCount = 1; candSince = t; candExpected = matched; }
     candCents = cents;
+    const candClarity = clarity;
 
     // 기대 음이 있는데 다른 음이 들린 경우에는 조금 더 지켜본다. 튕긴 직후에는 울리던 음이 먼저 잡힐 수 있기 때문이다.
     const viaOnset = onsetOpen && candCount >= (expected && !candExpected ? o.stableFrames + 2 : o.stableFrames);
@@ -118,7 +122,9 @@ export function createNoteTracker(options = {}) {
       ? candExpected && candCount >= o.softFrames && frame.rms >= levelBefore * 1.05
       : candCount >= o.slowFrames);
     if (viaOnset || viaChange) {
-      events.push({ type: 'note', midi: cand, cents: candCents, clarity, time: viaOnset ? lastOnsetAt : candSince });
+      // 기대한 음으로 확인된 것이 아니고, 또렷함이 기준을 겨우 넘었거나 두 음 사이에 걸쳤으면 애매한 음으로 표시한다.
+      const unsure = !candExpected && (candClarity < o.minClarity + o.unsureClarity || Math.abs(candCents) > o.unsureCents);
+      events.push({ type: 'note', midi: cand, cents: candCents, clarity, time: viaOnset ? lastOnsetAt : candSince, unsure });
       current = cand;
       onsetOpen = false;
     }

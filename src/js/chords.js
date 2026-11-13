@@ -65,6 +65,7 @@ export function scoreChord(chroma, id, sampleRate, size) {
 // 지금 쳐야 하는 코드가 맞는지 확인한다. 헷갈리기 쉬운 코드(rivals) 쪽이 더 비슷하면 그 이름을 알려 준다.
 export function verifyChord(chroma, expectedId, sampleRate, options = {}) {
   const minScore = options.minScore ?? 0.78;
+  const unsureMargin = options.unsureMargin ?? 0.05;
   const margin = options.margin ?? 0.02;
   const size = options.size;
   const rivals = (options.rivals ?? CHORDS[expectedId].rivals).filter((id) => id !== expectedId && CHORDS[id]);
@@ -75,7 +76,8 @@ export function verifyChord(chroma, expectedId, sampleRate, options = {}) {
     if (!rival || s > rival.score) rival = { id, score: s };
   }
   if (rival && rival.score > score + margin) return { ok: false, score, reason: 'rival', rival };
-  if (score < minScore) return { ok: false, score, reason: 'unclear', rival };
+  // 기준 바로 아래면 틀렸다고 하지 않고 다시 쳐 보게 한다.
+  if (score < minScore) return { ok: false, score, reason: score >= minScore - unsureMargin ? 'unsure' : 'unclear', rival };
   return { ok: true, score, rival };
 }
 

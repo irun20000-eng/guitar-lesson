@@ -1,6 +1,6 @@
 {
   "name": "guitar-lesson",
-  "version": "0.1.0",
+  "version": "0.6.0",
   "private": true,
   "type": "module",
   "description": "초급자를 위한 기타 레슨 웹앱",

@@ -1,6 +1,7 @@
 // 듣기 루프와 화면 공용 도우미.
 // 25ms마다 최근 소리로 음량, 날카로운 성분, 음 높이를 구해 구독자에게 넘긴다. 구독자가 없으면 멈춘다.
 import { detectPitch, rmsLevel, hfLevel } from './pitch.js';
+import { calibValues } from './calibrate.js';
 
 export function createListener(audio) {
   const subs = new Set();
@@ -46,8 +47,9 @@ export function clickSamples(sampleRate, accent = false) {
   return out;
 }
 
-// 마이크 민감도 설정 → 추적기 옵션
+// 보정값(없으면 기본값) + 마이크 민감도 설정 → 추적기 옵션. 민감도는 보정된 소리 크기 기준에 곱한다(낮게 2배, 높게 절반).
 export function trackerOptions(settings, extra = {}) {
-  const minRms = { low: 0.008, normal: 0.004, high: 0.002 }[settings.sensitivity] ?? 0.004;
-  return { minRms, ...extra };
+  const c = calibValues(settings);
+  const factor = { low: 2, normal: 1, high: 0.5 }[settings && settings.sensitivity] ?? 1;
+  return { minRms: c.minRms * factor, minClarity: c.minClarity, minSalience: c.minSalience, ...extra };
 }

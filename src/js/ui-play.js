@@ -246,6 +246,8 @@ export function mountNotePlayer(host, app, spec) {
               if (out.done) { finish(); return; }
               tracker.setExpected([notes[view.current].midi]);
               showTarget(notes[view.current]);
+            } else if (out.type === 'unsure') {
+              setInfo(`다시 쳐 볼까요? 소리가 애매하게 들렸어요. 칠 음: ${describeNote(notes[view.current])}`, '');
             } else if (out.type === 'wrong') {
               setInfo(`다른 음이 들렸어요(${describeMidi(out.heard)}). 칠 음: ${describeNote(notes[view.current])}`, 'warn');
             }

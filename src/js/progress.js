@@ -3,7 +3,7 @@
 export const PROGRESS_KEY = 'guitar-lesson.progress.v1';
 
 export function emptyProgress() {
-  return { version: 1, lessons: {}, changes: {}, days: {}, custom: [], latencyMs: 80, settings: { sensitivity: 'normal', click: true } };
+  return { version: 1, lessons: {}, changes: {}, days: {}, custom: [], latencyMs: 80, settings: { sensitivity: 'normal', click: true, theme: 'auto', seen: null } };
 }
 
 export function loadProgress(storage) {

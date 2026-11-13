@@ -10,13 +10,14 @@ import { micErrorMessage } from './audio.js';
 import { starsHtml, esc, clickSamples, trackerOptions } from './listen.js';
 import { isCalibrated } from './calibrate.js';
 
-export const APP_VERSION = '0.6';
+export const APP_VERSION = '0.6.1';
 // 업데이트 뒤 한 번만 보여 주는 '새로 생긴 것'.
 export const NEWS = [
   '보정 도우미: 1분 동안 줄과 코드를 쳐 보면 이 기기 마이크에 맞게 판정 기준을 스스로 맞춥니다(도구 → 보정 도우미)',
   '애매하게 들린 소리는 틀림으로 세지 않고 「다시 쳐 볼까요」로 알려 줍니다',
   '밝은 화면: 설정에서 자동(기기 따라)·어둡게·밝게를 고를 수 있습니다',
   '인터넷 없이 열기: 한 번 연 뒤에는 연결이 없어도 앱이 열립니다',
+  '보정 도우미가 주변이 시끄러우면 먼저 알려 주고, 잘 듣지 못했을 때는 기준을 바꾸지 않고 다시 해 보게 합니다. 작은 단추와 링크를 누르기 쉽게 키웠습니다',
 ];
 
 const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
@@ -41,7 +42,7 @@ export function renderHome(host, app) {
   const showNews = app.progress.settings.seen !== APP_VERSION;
   const needCalib = !isCalibrated(app.progress.settings);
   host.innerHTML = `
-    ${showNews ? `<section class="panel news" aria-labelledby="news-h"><h2 id="news-h">v${APP_VERSION}에서 새로 생긴 것</h2><ul>${NEWS.map((n) => `<li>${esc(n)}</li>`).join('')}</ul><button type="button" class="btn" data-act="news-ok">확인했어요</button></section>` : ''}
+    ${showNews ? `<section class="panel news" aria-labelledby="news-h"><h2 id="news-h">v${APP_VERSION.split('.').slice(0, 2).join('.')}에서 새로 생긴 것</h2><ul>${NEWS.map((n) => `<li>${esc(n)}</li>`).join('')}</ul><button type="button" class="btn" data-act="news-ok">확인했어요</button></section>` : ''}
     <div class="hero">
       <div class="hero-art" aria-hidden="true">${HERO_ART}</div>
       <div class="hero-body">

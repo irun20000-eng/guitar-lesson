@@ -7,7 +7,7 @@ import { chordSvg } from './diagram.js';
 import { encodeWav } from './wav.js';
 import { micErrorMessage } from './audio.js';
 import { esc } from './listen.js';
-import { CALIB_DEFAULTS, CALIB_LABELS, CALIB_CHORDS, measureNoise, measurePluck, measureChord, computeThresholds, makeCalibRecord, calibValues, isCalibrated } from './calibrate.js';
+import { CALIB_DEFAULTS, CALIB_LABELS, CALIB_CHORDS, measureNoise, measurePluck, measureChord, computeThresholds, makeCalibRecord, calibValues, isCalibrated, isNoisy, assessCalibration } from './calibrate.js';
 
 const ADJ_TAKE_SECONDS = 3;
 const ADJ_READY_MS = 1400;
@@ -43,10 +43,15 @@ export function renderAdjust(host, app) {
         <div class="timer" aria-hidden="true"><div data-role="bar"></div></div>
       </div>
       <ol class="adj-track" data-role="track" aria-label="보정 순서">${steps.map((st) => `<li data-key="${st.key}">${esc(st.short)}</li>`).join('')}</ol>
+      <div class="adj-noise" data-role="noise" hidden>
+        <p><strong>주변이 조금 시끄러워요.</strong> 소리 나는 것(텔레비전, 선풍기, 음악)을 끄거나 조용한 곳으로 옮기면 판정이 더 정확해요.</p>
+        <div class="row"><button type="button" class="btn primary" data-act="noise-retry">다시 재기</button><button type="button" class="btn" data-act="noise-go">그대로 계속</button></div>
+      </div>
       <p class="status" data-role="status" role="status" aria-live="polite"></p>
       <div class="adj-result" data-role="result" hidden></div>
       <div class="row">
         <button type="button" class="btn primary big" data-act="start">보정 시작</button>
+        <button type="button" class="btn" data-act="save-anyway" hidden>그래도 저장</button>
         <button type="button" class="btn ghost" data-act="stop" hidden>그만하기</button>
         <button type="button" class="btn" data-act="copy" hidden>결과 복사</button>
         <button type="button" class="btn" data-act="wav" hidden>녹음 WAV 저장</button>
@@ -57,7 +62,9 @@ export function renderAdjust(host, app) {
     </div>`;
   const q = (role) => host.querySelector(`[data-role="${role}"]`);
   const btn = (act) => host.querySelector(`[data-act="${act}"]`);
-  const el = { intro: q('intro'), now: q('now'), count: q('count'), prompt: q('prompt'), sub: q('sub'), fig: q('fig'), bar: q('bar'), track: q('track'), status: q('status'), result: q('result'), state: q('state'), fake: q('fake') };
+  const el = { intro: q('intro'), now: q('now'), count: q('count'), prompt: q('prompt'), sub: q('sub'), fig: q('fig'), bar: q('bar'), track: q('track'), status: q('status'), result: q('result'), state: q('state'), fake: q('fake'), noise: q('noise') };
+  let noiseAnswer = null;   // 시끄러울 때 사용자의 선택을 기다리는 약속
+  let pending = null;       // 실패한 보정 결과(사용자가 「그래도 저장」을 누르면 저장)
 
   function setStatus(text, kind = '') { el.status.textContent = text; el.status.dataset.kind = kind; }
   function paintState() {
@@ -101,6 +108,7 @@ export function renderAdjust(host, app) {
   function heardEnough(st, m) {
     const floor = Math.max((measured.noise?.rms ?? 0) * 4, 0.0015);
     if (st.kind === 'string') return m.peakRms >= floor && m.hitRate > 0;
+    // 코드는 소리가 충분히 컸는지만 본다(점수가 낮은 것은 기준 계산이 따로 다룬다).
     return m.peakRms >= floor;
   }
 
@@ -118,13 +126,15 @@ export function renderAdjust(host, app) {
     measured = { noise: null, strings: [], chords: [] };
     el.intro.hidden = true;
     el.result.hidden = true;
+    pending = null;
+    btn('save-anyway').hidden = true;
     btn('start').hidden = true; btn('stop').hidden = false; btn('copy').hidden = true; btn('wav').hidden = true; btn('defaults').hidden = true;
     for (const li of el.track.children) delete li.dataset.kind;
     const sr = app.audio.sampleRate;
     for (let i = 0; i < steps.length; i++) {
       const st = steps[i];
       let m = null, ok = false;
-      for (let attempt = 0; attempt < 2 && !ok; attempt++) {
+      for (let attempt = 0; attempt < (st.kind === 'quiet' ? 99 : 2) && !ok; attempt++) {
         showStep(i, attempt > 0);
         setStatus('준비하세요');
         await wait(ADJ_READY_MS);
@@ -134,9 +144,22 @@ export function renderAdjust(host, app) {
         const samples = await recordTake(ADJ_TAKE_SECONDS);
         if (!alive()) return;
         takes.push({ key: st.key, label: st.short, samples, sampleRate: sr });
-        if (st.kind === 'quiet') { m = measureNoise(samples, sr); ok = true; }
-        else if (st.kind === 'string') { m = { num: st.s.num, midi: st.s.midi, ...measurePluck(samples, sr, st.s.midi) }; ok = heardEnough(st, m); }
-        else { m = measureChord(samples, sr, st.id); ok = heardEnough(st, m); }
+        if (st.kind === 'quiet') {
+          m = measureNoise(samples, sr);
+          ok = true;
+          if (isNoisy(m)) {
+            // 시끄러우면 먼저 알리고, 다시 잴지 그대로 갈지 고르게 한다.
+            setStatus('주변이 조금 시끄러워요', 'warn');
+            el.noise.hidden = false;
+            const answer = await new Promise((resolve) => { noiseAnswer = resolve; });
+            noiseAnswer = null;
+            el.noise.hidden = true;
+            if (!alive()) return;
+            if (answer === 'retry') { ok = false; takes.pop(); continue; }
+          }
+        }
+        else if (st.kind === 'string') { m = { num: st.s.num, midi: st.s.midi, ...measurePluck(samples, sr, st.s.midi) }; ok = heardEnough(st, m); m.heard = ok; }
+        else { m = { ...measureChord(samples, sr, st.id) }; ok = heardEnough(st, m); m.heard = ok; }
         if (!ok && attempt === 0) setStatus('소리를 잘 듣지 못했어요. 한 번 더 해 볼게요', 'warn');
       }
       if (st.kind === 'quiet') measured.noise = m;
@@ -149,17 +172,43 @@ export function renderAdjust(host, app) {
   }
 
   function finish() {
-    const result = computeThresholds(measured);
-    lastRecord = makeCalibRecord(measured, result, { date: app.today(), sampleRate: app.audio.sampleRate });
-    app.progress.settings.calib = lastRecord;
-    app.save();
+    const s = app.progress.settings;
+    const previous = isCalibrated(s) ? calibValues(s) : null;
+    const check = assessCalibration(measured);
+    const result = computeThresholds(measured, previous);
+    const record = makeCalibRecord(measured, result, { date: app.today(), sampleRate: app.audio.sampleRate });
     el.now.hidden = true;
     for (const li of el.track.children) li.classList.remove('now');
     btn('start').hidden = false; btn('start').textContent = '다시 보정';
-    btn('stop').hidden = true; btn('copy').hidden = false; btn('wav').hidden = !takes.length;
-    setStatus(result.quality === 'good' ? '다 맞췄어요. 이제 이 기기에 맞는 기준으로 판정합니다' : '맞췄어요. 아래 안내를 한 번 확인해 주세요', result.quality === 'good' ? 'good' : 'warn');
+    btn('stop').hidden = true; btn('wav').hidden = !takes.length;
+    if (check.verdict === 'failed') {
+      // 못 들은 것이 많으면 저장하지 않고 다시 해 보게 한다. 원하면 그래도 저장할 수 있다(못 들은 부분은 지난번 값 유지).
+      pending = record;
+      lastRecord = record;
+      btn('save-anyway').hidden = false;
+      btn('copy').hidden = false;
+      setStatus(`잘 되지 않았어요. ${failText(check)} 기기를 기타 가까이에 두고 다시 보정해 볼까요? 지금 기준은 바꾸지 않았어요`, 'bad');
+    } else {
+      save(record);
+      setStatus(check.verdict === 'good' && result.quality === 'good' ? '다 맞췄어요. 이제 이 기기에 맞는 기준으로 판정합니다'
+        : check.verdict === 'partial' ? `맞췄어요. ${failText(check)} 그 줄은 판정 기준 계산에서 뺐어요` : '맞췄어요. 아래 안내를 한 번 확인해 주세요', check.verdict === 'good' && result.quality === 'good' ? 'good' : 'warn');
+    }
     paintResult(result);
     paintState();
+  }
+  function failText(check) {
+    const parts = [];
+    if (check.failedStrings.length) parts.push(`줄 ${check.failedStrings.length}개(${check.failedStrings.join(', ')}번)`);
+    if (check.failedChords.length) parts.push(`코드 ${check.failedChords.map((id) => CHORDS[id].name).join(', ')}`);
+    return parts.length ? `듣지 못한 것: ${parts.join(', ')}.` : '';
+  }
+  function save(record) {
+    lastRecord = record;
+    pending = null;
+    app.progress.settings.calib = record;
+    app.save();
+    btn('save-anyway').hidden = true;
+    btn('copy').hidden = false;
   }
 
   function stringVerdict(s) {
@@ -233,6 +282,8 @@ export function renderAdjust(host, app) {
     running = false;
     token++;
     clearInterval(timer);
+    el.noise.hidden = true;
+    if (noiseAnswer) noiseAnswer('stop');
     app.audio.stopAll();
     el.now.hidden = true;
     el.intro.hidden = false;
@@ -247,12 +298,16 @@ export function renderAdjust(host, app) {
     const act = a.dataset.act;
     if (act === 'start') start();
     else if (act === 'stop') stop();
+    else if (act === 'noise-retry' || act === 'noise-go') { if (noiseAnswer) noiseAnswer(act === 'noise-retry' ? 'retry' : 'go'); }
+    else if (act === 'save-anyway') { if (pending) { save(pending); setStatus('저장했어요. 듣지 못한 줄과 코드는 기준 계산에서 뺐고, 그 부분은 지난번(없으면 기본) 기준을 씁니다', 'warn'); paintState(); } }
     else if (act === 'copy') copy();
     else if (act === 'wav') saveWav();
     else if (act === 'defaults') {
       delete app.progress.settings.calib;
       app.save();
       lastRecord = null;
+      pending = null;
+      btn('save-anyway').hidden = true;
       el.result.hidden = true;
       btn('copy').hidden = true;
       setStatus('기본값으로 되돌렸어요', '');

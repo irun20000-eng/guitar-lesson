@@ -1,7 +1,7 @@
 // 인터넷 없이 열기(서비스 워커). build.mjs가 이 틀에서 sw.js를 만든다. sw.js를 직접 고치지 않는다.
 // 화면(index.html)은 늘 새 판을 먼저 받아 보고, 연결이 없을 때만 저장본을 쓴다(새로 올린 판이 바로 보이게).
 // 아이콘과 manifest는 저장본을 먼저 쓴다. 판이 바뀌면 VERSION이 바뀌어 옛 저장본을 지운다.
-const VERSION = '0.6-1b3d9971bc';
+const VERSION = '0.6.1-2a601cb150';
 const CACHE = 'yeoseotjul-' + VERSION;
 const FILES = ["./","index.html","manifest.webmanifest","icons/favicon-32.png","icons/icon.svg","icons/apple-touch-icon.png","icons/icon-192.png","icons/icon-512.png","icons/icon-maskable-192.png","icons/icon-maskable-512.png"];
 

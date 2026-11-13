@@ -11,7 +11,7 @@ import { trackerOptions } from '../src/js/listen.js';
 import { emptyProgress, loadProgress, saveProgress } from '../src/js/progress.js';
 import {
   CALIB_DEFAULTS, CALIB_LIMITS, CALIB_VERSION, CALIB_CHORDS, measureNoise, measurePluck, measureChord,
-  computeThresholds, calibValues, isCalibrated, chordMinScore, makeCalibRecord, percentile,
+  computeThresholds, calibValues, isCalibrated, chordMinScore, makeCalibRecord, percentile, isNoisy, assessCalibration, NOISE_LIMITS,
 } from '../src/js/calibrate.js';
 
 // 보정 도우미가 듣는 것을 합성한다: 조용한 방 3초, 개방현 여섯 줄 3초씩, 코드 셋 3초씩.
@@ -160,4 +160,46 @@ test('애매한 음 표시: 두 음 사이에 걸친 소리는 unsure, 또렷한
   const clean = events(440);
   assert.equal(clean.length, 1);
   assert.equal(clean[0].unsure, false);
+});
+
+test('시끄러운 방 알림: 잡음이 크거나 웅웅거리는 소리가 이어지면 먼저 알린다', () => {
+  assert.equal(isNoisy(measureNoise(renderPerformance([], 3, { noise: 0.0005, seed: 2 }), SR)), false, '조용한 방');
+  assert.equal(isNoisy(measureNoise(renderPerformance([], 3, { noise: 0.001, seed: 2 }), SR)), false, '보통 방');
+  const loud = measureNoise(renderPerformance([], 3, { noise: 0.005, seed: 2 }), SR);
+  assert.ok(loud.rms > NOISE_LIMITS.rms && isNoisy(loud), '큰 잡음');
+  // 80Hz로 계속 웅웅거리는 소리(작은 음량이어도)
+  const hum = new Float32Array(3 * SR);
+  for (let i = 0; i < hum.length; i++) hum[i] = 0.0015 * Math.sin((2 * Math.PI * 80 * i) / SR);
+  const h = measureNoise(hum, SR);
+  assert.ok(h.rms < NOISE_LIMITS.rms, `음량만으로는 못 잡는 크기: ${h.rms}`);
+  assert.ok(h.tonal > 0.9 && isNoisy(h), `웅웅거림: ${h.tonal}`);
+  assert.equal(isNoisy(null), false);
+});
+
+test('보정 실패 판정: 줄 셋 이상 또는 코드 하나를 못 들으면 실패, 못 들은 부분은 지난번 기준을 지킨다', () => {
+  const m = calibrationRun(0.5, 0.002);
+  assert.equal(assessCalibration(m).verdict, 'good');
+  const twoMissed = { ...m, strings: m.strings.map((s, i) => (i < 2 ? { ...s, heard: false, hitRate: 0 } : s)) };
+  const a2 = assessCalibration(twoMissed);
+  assert.equal(a2.verdict, 'partial');
+  assert.deepEqual(a2.failedStrings, [6, 5]);
+  const threeMissed = { ...m, strings: m.strings.map((s, i) => (i < 3 ? { ...s, heard: false } : s)) };
+  assert.equal(assessCalibration(threeMissed).verdict, 'failed');
+  const chordMissed = { ...m, chords: m.chords.map((c) => (c.id === 'C' ? { ...c, heard: false, score: 0.1 } : c)) };
+  const ac = assessCalibration(chordMissed);
+  assert.equal(ac.verdict, 'failed');
+  assert.deepEqual(ac.failedChords, ['C']);
+  // 못 들은 코드의 점수(0.1)는 기준 계산에 쓰지 않는다
+  const prev = { minRms: 0.003, minClarity: 0.75, minSalience: 0.66, chordMinScore: 0.7 };
+  const allChordsMissed = { ...m, chords: m.chords.map((c) => ({ ...c, heard: false, score: 0 })) };
+  assert.equal(computeThresholds(chordMissed, prev).values.chordMinScore, CALIB_DEFAULTS.chordMinScore, '들은 코드 둘로 계산');
+  assert.equal(computeThresholds(allChordsMissed, prev).values.chordMinScore, 0.7, '하나도 못 들으면 지난번 값');
+  assert.equal(computeThresholds(allChordsMissed).values.chordMinScore, CALIB_DEFAULTS.chordMinScore, '지난번 값이 없으면 기본값');
+  const allStringsMissed = { ...m, strings: m.strings.map((s) => ({ ...s, heard: false })) };
+  const r = computeThresholds(allStringsMissed, prev);
+  assert.equal(r.values.minClarity, 0.75);
+  assert.equal(r.values.minSalience, 0.66);
+  assert.ok(Math.abs(r.values.minRms - m.noise.rms * 3) < 1e-4, '줄은 못 들었어도 방 잡음은 재었으므로 소리 크기 기준은 잡음 3배까지 올린다');
+  assert.equal(computeThresholds({ ...allStringsMissed, noise: { rms: 0.0002 } }, prev).values.minRms, 0.003, '잡음이 작으면 지난번 값');
+  assert.ok(assessCalibration({ ...m, noise: { rms: 0.01 } }).noisy);
 });

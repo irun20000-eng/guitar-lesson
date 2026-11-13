@@ -421,6 +421,18 @@ tr[data-kind="bad"] .verdict { color: var(--bad); }
 .news .btn { justify-self: start; }
 .calib-hint { margin-top: 12px; }
 
+/* ---------- v0.6.1: 누르기 쉬운 크기, 넘침 (본사 화면 검수 권장 1~4) ---------- */
+.brand { min-height: 44px; min-width: 44px; justify-content: center; }
+.back { min-height: 44px; }
+.btn.small { min-height: 44px; }
+/* 문장 안 링크: 줄 간격은 그대로 두고 누르는 영역만 위아래로 넓힌다. */
+.hint a, .steps a, .tips a, .lead a, .adj-sub a { display: inline-block; padding: 12px 4px; margin: -12px -4px; }
+.custom label { min-width: 0; }
+.custom input, .custom select { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+input[type="range"] { min-height: 44px; }
+.adj-noise { display: grid; gap: 4px; padding: 12px 16px; border-radius: var(--radius-s); background: var(--warn-bg); }
+.adj-noise .row { margin: 4px 0 0; }
+
 /* ---------- v0.6: 밝은 화면 ----------
    밝은 화면에서는 빛 번짐(글로우), 빛망울, 입자 질감, 그림자를 뺀다. 홈 첫 그림(hero)만 어두운 무대로 남긴다.
    강조색은 글자로도 쓰이므로 밝은 바탕에서 대비 4.5 이상이 되는 진한 호박색으로 바꾸고, 그 위 글자는 흰색으로 한다. */
@@ -429,11 +441,11 @@ tr[data-kind="bad"] .verdict { color: var(--bad); }
   --bg: #f6f3ec; --bg-2: #f6f3ec; --bg-3: #ece6da;
   --ink: #1d1a2b; --muted: #555066;
   --accent: #8f5d00; --accent-deep: #6e4700; --accent-ink: #ffffff;
-  --good: #0f7a6a; --warn: #8f5d00; --bad: #b3261e;
-  --good-bg: rgba(15, 122, 106, 0.1); --warn-bg: rgba(143, 93, 0, 0.1); --bad-bg: rgba(179, 38, 30, 0.1);
+  --good: #0a6b5d; --warn: #855600; --bad: #b3261e;
+  --good-bg: rgba(10, 107, 93, 0.1); --warn-bg: rgba(143, 93, 0, 0.1); --bad-bg: rgba(179, 38, 30, 0.1);
   --glass: #fffdf9; --glass-2: #f1ece2; --line: rgba(29, 26, 43, 0.16);
   --shadow: none;
-  --tab-line: rgba(29, 26, 43, 0.32); --tab-note: #8f5d00; --tab-note-ink: #ffffff; --tab-hit: #0f7a6a; --tab-good: #4f7d10;
+  --tab-line: rgba(29, 26, 43, 0.32); --tab-note: #8f5d00; --tab-note-ink: #ffffff; --tab-hit: #0a6b5d; --tab-good: #4f7d10;
 }
 :root[data-theme="light"] body { background: var(--bg); }
 :root[data-theme="light"] body::before, :root[data-theme="light"] body::after { display: none; }
@@ -1197,10 +1209,34 @@ function eachWindow(samples, sampleRate, fn) {
   for (let end = CAL_WIN, i = 0; end <= samples.length; end += hop, i++) fn(samples.subarray(end - CAL_WIN, end), i, end / sampleRate);
 }
 
+// 조용한 방: 음량(90백분위)과 함께, 웅웅거리는 소리처럼 음 높이가 뚜렷한 잡음이 얼마나 이어지는지(tonal, 0~1)도 잰다.
 function measureNoise(samples, sampleRate) {
   const levels = [];
-  eachWindow(samples, sampleRate, (w) => levels.push(rmsLevel(w)));
-  return { rms: percentile(levels, 0.9) ?? 0, median: percentile(levels, 0.5) ?? 0 };
+  let frames = 0, tonal = 0;
+  eachWindow(samples, sampleRate, (w, i) => {
+    const r = rmsLevel(w);
+    levels.push(r);
+    if (i % 4) return;   // 음 높이는 100ms마다만 본다(충분하고 빠르다)
+    frames++;
+    if (r >= NOISE_LIMITS.tonalMinRms && detectPitch(w, sampleRate, { minFreq: 50 }).clarity >= 0.85) tonal++;
+  });
+  return { rms: percentile(levels, 0.9) ?? 0, median: percentile(levels, 0.5) ?? 0, tonal: frames ? tonal / frames : 0 };
+}
+
+// 이보다 크거나, 음 높이가 있는 잡음이 절반 넘게 이어지면 '주변이 조금 시끄러워요'를 먼저 알린다(계속할 수는 있다).
+const NOISE_LIMITS = { rms: 0.002, tonal: 0.5, tonalMinRms: 0.0008 };
+function isNoisy(noise) {
+  if (!noise) return false;
+  return noise.rms > NOISE_LIMITS.rms || (noise.tonal ?? 0) > NOISE_LIMITS.tonal;
+}
+
+// 보정이 잘 됐는지: 줄 셋 이상 또는 코드 하나라도 못 들었으면 실패로 보고 저장하기 전에 다시 하도록 권한다.
+// heard가 false인 항목(화면이 소리를 못 들었다고 표시한 것)과 맞힘 비율이 0인 줄을 '못 들음'으로 센다.
+function assessCalibration(m) {
+  const failedStrings = (m.strings || []).filter((s) => s && (s.heard === false || !(s.hitRate > 0))).map((s) => s.num);
+  const failedChords = (m.chords || []).filter((c) => c && c.heard === false).map((c) => c.id);
+  const failed = failedStrings.length >= 3 || failedChords.length >= 1;
+  return { verdict: failed ? 'failed' : failedStrings.length ? 'partial' : 'good', failedStrings, failedChords, noisy: isNoisy(m.noise) };
 }
 
 // 개방현 한 줄: 가장 큰 순간(튕김)을 찾고, 그 뒤 1.2초 동안 음이 얼마나 또렷하게 들리는지 잰다.
@@ -1253,14 +1289,16 @@ function measureChord(samples, sampleRate, id) {
 
 // m: { noise: { rms }, strings: [{ num, midi, ...measurePluck }], chords: [{ id, ...measureChord }] }
 // → { values, notes: [{ kind, text }], quality: 'good' | 'warn' }
-function computeThresholds(m) {
+// previous: 지난번 보정값(있으면). 못 들은 부분에서 나올 기준은 지난번 값(없으면 기본값)을 그대로 둔다.
+function computeThresholds(m, previous = null) {
   const notes = [];
+  const base = { ...CALIB_DEFAULTS, ...(previous || {}) };
   const strings = (m.strings || []).filter(Boolean);
-  const heardStrings = strings.filter((s) => s.hitRate >= 0.5);
+  const heardStrings = strings.filter((s) => s.heard !== false && s.hitRate >= 0.5);
   const noiseFloor = (m.noise?.rms ?? 0) * 3;
 
   // 소리 크기: 방의 잡음보다는 크고, 가장 작게 울리는 줄보다는 충분히 작게.
-  let minRms = CALIB_DEFAULTS.minRms;
+  let minRms = base.minRms;
   const softest = heardStrings.length ? Math.min(...heardStrings.map((s) => s.sustainRms)) : null;
   if (softest != null) {
     const ceiling = softest * 0.3;
@@ -1270,14 +1308,14 @@ function computeThresholds(m) {
       // 울리는 기타 소리가 잡음의 여섯 배도 안 되면 알려 준다.
       if (noiseFloor > softest * 0.5) notes.push({ kind: 'warn', text: '주변 소리가 기타 소리에 비해 커요. 조용한 곳에서 다시 보정하면 더 정확해요' });
     }
-  } else if (noiseFloor > CALIB_DEFAULTS.minRms) minRms = noiseFloor;
+  } else if (noiseFloor > base.minRms) minRms = noiseFloor;
   if (noiseFloor > CALIB_LIMITS.minRms[1]) notes.push({ kind: 'warn', text: '주변이 많이 시끄러워요. 판정이 자주 놓칠 수 있어요' });
 
   // 음의 또렷함: 여섯 줄 가운데 가장 흐린 줄도 통과하도록, 기본값보다 까다롭게는 하지 않는다.
   const clar = heardStrings.map((s) => s.clarity).filter((v) => v != null);
-  const minClarity = clar.length ? Math.min(CALIB_DEFAULTS.minClarity, Math.min(...clar) - 0.04) : CALIB_DEFAULTS.minClarity;
+  const minClarity = clar.length ? Math.min(CALIB_DEFAULTS.minClarity, Math.min(...clar) - 0.04) : base.minClarity;
   const sal = heardStrings.map((s) => s.salience).filter((v) => v != null);
-  const minSalience = sal.length ? Math.min(CALIB_DEFAULTS.minSalience, Math.min(...sal) - 0.05) : CALIB_DEFAULTS.minSalience;
+  const minSalience = sal.length ? Math.min(CALIB_DEFAULTS.minSalience, Math.min(...sal) - 0.05) : base.minSalience;
 
   for (const s of strings) {
     if (s.hitRate >= 0.5) continue;
@@ -1285,9 +1323,10 @@ function computeThresholds(m) {
   }
 
   // 코드: 세 코드 중 가장 낮은 점수보다 조금 아래로. 역시 기본값보다 까다롭게는 하지 않는다.
-  const chordScores = (m.chords || []).filter(Boolean).map((c) => c.score);
-  const chordMinScore = chordScores.length ? Math.min(CALIB_DEFAULTS.chordMinScore, Math.min(...chordScores) - 0.05) : CALIB_DEFAULTS.chordMinScore;
+  const chordScores = (m.chords || []).filter((c) => c && c.heard !== false).map((c) => c.score);
+  const chordMinScore = chordScores.length ? Math.min(CALIB_DEFAULTS.chordMinScore, Math.min(...chordScores) - 0.05) : base.chordMinScore;
   for (const c of (m.chords || []).filter(Boolean)) {
+    if (c.heard === false) { notes.push({ kind: 'warn', text: ` 코드를 듣지 못했어요. 이 코드 기준은 지난번 값을 그대로 둡니다` }); continue; }
     if (c.score < CALIB_LIMITS.chordMinScore[0] + 0.05) notes.push({ kind: 'warn', text: `${c.id} 코드가 또렷하게 들리지 않았어요. 코드표를 보고 손가락 자리를 확인한 뒤 다시 보정해 보세요` });
   }
 
@@ -3527,10 +3566,15 @@ function renderAdjust(host, app) {
         <div class="timer" aria-hidden="true"><div data-role="bar"></div></div>
       </div>
       <ol class="adj-track" data-role="track" aria-label="보정 순서">${steps.map((st) => `<li data-key="${st.key}">${esc(st.short)}</li>`).join('')}</ol>
+      <div class="adj-noise" data-role="noise" hidden>
+        <p><strong>주변이 조금 시끄러워요.</strong> 소리 나는 것(텔레비전, 선풍기, 음악)을 끄거나 조용한 곳으로 옮기면 판정이 더 정확해요.</p>
+        <div class="row"><button type="button" class="btn primary" data-act="noise-retry">다시 재기</button><button type="button" class="btn" data-act="noise-go">그대로 계속</button></div>
+      </div>
       <p class="status" data-role="status" role="status" aria-live="polite"></p>
       <div class="adj-result" data-role="result" hidden></div>
       <div class="row">
         <button type="button" class="btn primary big" data-act="start">보정 시작</button>
+        <button type="button" class="btn" data-act="save-anyway" hidden>그래도 저장</button>
         <button type="button" class="btn ghost" data-act="stop" hidden>그만하기</button>
         <button type="button" class="btn" data-act="copy" hidden>결과 복사</button>
         <button type="button" class="btn" data-act="wav" hidden>녹음 WAV 저장</button>
@@ -3541,7 +3585,9 @@ function renderAdjust(host, app) {
     </div>`;
   const q = (role) => host.querySelector(`[data-role="${role}"]`);
   const btn = (act) => host.querySelector(`[data-act="${act}"]`);
-  const el = { intro: q('intro'), now: q('now'), count: q('count'), prompt: q('prompt'), sub: q('sub'), fig: q('fig'), bar: q('bar'), track: q('track'), status: q('status'), result: q('result'), state: q('state'), fake: q('fake') };
+  const el = { intro: q('intro'), now: q('now'), count: q('count'), prompt: q('prompt'), sub: q('sub'), fig: q('fig'), bar: q('bar'), track: q('track'), status: q('status'), result: q('result'), state: q('state'), fake: q('fake'), noise: q('noise') };
+  let noiseAnswer = null;   // 시끄러울 때 사용자의 선택을 기다리는 약속
+  let pending = null;       // 실패한 보정 결과(사용자가 「그래도 저장」을 누르면 저장)
 
   function setStatus(text, kind = '') { el.status.textContent = text; el.status.dataset.kind = kind; }
   function paintState() {
@@ -3585,6 +3631,7 @@ function renderAdjust(host, app) {
   function heardEnough(st, m) {
     const floor = Math.max((measured.noise?.rms ?? 0) * 4, 0.0015);
     if (st.kind === 'string') return m.peakRms >= floor && m.hitRate > 0;
+    // 코드는 소리가 충분히 컸는지만 본다(점수가 낮은 것은 기준 계산이 따로 다룬다).
     return m.peakRms >= floor;
   }
 
@@ -3602,13 +3649,15 @@ function renderAdjust(host, app) {
     measured = { noise: null, strings: [], chords: [] };
     el.intro.hidden = true;
     el.result.hidden = true;
+    pending = null;
+    btn('save-anyway').hidden = true;
     btn('start').hidden = true; btn('stop').hidden = false; btn('copy').hidden = true; btn('wav').hidden = true; btn('defaults').hidden = true;
     for (const li of el.track.children) delete li.dataset.kind;
     const sr = app.audio.sampleRate;
     for (let i = 0; i < steps.length; i++) {
       const st = steps[i];
       let m = null, ok = false;
-      for (let attempt = 0; attempt < 2 && !ok; attempt++) {
+      for (let attempt = 0; attempt < (st.kind === 'quiet' ? 99 : 2) && !ok; attempt++) {
         showStep(i, attempt > 0);
         setStatus('준비하세요');
         await wait(ADJ_READY_MS);
@@ -3618,9 +3667,22 @@ function renderAdjust(host, app) {
         const samples = await recordTake(ADJ_TAKE_SECONDS);
         if (!alive()) return;
         takes.push({ key: st.key, label: st.short, samples, sampleRate: sr });
-        if (st.kind === 'quiet') { m = measureNoise(samples, sr); ok = true; }
-        else if (st.kind === 'string') { m = { num: st.s.num, midi: st.s.midi, ...measurePluck(samples, sr, st.s.midi) }; ok = heardEnough(st, m); }
-        else { m = measureChord(samples, sr, st.id); ok = heardEnough(st, m); }
+        if (st.kind === 'quiet') {
+          m = measureNoise(samples, sr);
+          ok = true;
+          if (isNoisy(m)) {
+            // 시끄러우면 먼저 알리고, 다시 잴지 그대로 갈지 고르게 한다.
+            setStatus('주변이 조금 시끄러워요', 'warn');
+            el.noise.hidden = false;
+            const answer = await new Promise((resolve) => { noiseAnswer = resolve; });
+            noiseAnswer = null;
+            el.noise.hidden = true;
+            if (!alive()) return;
+            if (answer === 'retry') { ok = false; takes.pop(); continue; }
+          }
+        }
+        else if (st.kind === 'string') { m = { num: st.s.num, midi: st.s.midi, ...measurePluck(samples, sr, st.s.midi) }; ok = heardEnough(st, m); m.heard = ok; }
+        else { m = { ...measureChord(samples, sr, st.id) }; ok = heardEnough(st, m); m.heard = ok; }
         if (!ok && attempt === 0) setStatus('소리를 잘 듣지 못했어요. 한 번 더 해 볼게요', 'warn');
       }
       if (st.kind === 'quiet') measured.noise = m;
@@ -3633,17 +3695,43 @@ function renderAdjust(host, app) {
   }
 
   function finish() {
-    const result = computeThresholds(measured);
-    lastRecord = makeCalibRecord(measured, result, { date: app.today(), sampleRate: app.audio.sampleRate });
-    app.progress.settings.calib = lastRecord;
-    app.save();
+    const s = app.progress.settings;
+    const previous = isCalibrated(s) ? calibValues(s) : null;
+    const check = assessCalibration(measured);
+    const result = computeThresholds(measured, previous);
+    const record = makeCalibRecord(measured, result, { date: app.today(), sampleRate: app.audio.sampleRate });
     el.now.hidden = true;
     for (const li of el.track.children) li.classList.remove('now');
     btn('start').hidden = false; btn('start').textContent = '다시 보정';
-    btn('stop').hidden = true; btn('copy').hidden = false; btn('wav').hidden = !takes.length;
-    setStatus(result.quality === 'good' ? '다 맞췄어요. 이제 이 기기에 맞는 기준으로 판정합니다' : '맞췄어요. 아래 안내를 한 번 확인해 주세요', result.quality === 'good' ? 'good' : 'warn');
+    btn('stop').hidden = true; btn('wav').hidden = !takes.length;
+    if (check.verdict === 'failed') {
+      // 못 들은 것이 많으면 저장하지 않고 다시 해 보게 한다. 원하면 그래도 저장할 수 있다(못 들은 부분은 지난번 값 유지).
+      pending = record;
+      lastRecord = record;
+      btn('save-anyway').hidden = false;
+      btn('copy').hidden = false;
+      setStatus(`잘 되지 않았어요. ${failText(check)} 기기를 기타 가까이에 두고 다시 보정해 볼까요? 지금 기준은 바꾸지 않았어요`, 'bad');
+    } else {
+      save(record);
+      setStatus(check.verdict === 'good' && result.quality === 'good' ? '다 맞췄어요. 이제 이 기기에 맞는 기준으로 판정합니다'
+        : check.verdict === 'partial' ? `맞췄어요. ${failText(check)} 그 줄은 판정 기준 계산에서 뺐어요` : '맞췄어요. 아래 안내를 한 번 확인해 주세요', check.verdict === 'good' && result.quality === 'good' ? 'good' : 'warn');
+    }
     paintResult(result);
     paintState();
+  }
+  function failText(check) {
+    const parts = [];
+    if (check.failedStrings.length) parts.push(`줄 ${check.failedStrings.length}개(${check.failedStrings.join(', ')}번)`);
+    if (check.failedChords.length) parts.push(`코드 ${check.failedChords.map((id) => CHORDS[id].name).join(', ')}`);
+    return parts.length ? `듣지 못한 것: ${parts.join(', ')}.` : '';
+  }
+  function save(record) {
+    lastRecord = record;
+    pending = null;
+    app.progress.settings.calib = record;
+    app.save();
+    btn('save-anyway').hidden = true;
+    btn('copy').hidden = false;
   }
 
   function stringVerdict(s) {
@@ -3717,6 +3805,8 @@ function renderAdjust(host, app) {
     running = false;
     token++;
     clearInterval(timer);
+    el.noise.hidden = true;
+    if (noiseAnswer) noiseAnswer('stop');
     app.audio.stopAll();
     el.now.hidden = true;
     el.intro.hidden = false;
@@ -3731,12 +3821,16 @@ function renderAdjust(host, app) {
     const act = a.dataset.act;
     if (act === 'start') start();
     else if (act === 'stop') stop();
+    else if (act === 'noise-retry' || act === 'noise-go') { if (noiseAnswer) noiseAnswer(act === 'noise-retry' ? 'retry' : 'go'); }
+    else if (act === 'save-anyway') { if (pending) { save(pending); setStatus('저장했어요. 듣지 못한 줄과 코드는 기준 계산에서 뺐고, 그 부분은 지난번(없으면 기본) 기준을 씁니다', 'warn'); paintState(); } }
     else if (act === 'copy') copy();
     else if (act === 'wav') saveWav();
     else if (act === 'defaults') {
       delete app.progress.settings.calib;
       app.save();
       lastRecord = null;
+      pending = null;
+      btn('save-anyway').hidden = true;
       el.result.hidden = true;
       btn('copy').hidden = true;
       setStatus('기본값으로 되돌렸어요', '');
@@ -3758,13 +3852,14 @@ function renderAdjust(host, app) {
 // ---- ui-pages.js ----
 // 홈, 배우는 순서, 곡, 도구(코드표, 메트로놈, 박자 보정, 설정) 화면.
 
-const APP_VERSION = '0.6';
+const APP_VERSION = '0.6.1';
 // 업데이트 뒤 한 번만 보여 주는 '새로 생긴 것'.
 const NEWS = [
   '보정 도우미: 1분 동안 줄과 코드를 쳐 보면 이 기기 마이크에 맞게 판정 기준을 스스로 맞춥니다(도구 → 보정 도우미)',
   '애매하게 들린 소리는 틀림으로 세지 않고 「다시 쳐 볼까요」로 알려 줍니다',
   '밝은 화면: 설정에서 자동(기기 따라)·어둡게·밝게를 고를 수 있습니다',
   '인터넷 없이 열기: 한 번 연 뒤에는 연결이 없어도 앱이 열립니다',
+  '보정 도우미가 주변이 시끄러우면 먼저 알려 주고, 잘 듣지 못했을 때는 기준을 바꾸지 않고 다시 해 보게 합니다. 작은 단추와 링크를 누르기 쉽게 키웠습니다',
 ];
 
 const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
@@ -3789,7 +3884,7 @@ function renderHome(host, app) {
   const showNews = app.progress.settings.seen !== APP_VERSION;
   const needCalib = !isCalibrated(app.progress.settings);
   host.innerHTML = `
-    ${showNews ? `<section class="panel news" aria-labelledby="news-h"><h2 id="news-h">v${APP_VERSION}에서 새로 생긴 것</h2><ul>${NEWS.map((n) => `<li>${esc(n)}</li>`).join('')}</ul><button type="button" class="btn" data-act="news-ok">확인했어요</button></section>` : ''}
+    ${showNews ? `<section class="panel news" aria-labelledby="news-h"><h2 id="news-h">v${APP_VERSION.split('.').slice(0, 2).join('.')}에서 새로 생긴 것</h2><ul>${NEWS.map((n) => `<li>${esc(n)}</li>`).join('')}</ul><button type="button" class="btn" data-act="news-ok">확인했어요</button></section>` : ''}
     <div class="hero">
       <div class="hero-art" aria-hidden="true">${HERO_ART}</div>
       <div class="hero-body">
